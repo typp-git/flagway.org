@@ -16,7 +16,7 @@ export default function Navbar() {
 					<div className="flex">
 						<div className="flex flex-shrink-0 items-center">
 							<a href="/" className="flex items-center gap-4 hover:cursor-pointer">
-								<Image alt="Logo of the Young People's Project" width="100" src={YPPLogo} />
+								<Image priority alt="Logo of the Young People's Project" width="100" src={YPPLogo} />
 								<div className="brand items-center">
 									<div className="w-full">FLAGWAY</div>
 									<div className="w-full -mt-1.5">LEAGUE</div>
