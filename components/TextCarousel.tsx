@@ -7,6 +7,17 @@ const TextCarousel: React.FC = () => {
     'celebrate learning math',
     'laugh while doing math',
     'find breakthrough in math',
+    'turn learning into an adventure',
+    'discover the joy of numbers',
+    'build confidence in problem solving',
+    'work together to solve challenges',
+    'unlock their math potential',
+    'grow in collaboration and play',
+    'connect math to real life experiences',
+    'make new friends while exploring math',
+    'transform their perspective on math',
+    'succeed in a supportive community',
+    'find excitement in every equation',
   ];
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
