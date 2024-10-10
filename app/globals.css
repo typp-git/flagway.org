@@ -3,21 +3,71 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
+  --background: #f4f4f4;
+
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #0a0a0a;
+    --background: #f4f4f4;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-anuphan)
+}
+
+.nav-item {
+  @apply font-medium text-lg rounded-lg px-2 my-5 inline-flex items-center no-underline transition ease-in-out;
+}
+
+.nav-item:hover {
+  @apply transition cursor-pointer bg-gray-300 bg-opacity-30 ease-in-out;
+}
+
+.brand { 
+  font-family: var(--font-anuphan);
+  @apply font-bold text-2xl select-none;
+}
+
+h1 {
+  @apply text-4xl font-bold;
+}
+
+h2 {
+  @apply text-3xl font-semibold;
+}
+
+h3 {
+  @apply text-2xl font-medium;
+}
+
+h4 {
+  @apply text-xl font-medium;
+}
+
+h5 {
+  @apply text-lg font-medium;
+}
+
+h6 {
+  @apply text-base font-medium;
+}
+
+a.prose {
+  @apply underline;
+}
+
+.landing-photo {
+  @apply transition-all;
+}
+
+.landing-photo:hover {
+  @apply scale-[1.05] transition-all;
 }
 
 @layer utilities {
