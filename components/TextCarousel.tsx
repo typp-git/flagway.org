@@ -41,7 +41,7 @@ const TextCarousel: React.FC = () => {
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className="absolute w-full h-full text-wrap flex items-start whitespace-nowrap"
         >
-          {texts[currentIndex]}
+          {texts[currentIndex] + "."}
         </motion.div>
       </AnimatePresence>
     </div>
