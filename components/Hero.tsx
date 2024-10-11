@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const Hero: React.FC = () => {
 	return (
-		<div>
+		<div className='overflow-hidden'>
 			<div className="relative isolate">
 				<div
 					aria-hidden="true"

@@ -67,7 +67,7 @@ a.prose {
 }
 
 .landing-photo:hover {
-  @apply scale-[1.05] transition-all;
+  @apply scale-[1] md:scale-[1.05] transition-all;
 }
 
 @layer utilities {

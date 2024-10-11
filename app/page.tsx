@@ -7,12 +7,10 @@ export default function Home() {
   return (
     <div className="bg-white">
       <main>
-        <div className="overflow-x-hidden overflow-y-visible">
-          <Hero />
-          <Container>
-            <h1>Some landing page content will go here.</h1>
-          </Container>
-        </div>
+        <Hero />
+        <Container>
+          <h1>Some landing page content will go here.</h1>
+        </Container>
       </main >
     </div >
   )
