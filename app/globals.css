@@ -21,6 +21,10 @@ body {
   font-family: var(--font-anuphan)
 }
 
+nav {
+  @apply bg-cover bg-center filter brightness-125;
+}
+
 .nav-item {
   @apply font-medium text-lg rounded-lg px-2 my-5 inline-flex items-center no-underline transition ease-in-out;
 }

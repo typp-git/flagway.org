@@ -9,9 +9,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function Navbar() {
 	return (
-		<Disclosure as="nav" className="shadow z-[-2] bg-black px-4 sm:px-10 text-white">
+		<Disclosure as="nav" style={{backgroundImage: "url('structures.png')"}}className="shadow z-[-2] bg-black px-4 sm:px-10 text-white">
 			<div className="mx-auto relative max-w-7xl px-4 sm:px-6 lg:px-8 z-0">
-				<Image className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150" alt="blurred flagway structures" priority src={Structures} />
+				{/* <Image className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150" alt="blurred flagway structures" priority src={Structures} /> */}
 				<div className="flex z-10 h-20 justify-between">
 					<div className="flex">
 						<div className="flex flex-shrink-0 items-center">

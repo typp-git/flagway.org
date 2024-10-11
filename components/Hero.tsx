@@ -66,6 +66,7 @@ const Hero: React.FC = () => {
 									<Image
 										alt=""
 										src={Winners}
+										placeholder="blur"
 										height="200"
 										className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-[1.1]"
 									/>
@@ -76,6 +77,7 @@ const Hero: React.FC = () => {
 									<Image
 										alt=""
 										src={Outdoors}
+										placeholder="blur"
 										height="200"
 										className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-125"
 									/>
@@ -84,6 +86,7 @@ const Hero: React.FC = () => {
 									<Image
 										alt=""
 										src={FloorWork}
+										placeholder="blur"
 										height="200"
 										className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] brightness-125"
 									/>
@@ -94,6 +97,7 @@ const Hero: React.FC = () => {
 									<Image
 										alt=""
 										src={Team2}
+										placeholder="blur"
 										height="200"
 										className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-[1.1] brightness-110"
 									/>
@@ -102,6 +106,7 @@ const Hero: React.FC = () => {
 									<Image
 										alt=""
 										src={MIT}
+										placeholder="blur"
 										height="200"
 										className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-125"
 									/>
