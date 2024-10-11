@@ -4,14 +4,14 @@
 
 :root {
   --foreground: #0a0a0a;
-  --background: #f4f4f4;
+  --background: #ffffff;
 
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --foreground: #0a0a0a;
-    --background: #f4f4f4;
+    --background: #ffffff;
   }
 }
 
@@ -56,6 +56,10 @@ h5 {
 
 h6 {
   @apply text-base font-medium;
+}
+
+p {
+  @apply mt-5
 }
 
 a.prose {
