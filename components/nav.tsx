@@ -1,7 +1,6 @@
 "use client"
 import Image from "next/image";
 import YPPLogo from "@/public/YPP-Logo-white.webp"
-import Structures from "@/public/structures.png"
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 

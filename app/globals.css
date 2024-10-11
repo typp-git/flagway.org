@@ -22,7 +22,7 @@ body {
 }
 
 nav {
-  @apply bg-cover bg-center filter brightness-125;
+  @apply bg-cover bg-center filter brightness-150
 }
 
 .nav-item {
