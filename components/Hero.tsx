@@ -20,7 +20,7 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
       <div className="relative isolate">
         <Image
           src={Structure}
-          className="absolute  rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
+          className="absolute -scale-x-100 md:scale-x-100 rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
           alt=""
         />
         <div

@@ -51,7 +51,7 @@ export default function Home() {
                       into learning the core concepts of Flagway.
                     </li>
                   </ul>
-                  <button className="bg-yellow-500 hover:bg-yellow-700 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
+                  <button className="bg-green-600 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
                     Register your group
                   </button>
                 </div>
@@ -84,7 +84,7 @@ export default function Home() {
                       preparing for competition.
                     </li>
                   </ul>
-                  <button className="bg-green-600 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
+                  <button className="bg-sky-600 hover:bg-sky-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
                     Get training materials
                   </button>
                 </div>
@@ -103,7 +103,7 @@ export default function Home() {
                       to compete on the national stage in May!
                     </li>
                   </ul>
-                  <button className="bg-sky-600 hover:bg-sky-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
+                  <button className="bg-yellow-500 hover:bg-yellow-700 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
                     Regional tournament details
                   </button>
                 </div>{" "}

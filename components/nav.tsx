@@ -33,8 +33,7 @@ export default function Navbar() {
     const defaultClasses =
       "block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium rounded-tr-lg rounded-br-lg text-gray-500 hover:border-gray-300 hover:bg-gray-700/50 hover:text-gray-50 transition-all";
 
-    if (path === pathname) {
-      console.log(`path: ${path} found. Returning active classes.`);
+    if (pathname.startsWith(path)) {
       return activeClasses[path] ?? defaultClasses;
     }
 
@@ -69,10 +68,10 @@ export default function Navbar() {
               {pathname === "/" && (
                 <motion.div
                   layoutId="underline"
-                  className="underline h-0.5 absolute bottom-2 z-[20] left-0 right-0 m-auto w-full flex opacity-80"
+                  className="underline h-0.5 absolute bottom-2 z-[20] left-0 right-0 m-auto w-full flex"
                 >
-                  <div className="w-1/3 h-full bg-yellow-400 rounded-tl-lg rounded-bl-lg"></div>
-                  <div className="w-1/3 h-full bg-red-800 "></div>
+                  <div className="w-1/3 h-full bg-yellow-600 rounded-tl-lg rounded-bl-lg"></div>
+                  <div className="w-1/3 h-full bg-red-700 "></div>
                   <div className="w-1/3 h-full bg-sky-700 rounded-tr-lg rounded-br-lg"></div>
                 </motion.div>
               )}
@@ -80,7 +79,7 @@ export default function Navbar() {
             <div className="hidden sm:pl-12 w-fit sm:flex sm:space-x-3">
               <Link href="/teams" className="nav-item text-yellow-600 relative">
                 <UserGroupIcon className="inline h-1/3 mr-2" /> Teams
-                {pathname === "/teams" && (
+                {pathname.startsWith("/teams") && (
                   <>
                     <motion.div
                       layoutId="underline"
@@ -95,7 +94,7 @@ export default function Navbar() {
                 className="nav-item text-red-700 relative"
               >
                 <TrophyIcon className="inline h-1/3 mr-2" /> Tournaments
-                {pathname === "/tournaments" && (
+                {pathname.startsWith("/tournaments") && (
                   <>
                     <motion.div
                       layoutId="underline"
@@ -123,7 +122,7 @@ export default function Navbar() {
               >
                 <FaUserPlus className="inline h-1/3 mr-2" />
                 Register
-                {pathname === "/register" && (
+                {pathname.startsWith("/register") && (
                   <>
                     <motion.div
                       layoutId="underline"
