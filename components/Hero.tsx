@@ -8,14 +8,19 @@ import Outdoors from "@/public/photos/outdoors.jpg";
 import TextCarousel from "@/components/TextCarousel";
 import Link from "next/link";
 import Structure from "@/public/burst_struct.png";
+import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  timelineRef: React.RefObject<HTMLDivElement>;
+}
+
+const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
   return (
     <div className="overflow-hidden">
       <div className="relative isolate">
         <Image
           src={Structure}
-          className="absolute  rotate-[0deg] -top-5 -left-5 w-full  opacity-[0.5]"
+          className="absolute  rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
           alt=""
         />
         <div
@@ -62,12 +67,14 @@ const Hero: React.FC = () => {
                 >
                   Learn more
                 </Link>
-                <Link
-                  href="/tournament"
-                  className="text-sm font-semibold leading-6 text-gray-900"
+                <div
+                  onClick={() =>
+                    timelineRef.current?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="text-sm font-semibold leading-6 text-gray-900 hover:cursor-pointer"
                 >
                   Tournament <span aria-hidden="true">→</span>
-                </Link>
+                </div>
               </div>
             </div>
             <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0 relative">
@@ -78,7 +85,7 @@ const Hero: React.FC = () => {
                     src={Winners}
                     placeholder="blur"
                     height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-[1.1]"
+                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg contrast-[1.1]"
                   />
                 </div>
               </div>
@@ -98,7 +105,7 @@ const Hero: React.FC = () => {
                     src={FloorWork}
                     placeholder="blur"
                     height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] brightness-125"
+                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] "
                   />
                 </div>
               </div>
@@ -126,9 +133,9 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
+      <ArrowDownIcon className="w-10 h-10 absolute bottom-10 left-0 right-0 mx-auto text-black/30 hidden lg:block animate-bounce" />
     </div>
   );
 };
 
 export default Hero;
-

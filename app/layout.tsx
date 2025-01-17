@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Viga, Mako, Kanit } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/nav";
+import { AnimatePresence, LayoutGroup } from "framer-motion";
 
 const viga = Viga({
   subsets: ["latin"],
@@ -36,13 +37,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${viga.variable} ${mako.variable} ${kanit.variable} antialiased`}
-      >
-        <Navigation />
-        {children}
-      </body>
-    </html>
+    <LayoutGroup>
+      <html lang="en">
+        <body
+          className={`${viga.variable} ${mako.variable} ${kanit.variable} antialiased`}
+        >
+          <Navigation />
+          <AnimatePresence mode="wait">{children}</AnimatePresence>
+        </body>
+      </html>
+    </LayoutGroup>
   );
 }

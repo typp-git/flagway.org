@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --foreground: #0a0a0a;
   --background: #ffffff;
@@ -26,20 +30,20 @@ nav {
 
 .nav-item {
   font-family: var(--font-mako);
-  @apply font-thin text-lg rounded-lg px-2 my-5 inline-flex items-center no-underline transition ease-in-out;
+  @apply font-thin text-base sm:text-sm md:text-base rounded-lg px-2 bg-gray-300/10 my-5 inline-flex items-center no-underline transition ease-in-out;
 }
 
 .nav-item:hover {
-  @apply transition cursor-pointer bg-gray-300 bg-opacity-30 ease-in-out;
+  @apply transition cursor-pointer bg-gray-300/20 ease-in-out;
 }
 
 .brand {
   font-family: var(--font-kanit);
-  @apply font-bold text-2xl select-none;
+  @apply font-bold text-xl md:text-2xl select-none;
 }
 
 h1 {
-  font-family: var(--font-viga);
+  font-family: var(--font-kanit);
   @apply text-4xl font-bold;
 }
 

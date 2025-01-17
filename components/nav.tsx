@@ -6,68 +6,140 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { TrophyIcon, UserGroupIcon } from "@heroicons/react/20/solid";
+import { FaDumbbell, FaUserPlus } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 // TAILWIND UI "SIMPLE" NAVBAR
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const getMobileClasses = (path: string) => {
+    const activeClasses: Record<string, string> = {
+      "/teams":
+        "block border-l-4 !border-yellow-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-yellow-600 rounded-tr-lg rounded-br-lg transition-all",
+      "/tournaments":
+        "block border-l-4 !border-red-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-red-700 rounded-tr-lg rounded-br-lg transition-all",
+      "/training":
+        "block border-l-4 !border-sky-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-sky-700 rounded-tr-lg rounded-br-lg transition-all",
+      "/register":
+        "block border-l-4 !border-green-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-green-800 rounded-tr-lg rounded-br-lg transition-all",
+    };
+
+    const defaultClasses =
+      "block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium rounded-tr-lg rounded-br-lg text-gray-500 hover:border-gray-300 hover:bg-gray-700/50 hover:text-gray-50 transition-all";
+
+    if (path === pathname) {
+      console.log(`path: ${path} found. Returning active classes.`);
+      return activeClasses[path] ?? defaultClasses;
+    }
+
+    return defaultClasses;
+  };
+
   return (
     <Disclosure
       as="nav"
-      style={{ backgroundImage: "url('structures.png')" }}
-      className="shadow z-[-2] bg-black px-4 sm:px-10 text-white"
+      // style={{ backgroundImage: "url('structures.png')" }}
+      className="shadow z-[-2] bg-black px-4 lg:px-10 text-white"
     >
-      <div className="mx-auto relative max-w-7xl px-4 sm:px-6 lg:px-8 z-0">
+      <div className="mx-auto relative w-full max-w-7xl justify-between sm:px-3 lg:px-8 z-0">
         {/* <Image className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150" alt="blurred flagway structures" priority src={Structures} /> */}
         <div className="flex z-10 h-20 justify-between">
-          <div className="flex">
-            <div className="flex flex-ahrink-0 items-center">
-              <a
-                href="/"
-                className="flex items-center gap-4 hover:cursor-pointer"
+          <div className="flex w-full gap-8 justify-between">
+            <Link
+              href="/"
+              className="flex items-center justify-start gap-4 relative hover:cursor-pointer"
+            >
+              <Image
+                priority
+                alt="Logo of the Young People's Project"
+                width="100"
+                src={YPPLogo}
+                className="w-[60px] md:w-[80px] h-auto"
+              />
+              <div className="brand font-bold items-center">
+                <div className="w-full">FLAGWAY</div>
+                <div className="w-full -mt-1.5">LEAGUE</div>
+              </div>
+              {pathname === "/" && (
+                <motion.div
+                  layoutId="underline"
+                  className="underline h-0.5 absolute bottom-2 z-[20] left-0 right-0 m-auto w-full flex opacity-80"
+                >
+                  <div className="w-1/3 h-full bg-yellow-400 rounded-tl-lg rounded-bl-lg"></div>
+                  <div className="w-1/3 h-full bg-red-800 "></div>
+                  <div className="w-1/3 h-full bg-sky-700 rounded-tr-lg rounded-br-lg"></div>
+                </motion.div>
+              )}
+            </Link>
+            <div className="hidden sm:pl-12 w-fit sm:flex sm:space-x-3">
+              <Link href="/teams" className="nav-item text-yellow-600 relative">
+                <UserGroupIcon className="inline h-1/3 mr-2" /> Teams
+                {pathname === "/teams" && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-yellow-600 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
+              <Link
+                href="/tournaments"
+                className="nav-item text-red-700 relative"
               >
-                <Image
-                  priority
-                  alt="Logo of the Young People's Project"
-                  width="100"
-                  src={YPPLogo}
-                />
-                <div className="brand font-bold items-center">
-                  <div className="w-full">FLAGWAY</div>
-                  <div className="w-full -mt-1.5">LEAGUE</div>
-                </div>
-              </a>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-              <a href="/about" className="nav-item">
-                About
-              </a>
-              <a href="/tournament" className="nav-item">
-                Tournament
-              </a>
-              <a href="/training" className="nav-item">
-                Training
-              </a>
-              <a href="/get-involved" className="nav-item">
-                Get Involved
-              </a>
+                <TrophyIcon className="inline h-1/3 mr-2" /> Tournaments
+                {pathname === "/tournaments" && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-red-700 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
+              <Link href="/training" className="nav-item text-sky-700 relative">
+                <FaDumbbell className="inline h-1/3 mr-2" /> Training
+                {pathname === "/training" && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-sky-700 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
+              <Link
+                href="/register"
+                className="nav-item text-green-800 relative"
+              >
+                <FaUserPlus className="inline h-1/3 mr-2" />
+                Register
+                {pathname === "/register" && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-green-800 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
               {/* <a href="/near-me" className="nav-item">Flagway Near You</a> */}
               {/* <a href="/login" className="nav-item">Log In</a> */}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <button
-              type="button"
-              className="relative rounded-full bg-black p-1 text-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="h-6 w-6" />
-            </button>
-
-            {/* Profile dropdown */}
-            {/* <Menu as="div" className="relative ml-3">
+          {/* <div className="hidden sm:ml-6 sm:flex sm:items-center"> */}
+          {/* Profile dropdown */}
+          {/* <Menu as="div" className="relative ml-3">
 							<div>
 								<MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
 									<span className="absolute -inset-1.5" />
@@ -102,7 +174,7 @@ export default function Navbar() {
 								</MenuItem>
 							</MenuItems>
 						</Menu> */}
-          </div>
+          {/* </div> */}
           <div className="-mr-2 flex items-center sm:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -123,87 +195,35 @@ export default function Navbar() {
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 pb-3 pt-2">
-          {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
           <DisclosureButton
             as="a"
-            href="#"
-            className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+            href="/teams"
+            className={getMobileClasses("/teams")}
           >
-            Dashboard
+            <UserGroupIcon className="inline h-[1rem] mr-2" /> Teams
           </DisclosureButton>
           <DisclosureButton
             as="a"
-            href="#"
-            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            href="/tournaments"
+            className={getMobileClasses("/tournaments")}
           >
-            Team
+            <TrophyIcon className="inline h-[1rem] mr-2" /> Tournaments
           </DisclosureButton>
           <DisclosureButton
             as="a"
-            href="#"
-            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            href="/training"
+            className={getMobileClasses("/training")}
           >
-            Projects
+            <FaDumbbell className="inline h-[1rem] mr-2" /> Training
           </DisclosureButton>
           <DisclosureButton
             as="a"
-            href="#"
-            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            href="/register"
+            className={getMobileClasses("/register")}
           >
-            Calendar
+            <FaUserPlus className="inline h-[1rem] mr-2" />
+            Register
           </DisclosureButton>
-        </div>
-        <div className="border-t border-gray-200 pb-3 pt-4">
-          <div className="flex items-center px-4">
-            <div className="flex-shrink-0">
-              <Image
-                alt=""
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded-full"
-              />
-            </div>
-            <div className="ml-3">
-              <div className="text-base font-medium text-gray-800">
-                Tom Cook
-              </div>
-              <div className="text-sm font-medium text-gray-500">
-                tom@example.com
-              </div>
-            </div>
-            <button
-              type="button"
-              className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="mt-3 space-y-1">
-            <DisclosureButton
-              as="a"
-              href="#"
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-            >
-              Your Profile
-            </DisclosureButton>
-            <DisclosureButton
-              as="a"
-              href="#"
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-            >
-              Settings
-            </DisclosureButton>
-            <DisclosureButton
-              as="a"
-              href="#"
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-            >
-              Sign out
-            </DisclosureButton>
-          </div>
         </div>
       </DisclosurePanel>
     </Disclosure>
