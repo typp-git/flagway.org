@@ -12,7 +12,7 @@ const TournamentPage: React.FC = () => {
     <div className="w-full p-5 h-full graph-paper-flat">
       <Container>
         <h1 className="m-auto text-center text-5xl">
-          2025 Flagway Season Details
+          Flagway Season Details
         </h1>
         <p className="text-lg max-w-4xl"></p>
         <br />
@@ -21,7 +21,7 @@ const TournamentPage: React.FC = () => {
           <div className="order-1 relative px-1 py-2 md:w-1/2">
             <h2 className="font-bold">Recruitment and Training</h2>
             <div className="text-lg italic mb-3">
-              September to December 2024
+              From September to December
             </div>
             <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100">
               <li>Recruitment kicks off as the Flagway season begins!</li>
@@ -31,7 +31,7 @@ const TournamentPage: React.FC = () => {
               </li>
             </ul>
             <button className="bg-yellow-500 hover:bg-yellow-700 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
-              Register your group
+              Request Training
             </button>
 
             <div className="absolute hidden md:block bottom-0 h-0.5 w-full bg-gray-200 rounded-xl"></div>
@@ -48,7 +48,7 @@ const TournamentPage: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12">
           <div className="order-1 relative px-1 py-4 md:w-1/2">
             <h2 className="font-bold text-2xl">Flagway Practice</h2>
-            <div className="text-lg italic mb-3">January to March 2025</div>
+            <div className="text-lg italic mb-3">From January to March</div>
             <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100">
               <li>
                 Students continue to practice Flagway, focusing on preparing for
@@ -72,7 +72,7 @@ const TournamentPage: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12">
           <div className="order-1 relative px-1 py-4 md:w-1/2">
             <h2 className="font-bold">Local &amp; Regional Tournaments</h2>
-            <div className="text-lg italic mb-3">April 2025</div>
+            <div className="text-lg italic mb-3">In April</div>
             <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100">
               <li>
                 Teams compete locally and regionally to secure their spot to
@@ -96,10 +96,10 @@ const TournamentPage: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12">
           <div className="order-1 relative px-1 py-4 md:w-1/2">
             <h2 className="font-bold">National Tournament</h2>
-            <div className="text-lg italic mb-3">May 2025</div>
+            <div className="text-lg italic mb-3">In May</div>
             <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100">
               <li>
-                Winners of regional tournament meet in Florida for the national
+                Winners of regional tournament compete at the national
                 tournament!
               </li>
               <li>

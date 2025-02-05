@@ -4,8 +4,10 @@ import React from 'react';
 const AboutPage: React.FC = () => {
 	return (
 		<Container>
-			<h1>Get Involved</h1>
-			<p>This is a placeholder for the Get Involved page content.</p>
+			<h1 className="py-10 text-center">Register Your Flagway Team</h1>
+			
+
+			<iframe className="rounded-3xl" src="https://bostonu.qualtrics.com/jfe/form/SV_eRjUqaxlAYSmPJk" height="600" width="100%" scrolling="yes"></iframe>
 		</Container>
 	);
 };

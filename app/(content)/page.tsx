@@ -42,7 +42,7 @@ export default function Home() {
                     Recruitment and Training
                   </h2>
                   <div className="text-lg italic mb-3">
-                    September to December 2024
+                    September to December
                   </div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>Recruitment kicks off as the Flagway season begins!</li>
@@ -52,7 +52,7 @@ export default function Home() {
                     </li>
                   </ul>
                   <button className="bg-green-600 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
-                    Register your group
+                    Request Training
                   </button>
                 </div>
                 <div className="order-2 px-5 py-3 text-left md:w-5/12">
@@ -76,7 +76,7 @@ export default function Home() {
                 <div className="order-1 md:order-2 px-1 py-4 text-left md:w-5/12">
                   <h2 className="font-bold text-2xl">Flagway Practice</h2>
                   <div className="text-lg italic mb-3">
-                    January to March 2025
+                    January to March
                   </div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>
@@ -96,7 +96,7 @@ export default function Home() {
                   <h2 className="font-bold text-2xl">
                     Local &amp; Regional Tournaments
                   </h2>
-                  <div className="text-lg italic mb-3">April 2025</div>
+                  <div className="text-lg italic mb-3">April</div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>
                       Teams compete locally and regionally to secure their spot
@@ -127,10 +127,10 @@ export default function Home() {
                 </div>
                 <div className="order-1 md:order-2 px-1 py-4 text-left md:w-5/12">
                   <h2 className="font-bold text-2xl">National Tournament</h2>
-                  <div className="text-lg italic mb-3">May 2025</div>
+                  <div className="text-lg italic mb-3">May</div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>
-                      Winners of regional tournament meet in Florida for the
+                      Winners of regional tournaments compete at the 
                       national tournament!
                     </li>
                   </ul>
