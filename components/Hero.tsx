@@ -20,7 +20,7 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
       <div className="relative isolate">
         <Image
           src={Structure}
-          className="absolute -scale-x-100 md:scale-x-100 rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
+          className="absolute select-none no-drag pointer-events-none -scale-x-100 md:scale-x-100 rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
           alt=""
         />
         <div
@@ -63,9 +63,9 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
               <div className="mt-10 flex items-center gap-x-6">
                 <Link
                   href="/about"
-                  className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                  className="rounded-md bg-green-500 px-3.5 py-2.5 font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 font-display text-base focus-visible:outline-green-600"
                 >
-                  Learn more
+                  SAVE THE DATE! National Tournament May 30-31, 2025
                 </Link>
                 <div
                   onClick={() =>

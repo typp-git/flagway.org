@@ -31,7 +31,8 @@ export default async function Page({ params }: { params: { team: string } }) {
       </Link>
       <h1>{name}</h1>
       <div>
-        Region: {region}.<br />
+        Region: {region}
+        <br />
         State: {state}
       </div>
       <h2>Players:</h2>
