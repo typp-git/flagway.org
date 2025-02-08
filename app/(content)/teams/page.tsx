@@ -7,7 +7,7 @@ import UnderConstruction from "@/components/UnderConstruction";
 const AboutPage: React.FC = () => {
   return (
     <Container className="">
-      <h1 className="text-3xl font-bold">All Teams</h1>
+      {/* <h1 className="text-3xl font-bold">All Teams</h1> */}
       <UnderConstruction />
       {/* <div className="flex flex-col gap-5"> */}
       {/*   {regions.map(({ name, data }) => ( */}
@@ -28,4 +28,3 @@ const AboutPage: React.FC = () => {
 };
 
 export default AboutPage;
-

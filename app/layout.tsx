@@ -3,6 +3,8 @@ import { Viga, Mako, Kanit } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/nav";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
+import Loading from "./loading";
+import { Suspense } from "react";
 
 const viga = Viga({
   subsets: ["latin"],
@@ -43,7 +45,9 @@ export default function RootLayout({
           className={`${viga.variable} ${mako.variable} ${kanit.variable} antialiased`}
         >
           <Navigation />
-          <AnimatePresence mode="wait">{children}</AnimatePresence>
+          <Suspense fallback={<Loading />}>
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
+          </Suspense>
         </body>
       </html>
     </LayoutGroup>

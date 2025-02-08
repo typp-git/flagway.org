@@ -1,22 +1,25 @@
 import Container from "@/components/container";
+import Image from "next/image";
 import React from "react";
+import Purple from "@/public/photos/purple.jpg";
 
 const AboutPage: React.FC = () => {
   return (
     <Container>
       <div className="relative bg-white">
-        <div className="lg:absolute lg:inset-0 lg:left-1/2">
-          <img
+        <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:mb-16 lg:mt-12">
+          <Image
             alt=""
-            src="https://photos.smugmug.com/FlagwayPhotos/2024-Flagway-Player-Headshots/YPP-3/i-PHSz7Bt/0/Nbp5s9vLsCLS2tCDwpvSjG3TVcmXtL3N3J4Bxq3hf/4K/LG_YPP_MMP01174©MOSES_MITCHELL-4K.jpg"
-            className="h-64 w-full bg-gray-50 object-cover sm:h-80 lg:absolute lg:h-full"
+            src={Purple}
+            className="h-64 w-full bg-gray-50 rounded-3xl object-cover sm:h-80 lg:absolute lg:object-[35%_60%] lg:h-[90%]"
           />
         </div>
         <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
           <div className="px-6 lg:px-8">
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
               <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                Let's Get Your Site Some Flagway Training!
+                Let&apos;s get your site <em>running</em> with
+                <br /> Flagway training!
               </h2>
               <p className="mt-2 text-lg/8 text-gray-600">
                 Leave us your contact information and a sense of how many
@@ -224,33 +227,38 @@ const AboutPage: React.FC = () => {
                   </fieldset>
                 </div>
                 <div className="sm:col-span-2">
-  <label htmlFor="start-date" className=" pt-8 block text-sm/6 font-semibold text-gray-900">
-    Training Start Date
-  </label>
-  <div className="mt-2.5">
-    <input
-      id="start-date"
-      name="start-date"
-      type="date"
-      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-    />
-  </div>
-</div>
+                  <label
+                    htmlFor="start-date"
+                    className=" pt-8 block text-sm/6 font-semibold text-gray-900"
+                  >
+                    Training Start Date
+                  </label>
+                  <div className="mt-2.5">
+                    <input
+                      id="start-date"
+                      name="start-date"
+                      type="date"
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                    />
+                  </div>
+                </div>
 
-<div className="sm:col-span-2 mt-4">
-  <label htmlFor="end-date" className="block text-sm/6 font-semibold text-gray-900">
-    Training End Date
-  </label>
-  <div className="mt-2.5">
-    <input
-      id="end-date"
-      name="end-date"
-      type="date"
-      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-    />
-  </div>
-</div>
-
+                <div className="sm:col-span-2 mt-4">
+                  <label
+                    htmlFor="end-date"
+                    className="block text-sm/6 font-semibold text-gray-900"
+                  >
+                    Training End Date
+                  </label>
+                  <div className="mt-2.5">
+                    <input
+                      id="end-date"
+                      name="end-date"
+                      type="date"
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                    />
+                  </div>
+                </div>
 
                 <div className="mt-10 flex justify-end border-t border-gray-900/10 pt-8">
                   <button

@@ -89,12 +89,9 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
-              <Link
-                href="/tournaments"
-                className="nav-item text-red-700 relative"
-              >
-                <TrophyIcon className="inline h-1/3 mr-2" /> Tournaments
-                {pathname.startsWith("/tournaments") && (
+              <Link href="/posts" className="nav-item text-red-700 relative">
+                <TrophyIcon className="inline h-1/3 mr-2" /> Announcements
+                {pathname.startsWith("/posts") && (
                   <>
                     <motion.div
                       layoutId="underline"
