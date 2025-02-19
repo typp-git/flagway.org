@@ -4,17 +4,17 @@ author: "Flagway Team"
 date: "2025-02-02"
 ---
 
-{/* ===== Import Utilities ===== */}
-
 import MdxLayout from "@/components/MdxLayout";
-
-{/* ====== Content Section ===== */}
 
 This is the home of the Flagway League! We are a community of students, teachers, and math literacy workers who love to play Flagway. This is the place to find the latest news, resources, and events related to Flagway. Stay tuned for more information about the 2025 National Tournament and other updates!
 
 export default function Page({ children }) {
   return (
-    <MdxLayout title="Flagway Team" author="Flagway Team" date="2025-02-02">
+    <MdxLayout
+      title={frontmatter.title}
+      author={frontmatter.author}
+      date={frontmatter.date}
+    >
       {children}
     </MdxLayout>
   );

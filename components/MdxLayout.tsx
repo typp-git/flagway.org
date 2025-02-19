@@ -51,14 +51,14 @@ export default function MdxLayout({
         <div className="text-gray-500">Latest post:</div>
       )}
       <h1 className="text-3xl font-bold">{title}</h1>
-      <p className="text-gray-600">
+      <div className="text-gray-600">
         By {author} •{" "}
         {new Date(date).toLocaleString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
         })}
-      </p>
+      </div>
       {children}
     </div>
   );

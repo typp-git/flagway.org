@@ -20,7 +20,7 @@ export default function PostsPage() {
       </div>
       <div className="mt-16">
         <h2 className="text-xl font-semibold">Other Posts</h2>
-        <ul className="list-disc pl-5">
+        <ul className="list-none *:mb-2">
           {otherPosts.map((post) => (
             <li key={post.slug}>
               <Link
@@ -29,14 +29,14 @@ export default function PostsPage() {
               >
                 {post.title}
               </Link>
-              <p className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500">
                 By {post.author} •{" "}
                 {new Date(post.date).toLocaleString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
                 })}
-              </p>
+              </div>
             </li>
           ))}
         </ul>
