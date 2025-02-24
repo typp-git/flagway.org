@@ -17,6 +17,12 @@ import WinningSquad from "@/public/photos/winning-squad.jpg";
 const imgClasses = "rounded-lg shadow-xl";
 const sectionClasses = `mb-12 md:mb-8 md:justify-between justify-center md:gap-24 gap-8 items-center flex flex-col md:flex-row w-full md:w-full  !transition !transition-500 rounded-xl  p-2`;
 
+// export const metadata: Metadata = {
+//   title: "Flagway League",
+//   description:
+//     "Flagway exists to create environments where students can practice and celebrate learning math.",
+// };
+//
 export default function Home() {
   const timelineRef = React.useRef<HTMLDivElement>(null);
   return (
@@ -51,7 +57,7 @@ export default function Home() {
                       into learning the core concepts of Flagway.
                     </li>
                   </ul>
-                  <button className="bg-green-600 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
+                  <button className="bg-green-700 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
                     Request Training
                   </button>
                 </div>
@@ -75,9 +81,7 @@ export default function Home() {
                 </div>
                 <div className="order-1 md:order-2 px-1 py-4 text-left md:w-5/12">
                   <h2 className="font-bold text-2xl">Flagway Practice</h2>
-                  <div className="text-lg italic mb-3">
-                    January to March
-                  </div>
+                  <div className="text-lg italic mb-3">January to March</div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>
                       Students continue to practice Flagway, focusing on
@@ -130,8 +134,8 @@ export default function Home() {
                   <div className="text-lg italic mb-3">May</div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>
-                      Winners of regional tournaments compete at the 
-                      national tournament!
+                      Winners of regional tournaments compete at the national
+                      tournament!
                     </li>
                   </ul>
                   <button className="bg-rose-600 hover:bg-rose-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">

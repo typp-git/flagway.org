@@ -8,6 +8,60 @@
     user-drag: none;
     -webkit-user-drag: none;
   }
+
+  .custom-border {
+    position: relative;
+    padding: 16px;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  /* TODO: This does not work lol. Want it to rotate around when you hover, but no animation happens now.*/
+  .custom-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px; /* Border thickness */
+    background: conic-gradient(
+      from 0deg,
+      #0369a1 0deg 110deg,
+      #b91c1c 110deg 250deg,
+      #ca8a04 250deg 360deg
+    );
+    -webkit-mask:
+      linear-gradient(white 0 0) content-box,
+      linear-gradient(white 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    border-radius: inherit;
+    z-index: -1;
+    transition: none; /* Remove previous transition */
+  }
+
+  /* Keyframes for rotating the gradient */
+  @keyframes rotateGradient {
+    0% {
+      background: conic-gradient(
+        from 0deg,
+        #0369a1 0deg 110deg,
+        #b91c1c 110deg 250deg,
+        #ca8a04 250deg 360deg
+      );
+    }
+    100% {
+      background: conic-gradient(
+        from 360deg,
+        #0369a1 0deg 110deg,
+        #b91c1c 110deg 250deg,
+        #ca8a04 250deg 360deg
+      );
+    }
+  }
+
+  /* Hover effect that triggers the animation */
+  .custom-border:hover::before {
+    animation: rotateGradient 1s linear infinite; /* Animate the gradient */
+  }
 }
 
 html {

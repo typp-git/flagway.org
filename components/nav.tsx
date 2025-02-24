@@ -44,7 +44,7 @@ export default function Navbar() {
     <Disclosure
       as="nav"
       // style={{ backgroundImage: "url('structures.png')" }}
-      className="shadow z-[-2] bg-black px-4 lg:px-10 text-white"
+      className="shadow bg-black px-4 lg:px-10 text-white"
     >
       <div className="mx-auto relative w-full max-w-7xl justify-between sm:px-3 lg:px-8 z-0">
         {/* <Image className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150" alt="blurred flagway structures" priority src={Structures} /> */}
