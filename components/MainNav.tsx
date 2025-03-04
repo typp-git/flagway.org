@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import YPPLogo from "@/public/YPP-Logo-white.webp";
 import {
   Disclosure,
   DisclosureButton,
@@ -12,6 +10,9 @@ import { FaDumbbell, FaUserPlus } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import FlagwayLogo from "./FlagwayLogo";
+import clsx from "clsx";
+import DashboardNavLink from "./DashboardNavLink";
 
 // TAILWIND UI "SIMPLE" NAVBAR
 
@@ -49,36 +50,17 @@ export default function Navbar() {
       <div className="mx-auto relative w-full max-w-7xl justify-between sm:px-3 lg:px-8 z-0">
         {/* <Image className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150" alt="blurred flagway structures" priority src={Structures} /> */}
         <div className="flex z-10 h-20 justify-between">
-          <div className="flex w-full gap-8 justify-between">
-            <Link
-              href="/"
-              className="flex items-center justify-start gap-4 relative hover:cursor-pointer"
-            >
-              <Image
-                priority
-                alt="Logo of the Young People's Project"
-                width="100"
-                src={YPPLogo}
-                className="w-[60px] md:w-[80px] h-auto"
-              />
-              <div className="brand font-bold items-center">
-                <div className="w-full">FLAGWAY</div>
-                <div className="w-full -mt-1.5">LEAGUE</div>
-              </div>
-              {pathname === "/" && (
-                <motion.div
-                  layoutId="underline"
-                  className="underline h-0.5 absolute bottom-2 z-[20] left-0 right-0 m-auto w-full flex"
-                >
-                  <div className="w-1/3 h-full bg-yellow-600 rounded-tl-lg rounded-bl-lg"></div>
-                  <div className="w-1/3 h-full bg-red-700 "></div>
-                  <div className="w-1/3 h-full bg-sky-700 rounded-tr-lg rounded-br-lg"></div>
-                </motion.div>
-              )}
-            </Link>
-            <div className="hidden sm:pl-12 w-fit sm:flex sm:space-x-3">
-              <Link href="/teams" className="nav-item text-yellow-600 relative">
-                <UserGroupIcon className="inline h-1/3 mr-2" /> Teams
+          <div className="flex w-full gap-8 justify-between items-center">
+            <FlagwayLogo />
+            <div className="hidden sm:pl-12  sm:flex sm:space-x-3 sm:*:min-h-8 *:w-fit">
+              <Link
+                href="/teams"
+                className={clsx(
+                  "nav-item relative hover:text-yellow-600" +
+                    (pathname.startsWith("/teams") ? " text-yellow-600" : ""),
+                )}
+              >
+                <UserGroupIcon className="inline h-4 mr-2" /> Teams
                 {pathname.startsWith("/teams") && (
                   <>
                     <motion.div
@@ -89,8 +71,14 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
-              <Link href="/posts" className="nav-item text-red-700 relative">
-                <TrophyIcon className="inline h-1/3 mr-2" /> Announcements
+              <Link
+                href="/posts"
+                className={clsx(
+                  "nav-item relative hover:text-red-700",
+                  pathname.startsWith("/posts") ? " text-red-700" : "",
+                )}
+              >
+                <TrophyIcon className="inline h-4 mr-2" /> Announcements
                 {pathname.startsWith("/posts") && (
                   <>
                     <motion.div
@@ -101,8 +89,14 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
-              <Link href="/training" className="nav-item text-sky-700 relative">
-                <FaDumbbell className="inline h-1/3 mr-2" /> Training
+              <Link
+                href="/training"
+                className={clsx(
+                  "nav-item relative hover:text-sky-700" +
+                    (pathname.startsWith("/training") ? " text-sky-700" : ""),
+                )}
+              >
+                <FaDumbbell className="inline h-4 mr-2" /> Training
                 {pathname === "/training" && (
                   <>
                     <motion.div
@@ -115,9 +109,12 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/register"
-                className="nav-item text-green-800 relative"
+                className={clsx(
+                  "nav-item relative hover:text-green-800" +
+                    (pathname.startsWith("/register") ? " text-green-800" : ""),
+                )}
               >
-                <FaUserPlus className="inline h-1/3 mr-2" />
+                <FaUserPlus className="inline h-4 mr-2" />
                 Register
                 {pathname.startsWith("/register") && (
                   <>
@@ -131,6 +128,7 @@ export default function Navbar() {
               </Link>
               {/* <a href="/near-me" className="nav-item">Flagway Near You</a> */}
               {/* <a href="/login" className="nav-item">Log In</a> */}
+              <DashboardNavLink />
             </div>
           </div>
           {/* <div className="hidden sm:ml-6 sm:flex sm:items-center"> */}

@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { TbLogout } from "react-icons/tb";
 
 export default function LogoutButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,9 +18,10 @@ export default function LogoutButton() {
   return (
     <>
       <button
-        className="bg-red-950 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-lg h-fit my-auto font-base hover:cursor-pointer"
+        className="bg-red-950 hover:bg-red-900 text-white font-bold py-1.5 flex gap-1 items-center justify-center px-3 rounded-lg h-fit my-auto !text-base font-normal transition hover:cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
+        <TbLogout />
         Log out
       </button>
       <Dialog
