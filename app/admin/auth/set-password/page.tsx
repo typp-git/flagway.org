@@ -3,6 +3,14 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { type EmailOtpType } from "@supabase/supabase-js";
+import Link from "next/link";
+// import {
+//   Dialog,
+//   DialogBackdrop,
+//   DialogPanel,
+//   DialogTitle,
+//   Description,
+// } from "@headlessui/react";
 
 export default function AcceptInvite() {
   const supabase = createClient();
@@ -10,9 +18,11 @@ export default function AcceptInvite() {
   const searchParams = useSearchParams();
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
-  const next = searchParams.get("next") ?? "/auth/result";
+  const next = searchParams.get("next") ?? "/admin";
   const [validToken, setValidToken] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (token_hash && type) {
@@ -37,13 +47,15 @@ export default function AcceptInvite() {
   }, [token_hash, type, next, router, supabase.auth]);
 
   async function updatePassword(formData: FormData) {
+    setIsOpen(true);
     const newPassword = formData.get("password") as string;
     const { data, error } = await supabase.auth.updateUser({
       password: newPassword,
     });
 
-    if (data) alert("Password updated successfully!");
-    if (error) alert("There was an error updating your password.");
+    if (data) setMessage("Password updated successfully!");
+    if (error)
+      setMessage(`There was an error updating your password: ${error.code}`);
   }
 
   return (
@@ -86,7 +98,15 @@ export default function AcceptInvite() {
             </>
           ) : (
             <>
-              <div>Your password reset link has expired! Please try again.</div>
+              <div>
+                Your password reset link has expired! Please try again.{" "}
+                <Link
+                  className="text-green-700 underline"
+                  href="/admin/auth/reset"
+                >
+                  Reset password.
+                </Link>
+              </div>
             </>
           )}
         </div>

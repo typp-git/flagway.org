@@ -10,17 +10,16 @@
   }
 
   .custom-border {
-    position: relative;
-    padding: 16px;
-    z-index: 0;
-    overflow: hidden;
+    padding: 5px; /* Slight padding to ensure full wrap */
+    z-index: 10;
+    overflow: visible;
+    border-radius: 8px;
   }
 
-  /* TODO: This does not work lol. Want it to rotate around when you hover, but no animation happens now.*/
   .custom-border::before {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -4px; /* Slightly expand */
     padding: 2px; /* Border thickness */
     background: conic-gradient(
       from 0deg,
@@ -34,8 +33,8 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     border-radius: inherit;
-    z-index: -1;
-    transition: none; /* Remove previous transition */
+    z-index: 10;
+    transition: transform 0.3s ease-in-out;
   }
 
   /* Keyframes for rotating the gradient */
@@ -61,6 +60,7 @@
   /* Hover effect that triggers the animation */
   .custom-border:hover::before {
     animation: rotateGradient 1s linear infinite; /* Animate the gradient */
+    cursor: pointer;
   }
 }
 
@@ -92,11 +92,15 @@ nav {
 
 .nav-item {
   font-family: var(--font-mako);
-  @apply font-thin text-base sm:text-sm md:text-base rounded-lg px-2 bg-gray-300/10 my-5 inline-flex items-center no-underline transition ease-in-out;
+  @apply font-thin text-base sm:text-sm md:text-base rounded-lg px-2  my-5 inline-flex items-center no-underline transition ease-in-out transition;
 }
 
 .nav-item:hover {
-  @apply transition cursor-pointer bg-gray-300/20 ease-in-out;
+  @apply transition cursor-pointer ease-in-out;
+}
+
+.font-display {
+  font-family: var(--font-kanit);
 }
 
 .brand {
