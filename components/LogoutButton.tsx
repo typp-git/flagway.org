@@ -32,7 +32,10 @@ export default function LogoutButton() {
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
           <DialogPanel className="max-w-lg space-y-4 shadow bg-white rounded-xl p-8">
-            <DialogTitle className="font-bold">Log out</DialogTitle>
+            <DialogTitle className="flex justify-left gap-2 items-center font-bold">
+              Log out
+              <TbLogout />
+            </DialogTitle>
             <Description>Are you sure you want to log out?</Description>
             <div className="flex gap-4">
               <button
