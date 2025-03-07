@@ -29,7 +29,9 @@ const regions: Region[] = [
           name: "Greater Boston",
           state: "MA",
           players: [
-            { name: "Player 1", grade: 9, city: "Boston", yearsYPP: 1 },
+            { name: "Robert Sluis", grade: 9, city: "Boston", yearsYPP: 1 },
+            { name: "Ethel Amanda Mc'Cain", grade: 8, city: "Boston", yearsYPP: 2 },
+            { name: "Breanna Marcus", grade: 7, city: "Boston", yearsYPP: 3 }
           ],
         },
         { name: "VSU", state: "VA", players: [] },
