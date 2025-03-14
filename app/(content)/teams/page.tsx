@@ -22,14 +22,16 @@ const AboutPage: React.FC = () => {
   return (
     <div className="overflow-auto">
       <div className="absolute -z-100 h-full w-full
-        bg-[url('/structures.png')]
-        bg-gray-950 bg-cover  bg-center">
+        bg-white bg-cover bg-center">
+      </div>
+
+      <div className="w-full text-white bg-gray-800 bg-[url('/structures.png')] py-8">
+        <Container className= "py-0">
+          <h1 className="text-3xl font-bold">All Teams</h1>
+        </Container>
       </div>
       
-      <Container className= "text-white mb-20">
-        <h1 className="text-3xl font-bold">All Teams</h1>
-        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300"/>
-
+      <Container className= "text-gray-900 mb-20">
         {/* relative grid min-h-screen grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 bg-gray-50 px-8 py-6 sm:py-12 */}
 
         <div className="relative grid min-h-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
@@ -40,9 +42,9 @@ const AboutPage: React.FC = () => {
               <h3 className="text-2xl font-bold">{name}</h3>
               <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-300"/>
 
-              <div className="flex flex-col text-gray-900 h-full">
+              <div className="flex flex-col text-gray-900 p-4 h-full">
                 {data.teams.map((team) => (
-                    <div key={team.name} className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-800 text-white group-hover:text-gray-400 hover:bg-gray-700 p-2 rounded-lg shadow-lg">
+                    <div key={team.name} className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-200 hover:bg-gray-300 p-2 rounded-lg shadow-lg">
                       <Link href={`/teams/${team.slug}`} className="w-full">
                         <div className="flex flex-row items-center justify-start">
                           <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
@@ -52,7 +54,7 @@ const AboutPage: React.FC = () => {
                             <h3 className="*:bg-clip-text bg-gradient-to-r transition-all">{team.name}</h3>
                             {/* <Link className="text-blue-500 hover:underline" href={`/teams/${team.slug}`}>Group Page</Link> */}
                           </div>
-                          <span className="mr-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 pr-2  transition-all ">
+                          <span className="mr-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 pr-2 group-hover:text-gray-600 transition-all ">
                               <IoIosArrowForward className="h-6 w-6"/>
                           </span>
                         </div>
