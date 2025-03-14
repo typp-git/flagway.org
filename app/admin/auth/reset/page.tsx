@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import { createClient } from "@/utils/supabase/client";
+import { MdLockReset } from "react-icons/md";
 
 export default function ResetPassword() {
   const supabase = createClient();
@@ -10,7 +11,9 @@ export default function ResetPassword() {
 
   async function resetPassword(formData: FormData) {
     const email = formData.get("email") as string;
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/admin/auth/set-password`,
+    });
     if (error) {
       setSent("error");
       setErrorMessage(error.message);
@@ -27,7 +30,9 @@ export default function ResetPassword() {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow-xl sm:rounded-lg sm:px-12">
-            <h3>Reset password</h3>
+            <h2 className="inline-flex items-center gap-2">
+              <MdLockReset /> Reset password
+            </h2>
             <div className="mt-2">
               Enter the email associated with your account and we&apos;ll send
               you an email with instructions to reset your password.

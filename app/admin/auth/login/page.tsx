@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { login } from "./actions";
+import LoginStatus from "./Status";
 // import ClearStructure from "@/public/clear-structure.png";
 // import Image from "next/image";
 
@@ -57,7 +58,7 @@ export default function Login() {
 
             <div className="text-sm/6">
               <Link
-                href="/auth/reset"
+                href="/admin/auth/reset"
                 className="font-semibold text-green-700 hover:text-green-600 hover:cursor-pointer"
               >
                 Forgot password?
@@ -74,6 +75,7 @@ export default function Login() {
               </button>
             </div>
           </form>
+          <LoginStatus />
           {/* <div> */}
           {/*   <div className="relative mt-10"> */}
           {/*     <div */}
