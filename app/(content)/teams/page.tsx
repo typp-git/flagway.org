@@ -14,43 +14,54 @@ import Fox from "@/public/team-logos/fox-deep.png";
 import Lion from "@/public/team-logos/lion-deep.png";
 const RandomLogo = [Dog, Crown, Meerkat, Eagle, Rabbit, Rhino, Fox, Lion];
 
+import { IoIosArrowForward } from "react-icons/io";
+
+
+
 const AboutPage: React.FC = () => {
   return (
-    <div>
-      <div className="absolute -z-100 h-full w-full overflow-hidden
-        bg-[url('/court-background-by-caroline-justine.jpg')]
-        bg-gray-700 bg-cover bg-blend-overlay bg-center">
+    <div className="overflow-auto">
+      <div className="absolute -z-100 h-full w-full
+        bg-[url('/structures.png')]
+        bg-gray-950 bg-cover  bg-center">
       </div>
-      <Container className="text-white">
+      
+      <Container className= "text-white mb-20">
         <h1 className="text-3xl font-bold">All Teams</h1>
+        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300"/>
 
-        <div className="flex flex-col gap-5">
+        {/* relative grid min-h-screen grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 bg-gray-50 px-8 py-6 sm:py-12 */}
+
+        <div className="relative grid min-h-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
+
+          
           {regions.map(({ name, data }) => (
-            <div key={name}>
-              <h2 className="text-2xl font-bold ">{name}</h2>
+            <div key={name} className="flex flex-col">
+              <h3 className="text-2xl font-bold">{name}</h3>
+              <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-300"/>
 
+              <div className="flex flex-col text-gray-900 h-full">
                 {data.teams.map((team) => (
-                  <Link href={`/teams/${team.slug}`} key={team.name}>
-                    <div className="flex flex-row flex-wrap items-center h-15 mb-6 w-full">
-                      <div className="justify-center h-full  aspect-square overflow-hidden [clip-path:polygon(100_0,100%_50%,100_100%,0_100%,0%_50%,0_0)]">
-                        <Image src={RandomLogo[team.name.length % 8]} className="" alt="Team Logo" />
-                      </div>
-                      <div 
-                        className="flex flex-col items-start
-                        justify-center px-2 h-full
-                        min-w-80 bg-gray-800 text-white
-                        bg-[url('/thin_struct.png')]
-                        bg-cover bg-center 
-                        [clip-path:polygon(100%_0,100%_50%,100%_100%,0_100%,0%_50%,0_0)]
-                        "
-                      >
-                        <h1 className="bg-clip-text bg-gradient-to-r from-white to-blue-200 text-transparent">{team.name}</h1>
-                      </div>
-
-                      {/* <div className="justify-center h-full bg-white pl-2 pr-4 overflow-hidden [clip-path:polygon(80%_0,100%_50%,80%_100%,0_100%,20%_50%,0_0)]"> */}
+                    <div key={team.name} className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-800 text-white group-hover:text-gray-400 hover:bg-gray-700 p-2 rounded-lg shadow-lg">
+                      <Link href={`/teams/${team.slug}`} className="w-full">
+                        <div className="flex flex-row items-center justify-start">
+                          <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
+                            <Image src={RandomLogo[team.name.length % 8]} className="object-cover" alt="Team Logo" />
+                          </div>
+                          <div className="ml-2 flex flex-col relative ">
+                            <h3 className="*:bg-clip-text bg-gradient-to-r transition-all">{team.name}</h3>
+                            {/* <Link className="text-blue-500 hover:underline" href={`/teams/${team.slug}`}>Group Page</Link> */}
+                          </div>
+                          <span className="mr-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 pr-2  transition-all ">
+                              <IoIosArrowForward className="h-6 w-6"/>
+                          </span>
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
                 ))}
+
+              </div>
+               
             </div>
           ))}
         </div>

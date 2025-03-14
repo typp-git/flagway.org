@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { team: string } }) {
         </Link>
 
         <div className="h-30 my-6 w-full flex flex-row items-center">
-          <div className="h-full justify-center aspect-square overflow-hidden
+          <div className="h-full justify-center shrink-0 aspect-square overflow-hidden
             [clip-path:polygon(100%_0,100%_50%,100%_100%,0_100%,0%_50%,0_0)]"
           >
           {/* <div className="h-full justify-center aspect-square overflow-hidden [clip-path:polygon(75%_0,100%_50%,75%_100%,0_100%,25%_50%,0_0)]"> */}
@@ -55,8 +55,7 @@ export default async function Page({ params }: { params: { team: string } }) {
             className="ml-4 pl-12 pr-20 h-full flex-grow min-w-80
             flex flex-col items-start justify-center 
             bg-gray-800 bg-[url('/thin_struct.png')] bg-cover bg-center 
-            [clip-path:polygon(0_0,95%_0%,100%_50%,95%_100%,0_100%)]
-            "
+            [clip-path:polygon(0_0,95%_0%,100%_50%,95%_100%,0_100%)]"
           >
             <h1 className="bg-gradient-to-r from-white to-blue-200 text-transparent bg-clip-text">{name}</h1>
             <div> <span className="text-blue-300">Region:</span> {region}</div>
