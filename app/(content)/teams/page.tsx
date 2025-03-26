@@ -16,57 +16,59 @@ const RandomLogo = [Dog, Crown, Meerkat, Eagle, Rabbit, Rhino, Fox, Lion];
 
 import { IoIosArrowForward } from "react-icons/io";
 
-
-
 const AboutPage: React.FC = () => {
   return (
     <div className="overflow-auto">
-      <div className="absolute -z-100 h-full w-full
+      <div
+        className="absolute -z-100 h-full w-full
         bg-[url('/structures.png')]
-        bg-gray-950 bg-cover  bg-center">
-      </div>
-      
-      <Container className= "text-white mb-20">
+        bg-gray-950 bg-cover bg-center"
+      ></div>
+
+      <Container className="text-white mb-20">
         <h1 className="text-3xl font-bold">All Teams</h1>
-        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300"/>
+        <hr className="h-px my-8 bg-gray-300 border-0 dark:bg-gray-400" />
 
         {/* relative grid min-h-screen grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 bg-gray-50 px-8 py-6 sm:py-12 */}
 
         <div className="relative grid min-h-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
-
-          
           {regions.map(({ name, data }) => (
             <div key={name} className="flex flex-col">
               <h3 className="text-2xl font-bold">{name}</h3>
-              <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-300"/>
+              <hr className="h-px my-2 bg-gray-300 border-0 dark:bg-gray-400" />
 
               <div className="flex flex-col text-gray-900 h-full">
                 {data.teams.map((team) => (
-                    <div key={team.name} className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-800 text-white group-hover:text-gray-400 hover:bg-gray-700 p-2 rounded-lg shadow-lg">
-                      <Link href={`/teams/${team.slug}`} className="w-full">
-                        <div className="flex flex-row items-center justify-start">
-                          <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
-                            <Image src={RandomLogo[team.name.length % 8]} className="object-cover" alt="Team Logo" />
-                          </div>
-                          <div className="ml-2 flex flex-col relative ">
-                            <h3 className="*:bg-clip-text bg-gradient-to-r transition-all">{team.name}</h3>
-                            {/* <Link className="text-blue-500 hover:underline" href={`/teams/${team.slug}`}>Group Page</Link> */}
-                          </div>
-                          <span className="mr-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 pr-2  transition-all ">
-                              <IoIosArrowForward className="h-6 w-6"/>
-                          </span>
+                  <div
+                    key={team.name}
+                    className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-900/40 text-white group-hover:text-gray-400 hover:bg-gray-800/50 p-2 rounded-lg shadow-lg transition"
+                  >
+                    <Link href={`/teams/${team.slug}`} className="w-full">
+                      <div className="flex flex-row items-center justify-start">
+                        <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
+                          <Image
+                            src={RandomLogo[team.name.length % 8]}
+                            className="object-cover"
+                            alt="Team Logo"
+                          />
                         </div>
-                      </Link>
-                    </div>
+                        <div className="ml-2 flex flex-col relative ">
+                          <h3 className="*:bg-clip-text bg-gradient-to-r transition-all">
+                            {team.name}
+                          </h3>
+                          {/* <Link className="text-blue-500 hover:underline" href={`/teams/${team.slug}`}>Group Page</Link> */}
+                        </div>
+                        <span className="mr-2 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-2 pr-2  transition-all ">
+                          <IoIosArrowForward className="h-6 w-6" />
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
                 ))}
-
               </div>
-               
             </div>
           ))}
         </div>
-
-
       </Container>
     </div>
   );
