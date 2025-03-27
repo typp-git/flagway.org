@@ -41,7 +41,7 @@ const AboutPage: React.FC = () => {
                 {data.teams.map((team) => (
                   <div
                     key={team.name}
-                    className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-900/40 text-white group-hover:text-gray-400 hover:bg-gray-800/50 p-2 rounded-lg shadow-lg transition"
+                    className="group flex flex-row flex-wrap items-center my-1 mx-1 transition-all bg-gray-700/30 text-white group-hover:text-gray-400 hover:bg-gray-600/50 p-2 rounded-lg shadow-lg transition"
                   >
                     <Link href={`/teams/${team.slug}`} className="w-full">
                       <div className="flex flex-row items-center justify-start">

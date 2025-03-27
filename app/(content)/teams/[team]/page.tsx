@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { team: string } }) {
       // className="absolute w-full
       // bg-[url('/court-background-by-caroline-justine.jpg')]
       // bg-black/90 bg-cover bg-blend-overlay bg-center"
-      className="absolute h-full w-full 
+      className="h-full flex-1
         bg-[url('/structures.png')]
         bg-gray-950 bg-cover bg-center backdrop-grayscale"
     >
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: { team: string } }) {
           <div
             className="ml-4 pl-12 pr-20 h-full flex-grow min-w-80
             flex flex-col items-start justify-center 
-            bg-gray-900/40 
+            bg-gray-700/30 
             [clip-path:polygon(0_0,95%_0%,100%_50%,95%_100%,0_100%)]"
           >
             <h1 className="bg-gradient-to-r from-white to-blue-200 text-transparent bg-clip-text">
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: { team: string } }) {
                 className="flex flex-col md:flex-row
                 max-w-xs md:max-w-xl rounded-lg 
                 items-center md:items-start overflow-hidden
-                bg-gray-900/40 hover:scale-[1.02]
+                bg-gray-700/30 hover:scale-[1.02] hover:bg-gray-600/50
                 md:min-h-[200px] gap-2
                 transition-all duration-300 ease-in-out"
                 key={player.name}
