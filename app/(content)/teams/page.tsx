@@ -18,14 +18,12 @@ import { IoIosArrowForward } from "react-icons/io";
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="overflow-auto">
-      <div
-        className="absolute -z-100 h-full w-full
+    <div
+      className="h-full flex-1
         bg-[url('/structures.png')]
-        bg-gray-950 bg-cover bg-center"
-      ></div>
-
-      <Container className="text-white mb-20">
+        bg-gray-950 bg-cover bg-center backdrop-grayscale"
+    >
+      <Container className="text-white">
         <h1 className="text-3xl font-bold">All Teams</h1>
         <hr className="h-px my-8 bg-gray-300 border-0 dark:bg-gray-400" />
 
