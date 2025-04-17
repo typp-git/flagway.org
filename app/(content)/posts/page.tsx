@@ -1,46 +1,85 @@
-import { getPostsList } from "./postUtil";
-import dynamic from "next/dynamic";
+"use client";
+import MdxLayout from "@/components/MdxLayout";
+import ReactMarkdown from "react-markdown";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Post } from "@/utils/types";
 import Link from "next/link";
 
 export default function PostsPage() {
-  const posts = getPostsList();
+  const supabase = createClient();
+  const [announcements, setAnnouncements] = useState<Post[]>([]);
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
 
-  if (posts.length === 0) return <p>No posts available.</p>;
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("id, title, published_at, author, markdown")
+        .order("published_at", { ascending: false });
 
-  const latestPost = posts[0];
-  const otherPosts = posts.slice(1);
+      console.log("Fetched announcements:", data);
 
-  // Dynamically import the latest post's MDX file (without processing frontmatter again)
-  const LatestPost = dynamic(() => import(`./${latestPost.slug}/page.mdx`));
+      if (error) {
+        console.error("Error fetching:", error);
+      } else {
+        setAnnouncements(data);
+        setLatestPost(data[0]);
+      }
+    };
+    fetchAnnouncements();
+  }, [supabase]); // empty dependency array = run on mount only
 
   return (
     <div className="md:flex">
       <div className="prose ml-4 mt-4 max-w-5xl">
-        <LatestPost />
+        {latestPost && (
+          <MdxLayout
+            title={latestPost?.title}
+            author={latestPost?.author}
+            date={new Date(latestPost?.published_at)}
+          >
+            <MDXRemote source={latestPost.markdown} />
+          </MdxLayout>
+        )}
       </div>
-      <div className="mt-16">
+      <div className="mt-16 mx-10 md:mx-0 mb-5">
         <h2 className="text-xl font-semibold">Other Posts</h2>
-        <ul className="list-none *:mb-2">
-          {otherPosts.map((post) => (
-            <li key={post.slug}>
-              <Link
-                href={`/posts/${post.slug}`}
-                className="text-blue-500 hover:underline"
-              >
-                {post.title}
+
+        <ul className="space-y-3">
+          {announcements.map((post) => (
+            <li
+              key={post.id}
+              className="flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-all rounded-xl p-3 "
+            >
+              <Link href={`/${post.id}`}>
+                <div className="font-display text-gray-800">{post.title}</div>
+                <div className="text-sm text-gray-400">
+                  {new Date(post.published_at).toLocaleString("en-US", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    year: "numeric",
+                  })}
+                  <span className="italic text-gray-500 ml-2">
+                    <ReactMarkdown components={{ p: "span" }}>
+                      {truncateMarkdown(post.markdown, 30)}
+                    </ReactMarkdown>
+                  </span>
+                </div>
               </Link>
-              <div className="text-sm text-gray-500">
-                By {post.author} •{" "}
-                {new Date(post.date).toLocaleString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </div>
             </li>
           ))}
+          {announcements.length === 0 && (
+            <li className="text-gray-500">No announcements yet.</li>
+          )}
         </ul>
       </div>
     </div>
   );
+}
+
+// Helper to trim and avoid breaking markdown syntax
+function truncateMarkdown(md: string, limit: number): string {
+  return md.length <= limit ? md : md.slice(0, limit).trim() + "...";
 }

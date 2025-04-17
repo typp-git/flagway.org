@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   FaPlus,
   FaPencilAlt,
@@ -7,20 +8,54 @@ import {
   FaEye,
 } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
-import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { createClient } from "@/utils/supabase/client";
+
+interface Post {
+  id: number;
+  title: string;
+  published_at: string;
+  markdown: string;
+}
 
 export default function DashboardContent() {
+  const supabase = createClient();
+  const [registeredCount] = useState<number>(97);
+  const [pendingReviews] = useState<number>(3);
+  const [announcements, setAnnouncements] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("id, title, published_at, markdown");
+
+      console.log("Fetched announcements:", data);
+
+      if (error) {
+        console.error("Error fetching:", error);
+      } else {
+        setAnnouncements(data);
+      }
+    };
+    fetchAnnouncements();
+  }, [supabase]); // empty dependency array = run on mount only
+
   return (
     <div className="p-4 md:p-8 bg-white min-h-screen">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl m-auto">
         {/* Registered Card */}
-        <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-          <div className="text-6xl font-bold text-blue-800">97</div>
-          <div className="text-gray-700 mt-2">registered</div>
+        <div className="bg-gray-100 col-span-4 lg:col-span-1 rounded-lg p-6 flex flex-col items-center justify-center text-center">
+          <div className="text-6xl font-bold font-display text-sky-700">
+            {registeredCount}
+          </div>
+          <div className="text-gray-700 mt-2">
+            {registeredCount === 1 ? "person" : "people"} registered!
+          </div>
         </div>
 
         {/* Announcements */}
-        <div className="lg:col-span-2 bg-gray-100 rounded-lg p-6">
+        <div className="col-span-4 lg:col-span-3 bg-gray-100 rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
               Announcements
@@ -30,62 +65,62 @@ export default function DashboardContent() {
             </button>
           </div>
           <ul className="space-y-3">
-            {[1, 2, 3, 4].map((num) => (
+            {announcements.map((post) => (
               <li
-                key={num}
-                className="flex justify-between  items-center bg-white rounded p-3 shadow-sm"
+                key={post.id}
+                className="flex justify-between items-center bg-white rounded p-3"
               >
                 <div>
-                  <div className="font-semibold text-gray-800">
-                    Title Number {num}
-                  </div>
+                  <div className="font-display text-gray-800">{post.title}</div>
                   <div className="text-sm text-gray-400">
-                    3/14/25
+                    {new Date(post.published_at).toLocaleString("en-US", {
+                      month: "2-digit",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}
                     <span className="italic text-gray-500 ml-2">
-                      Here is some of the cont...
+                      <ReactMarkdown components={{ p: "span" }}>
+                        {truncateMarkdown(post.markdown, 30)}
+                      </ReactMarkdown>
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center  space-x-3">
-                  <Tooltip
-                    icon={<FaEye size={14} className="hover:cursor-pointer" />}
-                    label="View post"
-                  />
-                  <Tooltip
-                    icon={
-                      <FaPencilAlt size={14} className="hover:cursor-pointer" />
-                    }
-                    label="Edit post"
-                  />
+                <div className="flex items-center space-x-3">
+                  <Tooltip icon={<FaEye size={14} />} label="View post" />
+                  <Tooltip icon={<FaPencilAlt size={14} />} label="Edit post" />
                 </div>
               </li>
             ))}
+            {announcements.length === 0 && (
+              <li className="text-gray-500">No announcements yet.</li>
+            )}
           </ul>
         </div>
 
         {/* Review Registrants */}
-        <div className="bg-gray-100 rounded-lg p-6 flex items-center space-x-4">
-          <div className="text-blue-800">
+        <div className="bg-gray-100 rounded-lg p-6 col-span-2 flex items-center space-x-4">
+          <div className="text-sky-700">
             <FaExclamationCircle size={28} />
           </div>
           <div>
             <p className="text-gray-800 mb-2">
-              There are <strong>3</strong> registrants that need your review.
+              There are <strong>{pendingReviews}</strong> registrants that need
+              your review.
             </p>
-            <button className="bg-blue-800 text-white px-4 py-1 rounded hover:bg-blue-900 text-sm">
+            <button className="bg-sky-700 text-white px-4 py-1 rounded hover:bg-sky-800 text-sm">
               Review them now
             </button>
           </div>
         </div>
 
         {/* Empty block */}
-        <div className="bg-gray-100 rounded-lg p-6" />
+        <div className="bg-gray-100 rounded-lg p-6 col-span-2" />
       </div>
     </div>
   );
 }
 
-// Tooltip component with Headless UI animation
+// Tooltip component
 function Tooltip({ icon, label }: { icon: React.ReactNode; label: string }) {
   const [hovered, setHovered] = useState(false);
 
@@ -105,10 +140,15 @@ function Tooltip({ icon, label }: { icon: React.ReactNode; label: string }) {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
-        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10 shadow-md">
+        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
           {label}
         </div>
       </Transition>
     </div>
   );
+}
+
+// Helper to trim and avoid breaking markdown syntax
+function truncateMarkdown(md: string, limit: number): string {
+  return md.length <= limit ? md : md.slice(0, limit).trim() + "...";
 }
