@@ -8,7 +8,7 @@ export default function Layout({
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      <main className="flex-grow">{children}</main>
+      <main className="min-h-screen flex-grow">{children}</main>
     </div>
   );
 }
