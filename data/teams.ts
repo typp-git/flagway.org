@@ -1,9 +1,20 @@
 export type Player = {
-  name: string;
-  grade: number;
-  city: string;
-  yearsYPP: number;
+  id?: number; // Unique identifier for the player
+  created_at?: string; // Timestamp when the player was created
+  first_name: string; // Player's first name
+  last_name: string; // Player's last name
+  tshirt_size: string | null; // T-shirt size (nullable)
+  dietary_restrictions: string | null; // Dietary restrictions (nullable)
+  emergency_contact_name: string | null; // Emergency contact's name (nullable)
+  emergency_contact_phone_number: string | null; // Emergency contact's phone number (nullable)
+  emergency_contact_relationship: string | null; // Emergency contact's relation (nullable)
+  grade: number; // Player's grade 
+  team_id: number; // Foreign key referencing the team
+  verified: boolean; // Whether the player is verified
 };
+
+export type Chaperone = Omit<Player, "grade">;
+export type Coach = Player
 
 export type Team = {
   name: string;
@@ -12,6 +23,19 @@ export type Team = {
   slug?: string; // Add the optional slug property
   region?: string;
 };
+
+// export type Team = {
+//   id: number;
+//   created_at: string; // ISO timestamp
+//   name: string;
+//   state_id: number | null;
+//   country: string;
+//   coordinator_first_name: string;
+//   coordinator_last_name: string;
+//   coordinator_email: string;
+//   coordinator_phone: string;
+//   name_abbrev: string;
+// };
 
 export type Region = {
   name: string;
