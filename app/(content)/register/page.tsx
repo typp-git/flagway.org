@@ -1,35 +1,82 @@
 "use client";
 
+import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
+import { MdAddCircle } from "react-icons/md";
 
 export default function RegistrationForm() {
 	const resetForm = () => {
 		setFormData({
 		  teamInfo: Array(9).fill(""),
-		  students: Array.from({ length: 12 }, () => Array(8).fill("")),
-		  coaches: Array.from({ length: 5 }, () => Array(8).fill("")),
-		  additionalCoaches: Array.from({ length: 4 }, () => Array(7).fill("")),
+		  students: Array.from({ length: 6 }, () => Array(8).fill("")),
+		  coaches: Array.from({ length: 2 }, () => Array(8).fill("")),
+		  additionalCoaches: Array.from({ length: 2 }, () => Array(7).fill("")),
 		});
 		setIsSubmitted(false);
 	  };
 	  
-	  
 	const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const [formData, setFormData] = useState({
 		teamInfo: Array(9).fill(""), // ✅ Fills array with empty strings
-		students: Array.from({ length: 12 }, () => Array(8).fill("")), // ✅ Generates a 12x8 matrix
-		coaches: Array.from({ length: 5 }, () => Array(8).fill("")), // ✅ Generates a 5x8 matrix
-		additionalCoaches: Array.from({ length: 4 }, () => Array(7).fill("")), // ✅ Generates a 4x7 matrix
+		students: Array.from({ length: 6 }, () => Array(8).fill("")), // ✅ Generates a 12x8 matrix
+		coaches: Array.from({ length: 2 }, () => Array(8).fill("")), // ✅ Generates a 5x8 matrix
+		additionalCoaches: Array.from({ length: 2 }, () => Array(7).fill("")), // ✅ Generates a 4x7 matrix
 	  });
-	  
 
+  const validateField = (section: string, row: number, col: number, value: string) => {
+    let error = "";
+
+    if (section === "team") {
+      if (col === 8) {
+        // Validate Coordinator Phone Number
+        const phoneRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
+        if (value.trim() !== "" && !phoneRegex.test(value)) {
+          error = "Invalid phone number";
+        }
+      }
+    }
+
+    if (section === "students" || section === "coaches" || section === "chaperones") {
+        if (col === 5) {
+        // Validate phone number
+        const phoneRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
+        if (value !== "" && !phoneRegex.test(value)) {
+          error = "Invalid phone number";
+        }
+      } else if (col === 7 && section !== "chaperones") {
+        // Validate grade (only for students and coaches)
+        const grade = parseInt(value, 10);
+        if (value !== "" && (isNaN(grade) || grade < 1 || grade > 12)) {
+          error = "Grade must be between 1 and 12";
+        }
+      } else if (col === 2) {
+        // Validate T-shirt size
+        const validSizes = ["S", "M", "L", "XL", "XXL", "YS", "YM", "YL"];
+        if (value !== "" && !validSizes.includes(value.toUpperCase())) {
+          error = "Invalid T-shirt size";
+        }
+      }
+    }
+
+  return error;
+};
+	  
 	  const handleChange = (
 		section: "students" | "coaches" | "additionalCoaches", // ✅ Restrict valid sections
 		row: number,
 		col: number,
 		value: string
 	  ) => {
+    const errorKey = `${section}-${row}-${col}`;
+    const error = validateField(section, row, col, value);
+  
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [errorKey]: error, // Update the error for the specific field
+    }));
+
 		setFormData((prev) => ({
 		  ...prev,
 		  [section]: prev[section].map((r, i) =>
@@ -37,9 +84,40 @@ export default function RegistrationForm() {
 		  ),
 		}));
 	  };
+
+    const addStudentRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
+      e.preventDefault();
+      setFormData((prevForm) => ({
+        ...prevForm,
+        students: [...prevForm.students, Array(8).fill("")],
+      })) 
+    }
+
+    const addCoachRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
+      e.preventDefault();
+      setFormData((prevForm) => ({
+        ...prevForm,
+        coaches: [...prevForm.coaches, Array(8).fill("")], 
+      })) 
+    }
 	  
+    const addChaperoneRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
+      e.preventDefault();
+      setFormData((prevForm) => ({
+        ...prevForm,
+        additionalCoaches: [...prevForm.additionalCoaches, Array(7).fill("")],
+      })) 
+    }
 
   const handleSingleChange = (index: number, value: string) => {
+    const errorKey = `team-0-${index}`;
+    const error = validateField("team", 0, index, value);
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [errorKey]: error, // Update the error for the specific field
+    }));
+  
     setFormData((prev) => ({
       ...prev,
       teamInfo: prev.teamInfo.map((val, i) => (i === index ? value : val)),
@@ -48,63 +126,78 @@ export default function RegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
 	e.preventDefault();
+
+  const hasErrors = Object.values(errors).some((error) => error !== "");
+  if (hasErrors) {
+    alert("Please fix the errors in the form before submitting.");
+    return;
+  }
+
 	setIsSubmitted(true); // Show confirmation screen
+
+    // Filter out empty rows
+    const filterEmptyRows = (rows: string[][]) =>
+      rows.filter((row) => row.some((value) => value.trim() !== ""));
   
 	const scriptURL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+  const supabase = createClient() // no use for Script URL when supabase has built in API
   
 	const formPayload = {
-	  TeamName: formData.teamInfo[0],
-	  TeamAbbreviation: formData.teamInfo[1],
-	  City: formData.teamInfo[2],
-	  State: formData.teamInfo[3],
-	  Country: formData.teamInfo[4],
-	  CoordinatorFirstName: formData.teamInfo[5],
-	  CoordinatorLastName: formData.teamInfo[6],
-	  CoordinatorEmail: formData.teamInfo[7],
-	  CoordinatorPhone: formData.teamInfo[8],
-  
-	  ...Object.fromEntries(
-		formData.students.flatMap((row, rowIndex) =>
-		  row.map((value, colIndex) => [
-			`Student${rowIndex + 1}${
-			  ["FirstName", "LastName", "TshirtSize", "DietaryRestrictions", "EmergencyContactName", "EmergencyContactPhone", "EmergencyContactRelationship", "Grade"][colIndex]
-			}`,
-			value,
-		  ])
-		)
-	  ),
-  
-	  ...Object.fromEntries(
-		formData.coaches.flatMap((row, rowIndex) =>
-		  row.map((value, colIndex) => [
-			`Coach${rowIndex + 1}${
-			  ["FirstName", "LastName", "TshirtSize", "DietaryRestrictions", "EmergencyContactName", "EmergencyContactPhone", "EmergencyContactRelationship", "Grade"][colIndex]
-			}`,
-			value,
-		  ])
-		)
-	  ),
-  
-	  ...Object.fromEntries(
-		formData.additionalCoaches.flatMap((row, rowIndex) =>
-		  row.map((value, colIndex) => [
-			`AdditionalCoach${rowIndex + 1}${
-			  ["FirstName", "LastName", "TshirtSize", "DietaryRestrictions", "EmergencyContactName", "EmergencyContactPhone", "EmergencyContactRelationship"][colIndex]
-			}`,
-			value,
-		  ])
-		)
-	  ),
+    team:
+    {
+      TeamName: formData.teamInfo[0],
+      TeamAbbreviation: formData.teamInfo[1],
+      City: formData.teamInfo[2],
+      State: formData.teamInfo[3],
+      Country: formData.teamInfo[4],
+      CoordinatorFirstName: formData.teamInfo[5],
+      CoordinatorLastName: formData.teamInfo[6],
+      CoordinatorEmail: formData.teamInfo[7],
+      CoordinatorPhone: formData.teamInfo[8],
+    }, 
+    students: filterEmptyRows(formData.students).map((row) => ({
+      firstName: row[0],
+      lastName: row[1],
+      tshirtSize: row[2],
+      dietaryRestrictions: row[3],
+      emergencyContactName: row[4],
+      emergencyContactPhone: row[5],
+      emergencyContactRelationship: row[6],
+      grade: row[7],
+    }))
+    , 
+    coaches: filterEmptyRows(formData.coaches).map((row) => ({
+      firstName: row[0],
+      lastName: row[1],
+      tshirtSize: row[2],
+      dietaryRestrictions: row[3],
+      emergencyContactName: row[4],
+      emergencyContactPhone: row[5],
+      emergencyContactRelationship: row[6],
+      grade: row[7],
+    }))
+    ,
+    chaperones: filterEmptyRows(formData.additionalCoaches).map((row) => ({
+      firstName: row[0],
+      lastName: row[1],
+      tshirtSize: row[2],
+      dietaryRestrictions: row[3],
+      emergencyContactName: row[4],
+      emergencyContactPhone: row[5],
+      emergencyContactRelationship: row[6],
+    }))
 	};
   
 	try {
-	  const response = await fetch(scriptURL!, {
-		method: "POST",
-		headers: {
-		  "Content-Type": "application/x-www-form-urlencoded",
-		},
-		body: new URLSearchParams(formPayload).toString(),
-	  });
+    console.log("FINAL FORM", formPayload)
+
+	  // const response = await fetch(scriptURL!, {
+		// method: "POST",
+		// headers: {
+		//   "Content-Type": "application/x-www-form-urlencoded",
+		// },
+		// body: new URLSearchParams(formPayload).toString(),
+	  // });
   
 	  if (response.ok) {
 		const wantToSubmitAnother = window.confirm(
@@ -166,7 +259,12 @@ export default function RegistrationForm() {
               type="text"
               value={formData.teamInfo[index]}
               onChange={(e) => handleSingleChange(index, e.target.value)}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
+              className={`w-full mt-1 p-2 border ${
+                errors[`team-0-${index}`]
+                  ? "border-red-500 bg-red-100/50"
+                  : "border-gray-300"
+              } rounded-lg`}
+              title={errors[`team-0-${index}`] || ""} // Show error as tooltip
               required
             />
           </div>
@@ -213,7 +311,12 @@ export default function RegistrationForm() {
                       onChange={(e) =>
                         handleChange("students", rowIndex, colIndex, e.target.value)
                       }
-                      className="w-full p-2 border border-gray-300 rounded-lg"
+                      className={`w-full p-2 border ${
+                        errors[`students-${rowIndex}-${colIndex}`]
+                          ? "border-red-500 bg-red-100/50"
+                          : "border-gray-300"
+                      } rounded-lg`}
+                      title={errors[`students-${rowIndex}-${colIndex}`] || ""} // Show error as tooltip
                     />
                   </td>
                 ))}
@@ -221,6 +324,15 @@ export default function RegistrationForm() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={addStudentRow}
+          className="text-yellow-500 hover:text-yellow-700"
+          title="Add Row"
+        >
+          <MdAddCircle className="w-10 h-10" />
+        </button>
       </div>
     </div>
 
@@ -261,7 +373,12 @@ export default function RegistrationForm() {
                       onChange={(e) =>
                         handleChange("coaches", rowIndex, colIndex, e.target.value)
                       }
-                      className="w-full p-2 border border-gray-300 rounded-lg"
+                      className={`w-full p-2 border ${
+                        errors[`coaches-${rowIndex}-${colIndex}`]
+                          ? "border-red-500 bg-red-100/50"
+                          : "border-gray-300"
+                      } rounded-lg`}
+                      title={errors[`coaches-${rowIndex}-${colIndex}`] || ""} // Show error as tooltip
                     />
                   </td>
                 ))}
@@ -269,6 +386,16 @@ export default function RegistrationForm() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={addCoachRow}
+          className="text-yellow-500 hover:text-yellow-700"
+          title="Add Row"
+        >
+          <MdAddCircle className="w-10 h-10" />
+        </button>
       </div>
     </div>
 
@@ -308,7 +435,12 @@ export default function RegistrationForm() {
                   onChange={(e) =>
                     handleChange("additionalCoaches", rowIndex, colIndex, e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  className={`w-full p-2 border ${
+                    errors[`additionalCoaches-${rowIndex}-${colIndex}`]
+                      ? "border-red-500 bg-red-100/50"
+                      : "border-gray-300"
+                  } rounded-lg`}
+                  title={errors[`additionalCoaches-${rowIndex}-${colIndex}`] || ""} // Show error as tooltip
                 />
               </td>
             ))}
@@ -317,6 +449,17 @@ export default function RegistrationForm() {
       </tbody>
     </table>
   </div>
+
+  <div className="flex justify-center mt-4">
+    <button
+      onClick={addChaperoneRow}
+      className="text-yellow-500 hover:text-yellow-700"
+      title="Add Row"
+    >
+      <MdAddCircle className="w-10 h-10" />
+    </button>
+  </div>
+
 </div>
 
 
