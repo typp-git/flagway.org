@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
+import { addPersonToDatabase, addTeamToDatabase } from "@/utils/supabase/database_functions";
 import { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 
@@ -8,7 +8,7 @@ export default function RegistrationForm() {
 	const resetForm = () => {
 		setFormData({
 		  teamInfo: Array(9).fill(""),
-		  students: Array.from({ length: 6 }, () => Array(8).fill("")),
+		  players: Array.from({ length: 6 }, () => Array(8).fill("")),
 		  coaches: Array.from({ length: 2 }, () => Array(8).fill("")),
 		  additionalCoaches: Array.from({ length: 2 }, () => Array(7).fill("")),
 		});
@@ -20,7 +20,7 @@ export default function RegistrationForm() {
 
 	const [formData, setFormData] = useState({
 		teamInfo: Array(9).fill(""), // ✅ Fills array with empty strings
-		students: Array.from({ length: 6 }, () => Array(8).fill("")), // ✅ Generates a 12x8 matrix
+		players: Array.from({ length: 6 }, () => Array(8).fill("")), // ✅ Generates a 12x8 matrix
 		coaches: Array.from({ length: 2 }, () => Array(8).fill("")), // ✅ Generates a 5x8 matrix
 		additionalCoaches: Array.from({ length: 2 }, () => Array(7).fill("")), // ✅ Generates a 4x7 matrix
 	  });
@@ -38,15 +38,15 @@ export default function RegistrationForm() {
       }
     }
 
-    if (section === "students" || section === "coaches" || section === "chaperones") {
+    if (section === "players" || section === "coaches" || section === "chaperones") {
         if (col === 5) {
         // Validate phone number
-        const phoneRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
+        const phoneRegex = /^[0-9]{10,14}$/; // Example: 10-digit phone number
         if (value !== "" && !phoneRegex.test(value)) {
           error = "Invalid phone number";
         }
       } else if (col === 7 && section !== "chaperones") {
-        // Validate grade (only for students and coaches)
+        // Validate grade (only for players and coaches)
         const grade = parseInt(value, 10);
         if (value !== "" && (isNaN(grade) || grade < 1 || grade > 12)) {
           error = "Grade must be between 1 and 12";
@@ -64,7 +64,7 @@ export default function RegistrationForm() {
 };
 	  
 	  const handleChange = (
-		section: "students" | "coaches" | "additionalCoaches", // ✅ Restrict valid sections
+		section: "players" | "coaches" | "additionalCoaches", // ✅ Restrict valid sections
 		row: number,
 		col: number,
 		value: string
@@ -85,11 +85,11 @@ export default function RegistrationForm() {
 		}));
 	  };
 
-    const addStudentRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
+    const addPlayerRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
       e.preventDefault();
       setFormData((prevForm) => ({
         ...prevForm,
-        students: [...prevForm.students, Array(8).fill("")],
+        players: [...prevForm.players, Array(8).fill("")],
       })) 
     }
 
@@ -133,91 +133,127 @@ export default function RegistrationForm() {
     return;
   }
 
-	setIsSubmitted(true); // Show confirmation screen
+  // Filter out empty rows
+  const filterEmptyRows = (rows: string[][]) =>
+    rows.filter((row) => row.some((value) => value.trim() !== ""));
+  //TODO: Post-Testing, Test a minimum number of players/chaperones
 
-    // Filter out empty rows
-    const filterEmptyRows = (rows: string[][]) =>
-      rows.filter((row) => row.some((value) => value.trim() !== ""));
-  
-	const scriptURL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-  const supabase = createClient() // no use for Script URL when supabase has built in API
-  
+	// const scriptURL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+
 	const formPayload = {
     team:
     {
-      TeamName: formData.teamInfo[0],
-      TeamAbbreviation: formData.teamInfo[1],
-      City: formData.teamInfo[2],
-      State: formData.teamInfo[3],
-      Country: formData.teamInfo[4],
-      CoordinatorFirstName: formData.teamInfo[5],
-      CoordinatorLastName: formData.teamInfo[6],
-      CoordinatorEmail: formData.teamInfo[7],
-      CoordinatorPhone: formData.teamInfo[8],
+      name: formData.teamInfo[0],
+      name_abbreviation: formData.teamInfo[1],
+      city: formData.teamInfo[2],
+      state: formData.teamInfo[3],
+      country: formData.teamInfo[4],
+      coordinator_first_name: formData.teamInfo[5],
+      coordinator_last_name: formData.teamInfo[6],
+      coordinator_email: formData.teamInfo[7],
+      coordinator_phone: formData.teamInfo[8],
     }, 
-    students: filterEmptyRows(formData.students).map((row) => ({
-      firstName: row[0],
-      lastName: row[1],
-      tshirtSize: row[2],
-      dietaryRestrictions: row[3],
-      emergencyContactName: row[4],
-      emergencyContactPhone: row[5],
-      emergencyContactRelationship: row[6],
+    players: filterEmptyRows(formData.players).map((row) => ({
+      first_name: row[0],
+      last_name: row[1],
+      tshirt_size: row[2],
+      dietary_restrictions: row[3],
+      emergency_contact_name: row[4],
+      emergency_contact_phone_number: row[5],
+      emergency_contact_relationship: row[6],
       grade: row[7],
     }))
     , 
     coaches: filterEmptyRows(formData.coaches).map((row) => ({
-      firstName: row[0],
-      lastName: row[1],
-      tshirtSize: row[2],
-      dietaryRestrictions: row[3],
-      emergencyContactName: row[4],
-      emergencyContactPhone: row[5],
-      emergencyContactRelationship: row[6],
+      first_name: row[0],
+      last_name: row[1],
+      tshirt_size: row[2],
+      dietary_restrictions: row[3],
+      emergency_contact_name: row[4],
+      emergency_contact_phone_number: row[5],
+      emergency_contact_relationship: row[6],
       grade: row[7],
     }))
     ,
     chaperones: filterEmptyRows(formData.additionalCoaches).map((row) => ({
-      firstName: row[0],
-      lastName: row[1],
-      tshirtSize: row[2],
-      dietaryRestrictions: row[3],
-      emergencyContactName: row[4],
-      emergencyContactPhone: row[5],
-      emergencyContactRelationship: row[6],
+      first_name: row[0],
+      last_name: row[1],
+      tshirt_size: row[2],
+      dietary_restrictions: row[3],
+      emergency_contact_name: row[4],
+      emergency_contact_phone_number: row[5],
+      emergency_contact_relationship: row[6],
     }))
 	};
   
 	try {
     console.log("FINAL FORM", formPayload)
 
-	  // const response = await fetch(scriptURL!, {
-		// method: "POST",
-		// headers: {
-		//   "Content-Type": "application/x-www-form-urlencoded",
-		// },
-		// body: new URLSearchParams(formPayload).toString(),
-	  // });
-  
-	  if (response.ok) {
-		const wantToSubmitAnother = window.confirm(
-		  "Your team has been successfully registered! Would you like to submit another team?"
-		);
-  
-		if (wantToSubmitAnother) {
-		  resetForm();
-		}
-	  } else {
-		alert("Error submitting form. Please try again.");
-	  }
-	} catch (error) {
-	  console.error("Submission Error:", error);
-	  alert("Failed to submit the form. Check console for details.");
-	}
-  };
+    const teamResult = await addTeamToDatabase(formPayload.team);
+    if (teamResult.error) {
+      console.error("Error creating team:", teamResult.error);
+      throw new Error(`Failed to create team: ${teamResult.error}`);
+    }
+    const team_id = teamResult.id
+    console.log("Successfully created a team with id", team_id);
 
-  
-  
+    const playerResults = await Promise.all(
+      formPayload.players.map(async (s) => {
+        const result = await addPersonToDatabase(s, "player", team_id); 
+        if (result.error) {
+          console.error("Error creating player:", result.error);
+          throw new Error(`Failed to create player: ${result.error}`);
+        }
+        console.log("Successfully created a player:", result);
+        return result;
+      })
+    );
+
+    console.log("All players processed successfully:", playerResults);
+
+    const coachResults = await Promise.all(
+      formPayload.coaches.map(async (s) => {
+        const result = await addPersonToDatabase(s, "coach", team_id);
+        if (result.error) {
+          console.error("Error creating coach:", result.error);
+          throw new Error(`Failed to create coach: ${result.error}`);
+        }
+        console.log("Successfully created a coach:", result);
+        return result;
+      })
+    );
+
+    console.log("All coaches processed successfully:", coachResults);
+
+    const chaperoneResults = await Promise.all(
+      formPayload.coaches.map(async (s) => {
+        const result = await addPersonToDatabase(s, "chaperone", team_id);
+        if (result.error) {
+          console.error("Error creating chaperone:", result.error);
+          throw new Error(`Failed to create chaperone: ${result.error}`);
+        }
+        console.log("Successfully created a chaperone:", result);
+        return result;
+      })
+    );
+
+    console.log("All chaperones processed successfully:", chaperoneResults);
+
+  } catch (error) {
+    console.error("Submission Error:", error);
+    alert("Failed to submit the form. Check console for details.");
+  }
+
+    setIsSubmitted(true); // Show confirmation screen
+    // Handle success response
+    const wantToSubmitAnother = window.confirm(
+      "Your team has been successfully registered! Would you like to submit another team?"
+    );
+    if (wantToSubmitAnother) {
+      resetForm();
+    }
+
+  };
 
   return (
     <div className="py-15 w-[100%] mx-auto p-[4%] bg-white shadow-lg rounded-lg">
@@ -272,7 +308,7 @@ export default function RegistrationForm() {
       </div>
     </div>
 
-    {/* STUDENT INFO SECTION */}
+    {/* PLAYER INFO SECTION */}
     <div>
       <h3 className="text-lg font-semibold">
         Flagway Team Roster (min of 6, max of 12)
@@ -300,7 +336,7 @@ export default function RegistrationForm() {
             </tr>
           </thead>
           <tbody>
-            {formData.students.map((row, rowIndex) => (
+            {formData.players.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="p-2 border text-center">{rowIndex + 1}</td>
                 {row.map((col, colIndex) => (
@@ -309,14 +345,14 @@ export default function RegistrationForm() {
                       type="text"
                       value={col}
                       onChange={(e) =>
-                        handleChange("students", rowIndex, colIndex, e.target.value)
+                        handleChange("players", rowIndex, colIndex, e.target.value)
                       }
                       className={`w-full p-2 border ${
-                        errors[`students-${rowIndex}-${colIndex}`]
+                        errors[`players-${rowIndex}-${colIndex}`]
                           ? "border-red-500 bg-red-100/50"
                           : "border-gray-300"
                       } rounded-lg`}
-                      title={errors[`students-${rowIndex}-${colIndex}`] || ""} // Show error as tooltip
+                      title={errors[`players-${rowIndex}-${colIndex}`] || ""} // Show error as tooltip
                     />
                   </td>
                 ))}
@@ -327,7 +363,7 @@ export default function RegistrationForm() {
       </div>
       <div className="flex justify-center mt-4">
         <button
-          onClick={addStudentRow}
+          onClick={addPlayerRow}
           className="text-yellow-500 hover:text-yellow-700"
           title="Add Row"
         >

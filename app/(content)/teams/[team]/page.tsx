@@ -38,11 +38,11 @@ export default async function Page({ params }: { params: { team: string } }) {
       <h2>Players:</h2>
       {players && players.length > 0 ? (
         players.map((player: Player) => (
-          <div key={player.name}>
-            <div>Name: {player.name}</div>
+          <div key={player.last_name}>
+            <div>Name: {player.first_name} {player.last_name}</div>
             <div>Grade: {player.grade}</div>
-            <div>City: {player.city}</div>
-            <div>Years at YPP: {player.yearsYPP}</div>
+            {/* <div>City: {player.city}</div> */}
+            {/* <div>Years at YPP: {player.yearsYPP}</div> */}
           </div>
         ))
       ) : (

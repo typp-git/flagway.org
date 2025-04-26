@@ -1,8 +1,16 @@
+
 export type Player = {
-  name: string;
-  grade: number;
-  city: string;
-  yearsYPP: number;
+  first_name?: string | null; // Optional string
+  last_name?: string | null; // Optional string
+  role?: string | null// should be 'player', 'coach', or 'chaperone
+  tshirt_size?: string | null; // Optional string
+  dietary_restrictions?: string | null; // Optional string
+  emergency_contact_name?: string | null; // Optional string
+  emergency_contact_phone_number?: string | null; // Optional string
+  emergency_contact_relationship?: string | null; // Optional string
+  grade?: number | null; // Optional number or null
+  team_id?: number | null; // Optional number or null
+  verified?: boolean; // Optional boolean
 };
 
 export type Team = {
@@ -29,7 +37,7 @@ const regions: Region[] = [
           name: "Greater Boston",
           state: "MA",
           players: [
-            { name: "Player 1", grade: 9, city: "Boston", yearsYPP: 1 },
+            { first_name: "Player 1", grade: 9 },
           ],
         },
         { name: "VSU", state: "VA", players: [] },
