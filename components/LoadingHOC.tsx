@@ -20,7 +20,7 @@ export default function LoadingHOC({
   // }, []);
 
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative min-h-screen">
       <AnimatePresence mode="wait">
         {/* {isLoading ? ( */}
         {/*   <motion.div */}

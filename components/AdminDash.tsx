@@ -10,6 +10,7 @@ import {
 import { Transition } from "@headlessui/react";
 import ReactMarkdown from "react-markdown";
 import { createClient } from "@/utils/supabase/client";
+import Editor from "./Editor";
 
 interface Post {
   id: number;
@@ -20,9 +21,44 @@ interface Post {
 
 export default function DashboardContent() {
   const supabase = createClient();
-  const [registeredCount] = useState<number>(97);
-  const [pendingReviews] = useState<number>(3);
+  const [registeredCount, setRegisteredCount] = useState<number>(0);
+  const [pendingReviews, setPendingReviews] = useState<number>(0);
   const [announcements, setAnnouncements] = useState<Post[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
+  const [newAnnouncement, setNewAnnouncement] = useState({
+    title: "",
+    content: "",
+  });
+
+  useEffect(() => {
+    const fetchRegisteredCount = async () => {
+      const { count, error } = await supabase
+        .from('players')
+        .select('*', { count: 'exact', head: true });
+
+      if (error) {
+        console.error('Error fetching player count:', error);
+      } else {
+        setRegisteredCount(count || 0);
+      }
+    };
+
+    const fetchPendingReviews = async () => {
+      const { count, error } = await supabase
+        .from('players')
+        .select('*', { count: 'exact', head: true })
+        .eq('verified', false);
+
+      if (error) {
+        console.error('Error fetching pending reviews:', error);
+      } else {
+        setPendingReviews(count || 0);
+      }
+    };
+
+    fetchRegisteredCount();
+    fetchPendingReviews();
+  }, [supabase]);
 
   useEffect(() => {
     const fetchAnnouncements = async () => {
@@ -40,6 +76,27 @@ export default function DashboardContent() {
     };
     fetchAnnouncements();
   }, [supabase]); // empty dependency array = run on mount only
+
+  const handleCreateAnnouncement = async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .insert([
+        {
+          title: newAnnouncement.title,
+          markdown: newAnnouncement.content,
+          published_at: new Date().toISOString(),
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error("Error creating announcement:", error);
+    } else {
+      setAnnouncements([...announcements, ...data]);
+      setIsCreating(false);
+      setNewAnnouncement({ title: "", content: "" });
+    }
+  };
 
   return (
     <div className="p-4 md:p-8 bg-white min-h-screen">
@@ -60,10 +117,54 @@ export default function DashboardContent() {
             <h2 className="text-lg font-semibold text-gray-800">
               Announcements
             </h2>
-            <button className="bg-green-500 hover:bg-green-600 text-white rounded-full p-2">
+            <button
+              onClick={() => setIsCreating(true)}
+              className="bg-green-500 hover:bg-green-600 text-white rounded-full p-2"
+            >
               <FaPlus size={14} />
             </button>
           </div>
+
+          {isCreating && (
+            <div className="mb-6 bg-white rounded-lg p-4">
+              <input
+                type="text"
+                placeholder="Announcement title"
+                className="w-full p-2 mb-4 border rounded"
+                value={newAnnouncement.title}
+                onChange={(e) =>
+                  setNewAnnouncement({
+                    ...newAnnouncement,
+                    title: e.target.value,
+                  })
+                }
+              />
+              <Editor
+                content={newAnnouncement.content}
+                onChange={(content) =>
+                  setNewAnnouncement({
+                    ...newAnnouncement,
+                    content,
+                  })
+                }
+              />
+              <div className="flex justify-end gap-2 mt-4">
+                <button
+                  onClick={() => setIsCreating(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateAnnouncement}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  Post
+                </button>
+              </div>
+            </div>
+          )}
+
           <ul className="space-y-3">
             {announcements.map((post) => (
               <li
@@ -91,7 +192,7 @@ export default function DashboardContent() {
                 </div>
               </li>
             ))}
-            {announcements.length === 0 && (
+            {announcements.length === 0 && !isCreating && (
               <li className="text-gray-500">No announcements yet.</li>
             )}
           </ul>
@@ -104,7 +205,7 @@ export default function DashboardContent() {
           </div>
           <div>
             <p className="text-gray-800 mb-2">
-              There are <strong>{pendingReviews}</strong> registrants that need
+              There {pendingReviews === 1 ? "is" : "are"} <strong>{pendingReviews}</strong> registrant{pendingReviews === 1 ? "" : "s"} that need{pendingReviews === 1 ? "s" : ""}{" "}
               your review.
             </p>
             <button className="bg-sky-700 text-white px-4 py-1 rounded hover:bg-sky-800 text-sm">

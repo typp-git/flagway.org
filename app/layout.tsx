@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Viga, Mako, Kanit } from "next/font/google";
 import "./globals.css";
+import "@/styles/editor.css";
 // import Navigation from "@/components/nav";
-import { AnimatePresence, LayoutGroup } from "framer-motion";
-import Loading from "./loading";
-import { Suspense } from "react";
+import { LayoutGroup } from "framer-motion";
 
 const viga = Viga({
   subsets: ["latin"],
@@ -44,9 +43,7 @@ export default function RootLayout({
         <body
           className={`${viga.variable} ${mako.variable} ${kanit.variable} antialiased`}
         >
-          <Suspense fallback={<Loading />}>
-            <AnimatePresence mode="wait">{children}</AnimatePresence>
-          </Suspense>
+          {children}
         </body>
       </html>
     </LayoutGroup>
