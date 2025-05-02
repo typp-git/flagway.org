@@ -1,11 +1,10 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import YPPLogo from "@/public/YPP-Logo-white.webp";
 // import { usePathname } from "next/navigation";
 // import { motion } from "framer-motion";
 
-export default function AdminLogo() {
+export default function FlagwayLogo() {
   // const pathname = usePathname();
   return (
     <div className="relative w-fit h-fit">
@@ -20,9 +19,10 @@ export default function AdminLogo() {
       >
         <Image
           priority
+          src="/YPP-Logo-white.webp"
           alt="Logo of the Young People's Project"
-          width="100"
-          src={YPPLogo}
+          width={150}
+          height={50}
           className="w-[40px] md:w-[65px] h-auto"
         />
 

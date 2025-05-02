@@ -9,10 +9,6 @@ import React from "react";
 import "./home.css";
 import "../graph.css";
 import Image from "next/image";
-import Breaker from "@/public/photos/breaker.jpg";
-import RegistrationImage from "@/public/photos/grading.jpg";
-import Table from "@/public/photos/table.jpg";
-import WinningSquad from "@/public/photos/winning-squad.jpg";
 
 const imgClasses = "rounded-lg shadow-xl";
 const sectionClasses = `mb-12 md:mb-8 md:justify-between justify-center md:gap-24 gap-8 items-center flex flex-col md:flex-row w-full md:w-full  !transition !transition-500 rounded-xl  p-2`;
@@ -53,7 +49,7 @@ export default function Home() {
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
                     <li>Recruitment kicks off as the Flagway season begins!</li>
                     <li>
-                      Students join the Young People’s Project (YPP) and dive
+                      Students join the Young People&apos;s Project (YPP) and dive
                       into learning the core concepts of Flagway.
                     </li>
                   </ul>
@@ -64,7 +60,7 @@ export default function Home() {
                 <div className="order-2 px-5 py-3 text-left md:w-5/12">
                   <Image
                     className={"rotate-3 " + imgClasses}
-                    src={RegistrationImage}
+                    src="/photos/grading.jpg"
                     alt="people sitting at table with computer"
                   />
                 </div>
@@ -75,7 +71,7 @@ export default function Home() {
                 <div className="order-2 md:order-1 px-3 py-3  md:w-5/12 text-left">
                   <Image
                     className={"-rotate-3 " + imgClasses}
-                    src={Table}
+                    src="/photos/table.jpg"
                     alt="people sitting at table with computer"
                   />
                 </div>
@@ -114,7 +110,7 @@ export default function Home() {
                 <div className="order-6 px-3 py-3 text-left md:w-5/12">
                   <Image
                     className={"rotate-3 " + imgClasses}
-                    src={Breaker}
+                    src="/photos/breaker.jpg"
                     alt="people sitting at table with computer"
                   />
                 </div>
@@ -125,7 +121,7 @@ export default function Home() {
                 <div className="order-2 md:order-1 px-3 py-3 text-left md:md:w-5/12">
                   <Image
                     className={"-rotate-3 " + imgClasses}
-                    src={WinningSquad}
+                    src="/photos/winning-squad.jpg"
                     alt="people sitting at table with computer"
                   />
                 </div>

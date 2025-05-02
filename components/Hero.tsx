@@ -1,13 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import FloorWork from "@/public/photos/floor-work.jpg";
-import Team2 from "@/public/photos/team_2.jpg";
-import Winners from "@/public/photos/winners.jpg";
-import MIT from "@/public/photos/mit.jpg";
-import Outdoors from "@/public/photos/outdoors.jpg";
 import TextCarousel from "@/components/TextCarousel";
 import Link from "next/link";
-import Structure from "@/public/burst_struct.png";
 import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
 interface HeroProps {
@@ -19,9 +13,10 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
     <div className="overflow-hidden">
       <div className="relative isolate">
         <Image
-          src={Structure}
-          className="absolute select-none no-drag pointer-events-none -scale-x-100 md:scale-x-100 rotate-[0deg] -top-8 -left-5 w-full lg:max-w-8xl opacity-[0.3]"
-          alt=""
+          className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+          alt="blurred flagway structures"
+          priority
+          src="/photos/floor-work.jpg"
         />
         <div
           aria-hidden="true"
@@ -81,51 +76,46 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
               <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                 <div className="relative">
                   <Image
-                    alt=""
-                    src={Winners}
-                    placeholder="blur"
-                    height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg contrast-[1.1]"
+                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    alt="blurred flagway structures"
+                    priority
+                    src="/photos/winners.jpg"
                   />
                 </div>
               </div>
               <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
                 <div className="relative">
                   <Image
-                    alt=""
-                    src={Outdoors}
-                    placeholder="blur"
-                    height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-125"
+                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    alt="blurred flagway structures"
+                    priority
+                    src="/photos/outdoors.jpg"
                   />
                 </div>
                 <div className="relative">
                   <Image
-                    alt=""
-                    src={FloorWork}
-                    placeholder="blur"
-                    height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] "
+                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    alt="blurred flagway structures"
+                    priority
+                    src="/photos/floor-work.jpg"
                   />
                 </div>
               </div>
               <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
                 <div className="relative">
                   <Image
-                    alt=""
-                    src={Team2}
-                    placeholder="blur"
-                    height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-[1.1] brightness-110"
+                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    alt="blurred flagway structures"
+                    priority
+                    src="/photos/team_2.jpg"
                   />
                 </div>
                 <div className="relative">
                   <Image
-                    alt=""
-                    src={MIT}
-                    placeholder="blur"
-                    height="200"
-                    className="landing-photo aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg saturate-[1.1] contrast-125"
+                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    alt="blurred flagway structures"
+                    priority
+                    src="/photos/mit.jpg"
                   />
                 </div>
               </div>

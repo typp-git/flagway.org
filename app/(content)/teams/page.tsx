@@ -3,19 +3,19 @@ import React from "react";
 import regions from "@/data/teams";
 import Link from "next/link";
 import Image from "next/image";
-// LOAD IN TEAM LOGOS FROM BACK END
-import Dog from "@/public/team-logos/dog-deep.png";
-import Crown from "@/public/team-logos/crown-deep.png";
-import Meerkat from "@/public/team-logos/meerkat-deep.png";
-import Eagle from "@/public/team-logos/eagle-deep.png";
-import Rabbit from "@/public/team-logos/rabbit-deep.png";
-import Rhino from "@/public/team-logos/rhino-deep.png";
-import Fox from "@/public/team-logos/fox-deep.png";
-import Lion from "@/public/team-logos/lion-deep.png";
-const RandomLogo = [Dog, Crown, Meerkat, Eagle, Rabbit, Rhino, Fox, Lion];
-
 import { IoIosArrowForward } from "react-icons/io";
 import LoadingHOC from "@/components/LoadingHOC";
+
+const teamLogos = [
+  "/team-logos/dog-deep.png",
+  "/team-logos/crown-deep.png",
+  "/team-logos/meerkat-deep.png",
+  "/team-logos/eagle-deep.png",
+  "/team-logos/rabbit-deep.png",
+  "/team-logos/rhino-deep.png",
+  "/team-logos/fox-deep.png",
+  "/team-logos/lion-deep.png"
+];
 
 const TeamsPage: React.FC = () => {
   return (
@@ -47,9 +47,11 @@ const TeamsPage: React.FC = () => {
                         <div className="flex flex-row items-center justify-start">
                           <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
                             <Image
-                              src={RandomLogo[team.name.length % 8]}
-                              className="object-cover"
-                              alt="Team Logo"
+                              src={teamLogos[team.name.length % 8]}
+                              alt={`${team.name} logo`}
+                              width={60}
+                              height={60}
+                              className="rounded-full"
                             />
                           </div>
                           <div className="ml-2 flex flex-col relative ">

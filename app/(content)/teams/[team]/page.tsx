@@ -2,12 +2,7 @@ import regions, { Player } from "@/data/teams";
 import Container from "@/components/container";
 import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-
-import TeamLogo1 from "@/public/team-logos/dog-deep.png";
-import DefaultProfilePic1 from "@/public/profile-pic-icons/example_avatar_dog.jpg";
-import DefaultProfilePic2 from "@/public/profile-pic-icons/profile-picture-opt-2.png";
-import DefaultProfilePic3 from "@/public/profile-pic-icons/profile-picture-opt-1.png";
-
+import React from "react";
 import Image from "next/image";
 import LoadingHOC from "@/components/LoadingHOC";
 
@@ -52,7 +47,13 @@ export default async function Page({ params }: { params: { team: string } }) {
             [clip-path:polygon(100%_0,100%_50%,100%_100%,0_100%,0%_50%,0_0)]"
             >
               {/* <div className="h-full justify-center aspect-square overflow-hidden [clip-path:polygon(75%_0,100%_50%,75%_100%,0_100%,25%_50%,0_0)]"> */}
-              <Image src={TeamLogo1} className="" alt="Team Logo" />
+              <Image
+                src="/team-logos/dog-deep.png"
+                alt="Team Logo"
+                width={200}
+                height={200}
+                className="rounded-full"
+              />
             </div>
             <div
               className="ml-4 pl-12 pr-20 h-full flex-grow min-w-80
@@ -104,12 +105,15 @@ export default async function Page({ params }: { params: { team: string } }) {
                       <Image
                         src={
                           player.grade % 3 == 1
-                            ? DefaultProfilePic1
+                            ? "/profile-pic-icons/example_avatar_dog.jpg"
                             : player.grade % 3 == 2
-                              ? DefaultProfilePic2
-                              : DefaultProfilePic3
+                              ? "/profile-pic-icons/profile-picture-opt-2.png"
+                              : "/profile-pic-icons/profile-picture-opt-1.png"
                         }
                         alt="Profile Picture"
+                        width={100}
+                        height={100}
+                        className="rounded-full"
                       />
                     </div>
                   </div>

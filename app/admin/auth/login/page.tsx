@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { login } from "./actions";
 import LoginStatus from "./Status";

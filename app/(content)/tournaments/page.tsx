@@ -2,11 +2,7 @@ import Container from "@/components/container";
 import Link from "next/link";
 import "../../graph.css";
 import { MapPinIcon, TrophyIcon } from "@heroicons/react/24/outline";
-// import Image from "next/image";
-// import RegistrationImage from "@/public/photos/grading.jpg";
-// import Table from "@/public/photos/table.jpg";
-// import Breaker from "@/public/photos/breaker.jpg";
-// import WinningSquad from "@/public/photos/winning-squad.jpg";
+import React from "react";
 
 const TournamentPage = () => {
   const sections = [
