@@ -5,21 +5,6 @@ import { Player } from "@/data/teams";
 import { EditField } from "./EditField";
 import { updatePlayer } from "@/utils/supabase/database_functions";
 
-
-// const blankPlayer: Omit<Player, "id" | "created_at"> = {
-//   first_name: "",
-//   last_name: "",
-//   tshirt_size: null,
-//   dietary_restrictions: null,
-//   emergency_contact_name: null,
-//   emergency_contact_phone_number: null,
-//   emergency_contact_relationship: null,
-//   grade: -1,
-//   team_id: -1,
-//   verified: false,
-// };
-
-
 export function EditPlayerModal({ playerData, onClose }: {playerData: Player, onClose:()=>void}) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   async function submitData(event: FormEvent<HTMLFormElement>) {

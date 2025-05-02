@@ -26,7 +26,7 @@ export default function TeamsDashboard() {
     }
     fetchTeams();
     setSelectedTeam((teams.length > 0)? teams[0]: undefined)
-  }, [])
+  }, [supabase, teams])
 
   const handleTeamSelection = function(team: Team) { 
     setSelectedTeam(team)

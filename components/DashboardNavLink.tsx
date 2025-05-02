@@ -23,7 +23,7 @@ export default function DashboardNavLink() {
     <>
       <Link
         href="/admin/dashboard"
-        className="bg-green-950 hover:bg-green-900 text-white font-bold py-1.5 flex gap-1 items-center justify-center px-3 rounded-lg h-fit my-auto !text-base font-normal transition hover:cursor-pointer"
+        className="bg-green-950 hover:bg-green-900 text-white font-bold py-1.5 flex gap-1 items-center justify-center px-3 rounded-lg h-fit my-auto !text-base transition hover:cursor-pointer"
       >
         <FaGears />
         Admin Dashboard

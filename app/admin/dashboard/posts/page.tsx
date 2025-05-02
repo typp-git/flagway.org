@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { FaEdit, FaEye } from "react-icons/fa";
 
-import Editor from "@/components/Editor";
+// import Editor from "@/components/Editor";
 
 import { createClient } from "@/utils/supabase/client";
 
@@ -212,10 +212,13 @@ export default function BlogPage() {
                       <label className="block text-sm font-medium text-gray-700">
                         Markdown Content
                       </label>
-                       <Editor
+                      <div className="mt-2 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                        <p className="text-yellow-800">Component Work in Progress</p>
+                      </div>
+                      {/* <Editor
                         content={markdown}
                         onChange={setMarkdown}
-                      />
+                      /> */}
                     </div>
 
                     <div className="flex justify-end gap-2 pt-4">
