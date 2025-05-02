@@ -45,6 +45,7 @@ export default function RootLayout({
           className={`${viga.variable} ${mako.variable} ${kanit.variable} antialiased`}
         >
           {children}
+          <Analytics />
         </body>
       </html>
     </LayoutGroup>
