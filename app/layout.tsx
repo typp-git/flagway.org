@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Viga, Mako, Kanit } from "next/font/google";
 import "./globals.css";
 import "@/styles/editor.css";
+import { Analytics } from "@vercel/analytics/react"
 // import Navigation from "@/components/nav";
 import { LayoutGroup } from "framer-motion";
 
