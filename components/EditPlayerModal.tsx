@@ -10,7 +10,20 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
   async function submitData(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const blankPlayer = {}
+    const blankPlayer: Omit<Player, "id" | "created_at" | "team_id"> = {
+      name: playerData.name,
+      first_name: playerData.first_name,
+      last_name: playerData.last_name,
+      tshirt_size: playerData.tshirt_size,
+      dietary_restrictions: playerData.dietary_restrictions,
+      emergency_contact_name: playerData.emergency_contact_name,
+      emergency_contact_phone_number: playerData.emergency_contact_phone_number,
+      emergency_contact_relationship: playerData.emergency_contact_relationship,
+      grade: playerData.grade,
+      verified: playerData.verified,
+      yearsYPP: playerData.yearsYPP,
+      city: playerData.city
+    };
 
     console.log("Form data entries:");
     for (const [key, value] of formData.entries()) {
@@ -18,28 +31,37 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
     }
 
     // First, copy all non-verified fields
-    formData.forEach(function(value, key){     
+    formData.forEach((value, key) => {     
       if (key !== "verified") {
-        blankPlayer[key] = value;
+        if (key === "grade") {
+          blankPlayer[key] = Number(value);
+        } else if (key === "tshirt_size" || key === "dietary_restrictions" || 
+                   key === "emergency_contact_name" || key === "emergency_contact_phone_number" || 
+                   key === "emergency_contact_relationship") {
+          blankPlayer[key] = value as string | null;
+        } else if (key === "first_name" || key === "last_name" || key === "name" || key === "city") {
+          blankPlayer[key] = value as string;
+        }
       }
     });
 
     // Then handle the verified checkbox separately
-    // Get the actual checkbox element to check its checked state
     const verifiedCheckbox = event.currentTarget.querySelector('input[name="verified"]') as HTMLInputElement;
-    blankPlayer["verified"] = verifiedCheckbox ? verifiedCheckbox.checked : false;
+    blankPlayer.verified = verifiedCheckbox ? verifiedCheckbox.checked : false;
     
     console.log("Verification checkbox value:", {
       checked: verifiedCheckbox?.checked,
-      final: blankPlayer["verified"]
+      final: blankPlayer.verified
     });
 
     console.log("Submitting player data:", blankPlayer);
-    const result = await updatePlayer(playerData.id, blankPlayer)
-    
-    if (result && result.error) {
-      console.error("Error While Submitting Data", result.error);
-      return;
+    if (playerData.id) {
+      const result = await updatePlayer(playerData.id, blankPlayer)
+      
+      if (result && result.error) {
+        console.error("Error While Submitting Data", result.error);
+        return;
+      }
     }
   
     setHasUnsavedChanges(false);
@@ -65,7 +87,7 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
           <EditField 
             label="First Name" 
             name="first_name" 
-            defaultValue={playerData.first_name} 
+            defaultValue={playerData.first_name ?? ""} 
             type="text" 
             form_id="player-form" 
             onChange={() => setHasUnsavedChanges(true)}
@@ -73,7 +95,7 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
           <EditField
             label="Last Name"
             name="last_name" 
-            defaultValue={playerData.last_name}
+            defaultValue={playerData.last_name ?? ""}
             type="text"
             form_id="player-form"
             onChange={() => setHasUnsavedChanges(true)}
@@ -121,7 +143,7 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
           <EditField 
             label="Grade" 
             name="grade" 
-            defaultValue={playerData.grade} 
+            defaultValue={playerData.grade ?? 0} 
             type="number" 
             form_id="player-form" 
             onChange={() => setHasUnsavedChanges(true)}
@@ -133,7 +155,6 @@ export function EditPlayerModal({ playerData, onClose }: {playerData: Player, on
             <input 
               name="verified" 
               type="checkbox" 
-              form_id="player-form" 
               defaultChecked={playerData.verified} 
               className="mr-3"
               onChange={() => setHasUnsavedChanges(true)}

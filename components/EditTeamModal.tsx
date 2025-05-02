@@ -5,16 +5,35 @@ import { updateTeam } from '@/data/teams';
 import { Team } from '@/data/teams';
 import {EditField} from './EditField';
 
+// These are the fields we know are strings in the Team type
+const STRING_FIELDS = [
+  'name',
+  'country',
+  'coordinator_first_name',
+  'coordinator_last_name',
+  'coordinator_email',
+  'coordinator_phone',
+  'name_abbreviation',
+  'state',
+  'city',
+  'slug',
+  'region'
+] as const;
+
+type TeamStringFields = typeof STRING_FIELDS[number];
+
 export function EditTeamModal({ teamData, onClose }: {teamData: Team, onClose:()=>void}) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   async function submitData(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const updatedTeam = {}
+    const updatedTeam: Partial<Team> = {};
 
-    formData.forEach(function(value, key){     
-      updatedTeam[key] = value;
+    formData.forEach(function(value, key) {     
+      if (STRING_FIELDS.includes(key as TeamStringFields)) {
+        updatedTeam[key as TeamStringFields] = value.toString();
+      }
     });
 
     console.log("final object:", updatedTeam)

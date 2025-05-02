@@ -1,51 +1,63 @@
-import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { useEffect } from "react";
 import { Button } from "@headlessui/react";
 import { FormEvent } from 'react'
 import { Player } from "@/data/teams";
 import { EditField } from "./EditField";
 import { updatePlayer } from "@/utils/supabase/database_functions";
 
-const emptyPlayer: Omit<Player, "id" | "created_at"> = {
+const blankPlayer: Omit<Player, "id" | "created_at"> = {
   first_name: "",
   last_name: "",
+  name: "",
   tshirt_size: null,
   dietary_restrictions: null,
   emergency_contact_name: null,
   emergency_contact_phone_number: null,
   emergency_contact_relationship: null,
-  grade: -1,
-  team_id: -1,
+  grade: 0,
+  team_id: 0,
   verified: false,
+  yearsYPP: 0,
+  city: ""
 };
 
-export async function AddPlayerModal({ playerData = emptyPlayer, onClose }: {playerData: Player, onClose:()=>void}) {
+export function AddPlayerModal({ playerData = blankPlayer, onClose }: {playerData: Player, onClose:()=>void}) {
   async function submitData(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    var blankPlayer = {}
+    const updatedPlayer = { ...blankPlayer };
 
-    formData.forEach(function(value, key){     
+    formData.forEach((value, key) => {     
       if (key === "verified") {
-        // already handled
-      } else {
-        blankPlayer[key] = value;
+        updatedPlayer.verified = formData.has("verified");
+      } else if (key === "grade") {
+        updatedPlayer.grade = Number(value);
+      } else if (key === "team_id") {
+        updatedPlayer.team_id = Number(value);
+      } else if (key === "yearsYPP") {
+        updatedPlayer.yearsYPP = Number(value);
+      } else if (key === "first_name" || key === "last_name" || key === "name" || key === "city") {
+        updatedPlayer[key] = value as string;
+      } else if (key === "tshirt_size" || key === "dietary_restrictions" || 
+                 key === "emergency_contact_name" || key === "emergency_contact_phone_number" || 
+                 key === "emergency_contact_relationship") {
+        updatedPlayer[key] = value as string | null;
       }
     });
 
-    if (Object.keys(playerData).includes("verified")){ // only if verified field
-      blankPlayer["verified"] = formData.has("verified")
+    console.log("final object:", updatedPlayer)
+    if (!playerData.id) {
+      console.error("Cannot update player: No ID provided");
+      return;
     }
-
-    console.log("final object:", blankPlayer)
-    const result = await updatePlayer(playerData.id, blankPlayer)
+    const result = await updatePlayer(playerData.id, updatedPlayer)
     
     if (result && result.error) {
       console.error("Error While Submitting Data", result.error);
       return;
     }
   
-    onClose(); // ✅ Only close on success
+    onClose(); // Only close on success
   }
 
   useEffect(() => {
@@ -58,12 +70,12 @@ export async function AddPlayerModal({ playerData = emptyPlayer, onClose }: {pla
     <div className="bg-white py-4 px-6">
       <form onSubmit={submitData} id="player-form">
         <div>
-          <EditField label="First Name" name="first_name" required={true} defaultValue={playerData.first_name} type="text" form_id="player-form" onChange={(val)=>{console.log("val", val)}}/>
+          <EditField label="First Name" name="first_name" required={true} defaultValue={playerData.first_name ?? ""} type="text" form_id="player-form" onChange={(val)=>{console.log("val", val)}}/>
           <EditField
             label="Last Name"
             name="last_name" 
             required={true}
-            defaultValue={playerData.last_name}
+            defaultValue={playerData.last_name ?? ""}
             type="text"
             form_id="player-form"
             onChange={(val)=>{console.log("val", val)}}
@@ -92,7 +104,6 @@ export async function AddPlayerModal({ playerData = emptyPlayer, onClose }: {pla
             form_id="player-form"
             onChange={(val)=>{console.log("val", val)}}
           />
-
           <EditField
             label="Emergency Contact Phone"
             name="emergency_contact_phone_number" 
@@ -102,11 +113,11 @@ export async function AddPlayerModal({ playerData = emptyPlayer, onClose }: {pla
             onChange={(val)=>{console.log("val", val)}}
           />
           <EditField label="Emergency Contact Relationship" name="emergency_contact_relationship" defaultValue={playerData.emergency_contact_relationship ?? ""} type="text" form_id="player-form" onChange={(val)=>{console.log("val", val)}}/>
-          <EditField label="Grade" name="grade" defaultValue={playerData.grade} type="number" form_id="player-form" onChange={(val)=>{console.log("val", val)}}/>
+          <EditField label="Grade" name="grade" defaultValue={playerData.grade ?? 0} type="number" form_id="player-form" onChange={(val)=>{console.log("val", val)}}/>
 
         <div>
           <label>
-            <input name="verified" type="checkbox" form_id="player-form" defaultChecked={playerData.verified}/>
+            <input name="verified" type="checkbox" form="player-form" defaultChecked={playerData.verified}/>
             Verified
           </label>
         </div>

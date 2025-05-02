@@ -52,7 +52,7 @@ export default function PlayerList({ id }: {id: number}) {
   const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [showModal, setShowModal] = useState(false);
 
   const fetchPlayers = useCallback(async () => {
@@ -61,12 +61,12 @@ export default function PlayerList({ id }: {id: number}) {
     if (error) {
       console.error('Error fetching teams:', error);
     } else {
-      setPlayers(data);
+      setPlayers(data || []);
     }
     setIsLoading(false);
   }, [id, supabase]);
 
-  function editPlayer(player) {
+  function editPlayer(player: Player) {
     setSelectedPlayer(player);
     setShowModal(true);
   }
@@ -182,8 +182,8 @@ export default function PlayerList({ id }: {id: number}) {
               <div key={player.id} className="grid grid-cols-1 sm:grid-cols-[auto_2fr_2fr_1fr_auto] items-center bg-gray-100 rounded-lg pl-3 my-1 p-2">
                 <input
                   type="checkbox"
-                  checked={selectedPlayers.includes(player.id)}
-                  onChange={() => handleBulkSelect(player.id)}
+                  checked={selectedPlayers.includes(player.id || 0)}
+                  onChange={() => handleBulkSelect(player.id || 0)}
                   className="mr-2"
                 />
                 <span className="font-display">
@@ -192,7 +192,7 @@ export default function PlayerList({ id }: {id: number}) {
                 <div className="grid grid-cols-3 sm:contents gap-2 mt-1 sm:mt-0">
                   <span className="text-gray-700">Grade: {player.grade}</span>
                   <Button
-                    onClick={() => handleVerifyPlayer(player.id)}
+                    onClick={() => player.id && handleVerifyPlayer(player.id)}
                     className="w-8 h-8 flex items-center justify-center text-green-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
                   >
                     <FaCheck size={13} />
@@ -238,7 +238,7 @@ export default function PlayerList({ id }: {id: number}) {
         </div>
       </div>
 
-      {showModal && <EditPlayerModal playerData={selectedPlayer} onClose={handleModalClose}/>}
+      {showModal && selectedPlayer && <EditPlayerModal playerData={selectedPlayer} onClose={handleModalClose}/>}
       <DeleteConfirmationModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

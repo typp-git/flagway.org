@@ -1,18 +1,62 @@
 import Container from "@/components/container";
-import React from "react";
+import Link from "next/link";
 import "../../graph.css";
+import { MapPinIcon, TrophyIcon } from "@heroicons/react/24/outline";
 // import Image from "next/image";
 // import RegistrationImage from "@/public/photos/grading.jpg";
 // import Table from "@/public/photos/table.jpg";
 // import Breaker from "@/public/photos/breaker.jpg";
 // import WinningSquad from "@/public/photos/winning-squad.jpg";
-import UnderConstruction from "@/components/UnderConstruction";
 
-const TournamentPage: React.FC = () => {
+const TournamentPage = () => {
+  const sections = [
+    {
+      name: "Local Tournaments",
+      description: "Find information about local tournaments in your area",
+      path: "/tournaments/local",
+      icon: MapPinIcon,
+      gradientClasses: "from-yellow-500 via-yellow-600 to-yellow-700",
+    },
+    // {
+    //   name: "Regional Tournaments",
+    //   description: "Details about regional tournaments and qualifiers",
+    //   path: "/tournaments/regional",
+    // },
+    {
+      name: "National Tournament",
+      description: "Information about the annual national tournament",
+      path: "/tournaments/national",
+      icon: TrophyIcon,
+      gradientClasses: "from-sky-500 via-sky-600 to-sky-700",
+    },
+  ];
+
   return (
     <div className="">
       <Container>
-        <UnderConstruction />
+        <h1 className="text-4xl font-bold mb-8">Tournaments</h1>
+        <div className="grid gap-6 md:grid-cols-2">
+          {sections.map((section) => {
+            const Icon = section.icon;
+            return (
+              <Link
+                key={section.path}
+                href={section.path}
+                className="block p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-300 group"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="relative p-2 rounded-lg bg-gradient-to-br group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-lg">
+                    <div className={`absolute inset-0 rounded-lg bg-gradient-to-br ${section.gradientClasses} opacity-20 group-hover:opacity-30 transition-opacity duration-300`}></div>
+                    <Icon className="h-8 w-8 text-gray-800 group-hover:text-black transition-colors relative z-10" />
+                  </div>
+                  <h2 className="text-2xl font-semibold">{section.name}</h2>
+                </div>
+                <p className="text-gray-600 group-hover:text-gray-700 transition-colors">{section.description}</p>
+              </Link>
+            );
+          })}
+        </div>
+        {/* <UnderConstruction /> */}
         {/* <h1 className="m-auto text-center text-5xl"> */}
         {/*   Flagway Season Details */}
         {/* </h1> */}
@@ -28,7 +72,7 @@ const TournamentPage: React.FC = () => {
         {/*     <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100"> */}
         {/*       <li>Recruitment kicks off as the Flagway season begins!</li> */}
         {/*       <li> */}
-        {/*         Students join the Young People’s Project (YPP) and dive into */}
+        {/*         Students join the Young People's Project (YPP) and dive into */}
         {/*         learning the core concepts of Flagway. */}
         {/*       </li> */}
         {/*     </ul> */}

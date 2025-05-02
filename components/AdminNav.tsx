@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { TrophyIcon, UserGroupIcon } from "@heroicons/react/20/solid";
-import { FaDumbbell, FaUserPlus } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -94,14 +94,14 @@ export default function Navbar() {
                 )}
               </Link>
               <Link
-                href="/training"
+                href="/tournaments"
                 className={clsx(
                   "nav-item relative hover:text-sky-700" +
-                    (pathname.startsWith("/training") ? " text-sky-700" : ""),
+                    (pathname.startsWith("/tournaments") ? " text-sky-700" : ""),
                 )}
               >
-                <FaDumbbell className="inline h-4 mr-2" /> Training
-                {pathname === "/training" && (
+                <TrophyIcon className="inline h-4 mr-2" /> Tournaments
+                {pathname.startsWith("/tournaments") && (
                   <>
                     <motion.div
                       layoutId="underline"
@@ -202,17 +202,17 @@ export default function Navbar() {
           </DisclosureButton>
           <DisclosureButton
             as="a"
+            href="/posts"
+            className={getMobileClasses("/posts")}
+          >
+            <TrophyIcon className="inline h-[1rem] mr-2" /> Announcements
+          </DisclosureButton>
+          <DisclosureButton
+            as="a"
             href="/tournaments"
             className={getMobileClasses("/tournaments")}
           >
             <TrophyIcon className="inline h-[1rem] mr-2" /> Tournaments
-          </DisclosureButton>
-          <DisclosureButton
-            as="a"
-            href="/training"
-            className={getMobileClasses("/training")}
-          >
-            <FaDumbbell className="inline h-[1rem] mr-2" /> Training
           </DisclosureButton>
           <DisclosureButton
             as="a"

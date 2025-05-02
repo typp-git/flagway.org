@@ -33,7 +33,6 @@ export default function Editor({ content, onChange }: EditorProps) {
         HTMLAttributes: {
           class: 'rounded-lg',
         },
-        resizable: true,
       }),
     ],
     content,

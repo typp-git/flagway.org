@@ -10,7 +10,6 @@ interface MenuButtonProps {
 }
 
 export const MenuButton = ({
-  editor,
   onClick,
   isActive,
   children,

@@ -27,15 +27,13 @@ export const ImageButton = ({ editor }: ImageButtonProps) => {
   return (
     <MenuButton
       editor={editor}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      onClick={() => {
         const input = document.createElement("input");
         input.type = "file";
         input.accept = "image/*";
-        input.onchange = (e: Event) => {
+        input.onchange = (e) => {
           e.stopPropagation();
-          handleImageUpload(e as React.ChangeEvent<HTMLInputElement>);
+          handleImageUpload(e as unknown as React.ChangeEvent<HTMLInputElement>);
         };
         input.onclick = (e) => {
           e.stopPropagation();
