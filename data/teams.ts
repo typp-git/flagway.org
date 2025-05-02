@@ -1,3 +1,5 @@
+import { createClient } from '@/utils/supabase/client';
+
 export type Player = {
   id?: number; // Unique identifier for the player
   created_at?: string; // Timestamp when the player was created
@@ -17,25 +19,18 @@ export type Chaperone = Omit<Player, "grade">;
 export type Coach = Player
 
 export type Team = {
+  id: number;
+  created_at: string;
   name: string;
+  country: string;
+  coordinator_first_name: string;
+  coordinator_last_name: string;
+  coordinator_email: string;
+  coordinator_phone: string;
+  name_abbreviation: string;
   state: string;
-  players: Player[];
-  slug?: string; // Add the optional slug property
-  region?: string;
+  city: string;
 };
-
-// export type Team = {
-//   id: number;
-//   created_at: string; // ISO timestamp
-//   name: string;
-//   state_id: number | null;
-//   country: string;
-//   coordinator_first_name: string;
-//   coordinator_last_name: string;
-//   coordinator_email: string;
-//   coordinator_phone: string;
-//   name_abbrev: string;
-// };
 
 export type Region = {
   name: string;
@@ -98,5 +93,23 @@ regions.forEach((region) => {
     team.region = region.name;
   });
 });
+
+export async function updateTeam(teamId: number, updatedData: Partial<Team>) {
+  const supabase = createClient();
+  
+  const { data, error } = await supabase
+    .from('teams')
+    .update(updatedData)
+    .eq('id', teamId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating team:', error);
+    return { error };
+  }
+
+  return { data };
+}
 
 export default regions;

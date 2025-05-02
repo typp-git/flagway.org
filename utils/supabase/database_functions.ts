@@ -5,7 +5,7 @@ export async function updatePlayer(playerID: number, newPlayerData:  Omit<Player
     const supabase = await createClient();
     console.log("attempting to update player with ID", playerID)
 
-    let dataToChange = {
+    const dataToChange = {
       first_name: newPlayerData.first_name,
       last_name: newPlayerData.last_name,
       tshirt_size: newPlayerData.tshirt_size, 
@@ -18,6 +18,12 @@ export async function updatePlayer(playerID: number, newPlayerData:  Omit<Player
       verified: Boolean(newPlayerData.verified)
     }
 
+    console.log("Verification value in updatePlayer:", {
+      input: newPlayerData.verified,
+      converted: Boolean(newPlayerData.verified),
+      final: dataToChange.verified
+    });
+    
     console.log("Formatted Player:", dataToChange)
     
     const { error } = await supabase
@@ -39,7 +45,7 @@ export async function addPlayer(newPlayerData:  Omit<Player, "id" | "created_at"
 
     console.log("attempting to add player")
 
-    let dataToChange = {
+    const dataToChange = {
       first_name: newPlayerData.first_name,
       last_name: newPlayerData.last_name,
       role: "player",
