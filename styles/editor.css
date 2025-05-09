@@ -1,0 +1,48 @@
+/* Image styles */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ProseMirror img[data-resizable] {
+  position: relative;
+  display: inline-block;
+}
+
+.ProseMirror img[data-resizable] .resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #0ea5e9;
+  border-radius: 4px;
+  z-index: 100;
+}
+
+.ProseMirror img[data-resizable] .resize-handle[data-handle="nw"] {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+
+.ProseMirror img[data-resizable] .resize-handle[data-handle="ne"] {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+
+.ProseMirror img[data-resizable] .resize-handle[data-handle="sw"] {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
+
+.ProseMirror img[data-resizable] .resize-handle[data-handle="se"] {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+/* Selection outline */
+.ProseMirror img[data-resizable].selected {
+  outline: 2px solid #0ea5e9;
+} 

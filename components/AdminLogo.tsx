@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import YPPLogo from "@/public/YPP-Logo-white.webp";
 // import { usePathname } from "next/navigation";
 // import { motion } from "framer-motion";
 
@@ -20,10 +19,11 @@ export default function AdminLogo() {
       >
         <Image
           priority
+          src="/YPP-Logo-white.webp"
           alt="Logo of the Young People's Project"
-          width="100"
-          src={YPPLogo}
-          className="w-[40px] md:w-[65px] h-auto"
+          width={150}
+          height={50}
+          className="h-8 w-auto"
         />
 
         <h3 className="!text-lg leading-none font-display w-fit">

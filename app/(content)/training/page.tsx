@@ -1,20 +1,21 @@
 import Container from "@/components/container";
 import Image from "next/image";
 import React from "react";
-import Purple from "@/public/photos/purple.jpg";
 
 const AboutPage: React.FC = () => {
   return (
     <Container>
-      <div className="relative bg-white">
+      <div className="relative bg-white min-h-screen">
         <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:mb-16 lg:mt-12">
           <Image
-            alt=""
-            src={Purple}
-            className="h-64 w-full bg-gray-50 rounded-3xl object-cover sm:h-80 lg:absolute lg:object-[35%_60%] lg:h-[90%]"
+            src="/photos/purple.jpg"
+            alt="Training Image"
+            width={800}
+            height={600}
+            className="h-64 w-full bg-gray-50 rounded-3xl object-cover sm:h-80 sm:relative sm:object-[0%_20%] lg:object-[35%_60%] lg:h-[90%] rounded-lg shadow-xl"
           />
         </div>
-        <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
+        <div className="pb-24 pt-16 sm:pb-32 sm:pt-12 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
           <div className="px-6 lg:px-8">
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
               <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
