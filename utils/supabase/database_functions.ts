@@ -1,6 +1,8 @@
 import { Player } from "@/data/teams"
 import { createClient } from "@/utils/supabase/client";
 
+
+
 /**
  * 
  * @param playerData Player Object but with Strings as Each Value
@@ -16,7 +18,7 @@ function parsePlayer(
         tshirt_size: playerData.tshirt_size as string | undefined,
         dietary_restrictions: playerData.dietary_restrictions as string | undefined,
         emergency_contact_name: playerData.emergency_contact_name as string | undefined,
-        emergency_contact_phone_number: playerData.emergency_contact_phone_number as string | undefined,
+        emergency_contact_phone: playerData.emergency_contact_phone as string | undefined,
         emergency_contact_relationship: playerData.emergency_contact_relationship as string | undefined,
         grade: playerData.grade ? Number(playerData.grade) : undefined, // Convert grade to number or undefined
         team_id: playerData.team_id ? Number(playerData.team_id) : undefined, // Convert team_id to number or undefined
