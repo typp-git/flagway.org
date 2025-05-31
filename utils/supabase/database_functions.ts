@@ -225,4 +225,42 @@ export async function submitEntireTeamForm(formPayload: EntireTeamSubmissionForm
   }
 }
 
-//TODO: add Coach, Player, Chaperone Form with the Handling. 
+export async function getStateIDs() { 
+  const supabase = await createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from("states")
+      .select("id, name");
+
+    if (error) {
+      console.error("Error fetching state IDs:", error);
+      return [];
+    }
+
+    return data ?? [];
+  } catch (error) { 
+    console.error("Unexpected error fetching state IDs:", error);
+    return [];
+  }
+}
+
+export async function getNestedAllRegionTeams() { 
+  const supabase = await createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from("states")
+      .select("id, name");
+
+    if (error) {
+      console.error("Error fetching state IDs:", error);
+      return [];
+    }
+
+    return data ?? [];
+  } catch (error) { 
+    console.error("Unexpected error fetching state IDs:", error);
+    return [];
+  }
+}

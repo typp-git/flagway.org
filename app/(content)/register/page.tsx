@@ -1,16 +1,32 @@
 "use client";
 
-import { submitEntireTeamForm } from "@/utils/supabase/database_functions";
+import { submitEntireTeamForm, getStateIDs } from "@/utils/supabase/database_functions";
 import { useState } from "react";
 import { MdAddCircle, MdRemoveCircle, MdClose } from "react-icons/md";
-import { EntireTeamSubmissionForm, emptyPlayerForm, emptyCoachForm, emptyChaperoneForm, emptyTeamForm } from "@/data/teams";
+import { emptyPlayerForm, emptyCoachForm, emptyChaperoneForm, emptyTeamForm } from "@/data/teams";
+
+/**
+ *  getStateIDs().then((data) => {);
+  });
+ */
+const states = [ // TODO: can replace with a database call to states in useeffect
+  { id: "09ae4904-f62a-4a4f-ad85-e2e22e1f4a95", name: "Maryland", abbreviation: "MD" },
+  { id: "1014f81b-681d-469c-a673-f6dcac6ba677", name: "Illinois", abbreviation: "IL" },
+  { id: "170a6ec5-8302-4533-9a9e-1ec95b889464", name: "Florida", abbreviation: "FL" },
+  { id: "737208e0-7015-4851-a5d9-657bc503f5f0", name: "California", abbreviation: "CA" },
+  { id: "93c552bd-f232-4b74-bce6-7c135ceb41fa", name: "Ohio", abbreviation: "OH" },
+  { id: "ab8103e8-d140-4603-969c-fbd6ce3d9943", name: "Georgia", abbreviation: "GA" },
+  { id: "ae96df6c-4289-444b-9fd7-6c05af759107", name: "Virginia", abbreviation: "VA" },
+  { id: "b4feca4c-de10-4b2f-b085-42ee14f9aab2", name: "Massachusetts", abbreviation: "MA" },
+  { id: "fb6c9c1d-4409-44e8-8804-1cf6f5a12d7b", name: "Minnesota", abbreviation: "MN" },
+];
 
 const teamColumns = [
   { field_name: "name", label: "Team Name *", type: "text", required: true },
   { field_name: "name_abbreviation", label: "Team Abbreviation", type: "text", required: false },
   { field_name: "school_organization", label: "School/Organization *", type: "text", required: true },
-  { field_name: "country", label: "Country *", type: "text", required: true },
-  { field_name: "state", label: "State", type: "text", required: false },
+  { field_name: "country", label: "Country *", type: "select", options: ["USA"], required: true },
+  { field_name: "state_id", label: "State", type: "select", options: states, required: false },
   { field_name: "coordinator_first_name", label: "Coordinator First Name *", type: "text", required: true },
   { field_name: "coordinator_last_name", label: "Coordinator Last Name *", type: "text", required: true },
   { field_name: "coordinator_email", label: "Coordinator Email *", type: "text", required: true },
@@ -65,7 +81,7 @@ const chaperoneColumns = [
   { field_name:"emergency_contact_relationship", label: "Emergency Contact Relationship *", type: "text", required: true },
   { field_name:"gender", label: "Gender *", type: "select", options: ["Male", "Female"], required: true },
   { field_name:"city", label: "City", type: "text", required: false },
-  { field_name:"years_YPP", label: "Years in YPP", type: "text", required: false },
+  { field_name:"years_YPP", label: "Years in YPP", type: "number", required: false },
   { field_name:"photo_consent_given", label: "Photo Consent Given?", type: "checkbox", required: false},
   { field_name:"photo_submission_file", label: "Photo Upload", type: "image", required: false} 
 ];
@@ -139,7 +155,7 @@ const removeLastRow = (
  */
 const validateField = (
   section: string,
-  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[] },
   value: string | File | number | boolean | null
 ): string => {
   let error = "";
@@ -193,7 +209,7 @@ const validateField = (
   const handleChange = (
   section: "team" | "players" | "coaches" | "chaperones", // ✅ Restrict valid sections
   rowIndex: number, // 0 for team, 0-indexed for players/coaches/chaperones
-  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[] },
   newValue: string | File | boolean | number | null // accepts files
   ) => {
     const errorKey = `${section}-${rowIndex}-${colMeta.field_name}`; // eg: students-3-grade or chaperones-0-first_name
@@ -490,12 +506,12 @@ const validateField = (
  */
 function createTableRow(
   role: "team" | "players" | "coaches" | "chaperones",
-  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] }[],
+  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] | {id: string, name: string }[] }[],
   rowIndex: number,
   handleChange: (
     section: "team" | "players" | "coaches" | "chaperones",
     rowIndex: number,
-    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] | {id:string,name:string}[]  },
     value: string | File | boolean | number | null
   ) => void,
   rowData: Record<string, any>,
@@ -531,11 +547,26 @@ function createTableRow(
                 title={error || ""}
               >
                 <option value="">Select...</option>
-                {(colMeta.options ?? []).map((opt: string) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
+                  {(colMeta.options ?? []).map((opt) => {
+                    if (typeof opt === 'string') {
+                      // option is a simple string
+                      return (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      );
+                    } else if (opt && typeof opt === 'object' && 'id' in opt && 'name' in opt) {
+                      // option is an object with id and name
+                      return (
+                        <option key={opt.id} value={opt.id}>
+                          {opt.name}
+                        </option>
+                      );
+                    } else {
+                      // fallback if shape unexpected
+                      return null;
+                    }
+                  })}
               </select>
             ) : colMeta.type === "image" ? (
                 <div className="flex flex-col gap-1 items-start">
@@ -612,12 +643,12 @@ function createTableRow(
  */
 function createExpandedFormSection(
   role: "team" | "players" | "coaches" | "chaperones",
-  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] }[],
+  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] | {id:string,name:string}[] }[],
   rowIndex: number,
   handleChange: (
     section: "team" | "players" | "coaches" | "chaperones",
     rowIndex: number,
-    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[] },
     value: string | File | boolean | number | null
   ) => void,
   rowData: Record<string, any>,
@@ -661,11 +692,26 @@ function createExpandedFormSection(
                   title={error || ""}
                 >
                   <option value="">Select...</option>
-                  {(colMeta.options ?? []).map((opt: string) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
+                    {(colMeta.options ?? []).map((opt) => {
+                      if (typeof opt === 'string') {
+                        // option is a simple string
+                        return (
+                          <option key={opt} value={opt}>
+                            {opt}
+                          </option>
+                        );
+                      } else if (opt && typeof opt === 'object' && 'id' in opt && 'name' in opt) {
+                        // option is an object with id and name
+                        return (
+                          <option key={opt.id} value={opt.id}>
+                            {opt.name}
+                          </option>
+                        );
+                      } else {
+                        // fallback if shape unexpected
+                        return null;
+                      }
+                    })}
                 </select>
               ) : colMeta.type === "image" ? (
                 <div className="flex flex-col gap-1 items-start">
