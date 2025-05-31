@@ -20,7 +20,7 @@ export type Team = {
   coordinator_email: string; // Coordinator email*
   coordinator_phone: string; // // Coordinator phone*
   name_abbreviation: string | null; // Team name Abbreviation
-  photo_ref: number | null; // Link to Team Image
+  photo_ref: string | null; // Link to Team Image
   special_accommodations: string | null; // Special Accommodations
   };
   
@@ -44,7 +44,7 @@ export type Team = {
   emergency_contact_relationship: string | null; // Emergency contact relation
   city: string | null; // City 
   years_YPP: number | null; // Years at YPP
-  photo_ref: number | null; // Image to Link 
+  photo_ref: string | null; // Image to Link 
   };
   
   export type Coach = Player
@@ -59,18 +59,29 @@ export type Team = {
   // SUBMISSION FORMS
   
   export type TeamForm = Omit<Team,
-    'id' | 'created_at' | 'slug'
-  >;
-  
+    'id' | 'created_at' | 'slug' 
+  > & {  photo_submission_file?: File | null;  }; // add submission file
+
+  /**
+   * Keep ID from changing
+   * If photo_submission_file is not null, then add it. 
+   */
   export type PlayerForm = Omit<Player,
-    'id' | 'created_at' 
-  >;
+    'id' | 'created_at'
+  > & { photo_submission_file ?: File | null;  }; // add submission file
   
   export type CoachForm = PlayerForm 
   
   export type ChaperoneForm = Omit<Chaperone,
     'id' | 'created_at' 
-  >;
+  > & { photo_submission_file ?: File | null;  }; // add submission file
+  
+  export type EntireTeamSubmissionForm = {
+    team: TeamForm; 
+    players: PlayerForm[];
+    coaches: CoachForm[];
+    chaperones: ChaperoneForm[];
+  }
   
   // EMPTY SUBMISSION FORMS
   
@@ -93,7 +104,8 @@ export type Team = {
     emergency_contact_relationship: null,
     city: null,
     years_YPP: null,
-    photo_ref: null,
+    photo_submission_file: null,
+    photo_ref: null
   };
   
   export const emptyCoachForm = emptyPlayerForm;
@@ -114,6 +126,7 @@ export type Team = {
     city: null,
     years_YPP: null,
     photo_ref: null,
+    photo_submission_file: null,
   };
   
   export const emptyTeamForm: TeamForm = {
@@ -126,7 +139,8 @@ export type Team = {
     coordinator_email: "",
     coordinator_phone: "",
     name_abbreviation: null,
-    photo_ref: null, 
+    photo_submission_file: null, 
+    photo_ref: null,
     special_accommodations: null,
   };
   

@@ -1,343 +1,300 @@
 "use client";
 
-import { addPersonToDatabase, addTeamToDatabase } from "@/utils/supabase/database_functions";
+import { submitEntireTeamForm } from "@/utils/supabase/database_functions";
 import { useState } from "react";
-import { MdAddCircle } from "react-icons/md";
+import { MdAddCircle, MdRemoveCircle, MdClose } from "react-icons/md";
+import { EntireTeamSubmissionForm, emptyPlayerForm, emptyCoachForm, emptyChaperoneForm, emptyTeamForm } from "@/data/teams";
+
+const teamColumns = [
+  { field_name: "name", label: "Team Name *", type: "text", required: true },
+  { field_name: "name_abbreviation", label: "Team Abbreviation", type: "text", required: false },
+  { field_name: "school_organization", label: "School/Organization *", type: "text", required: true },
+  { field_name: "country", label: "Country *", type: "text", required: true },
+  { field_name: "state", label: "State", type: "text", required: false },
+  { field_name: "coordinator_first_name", label: "Coordinator First Name *", type: "text", required: true },
+  { field_name: "coordinator_last_name", label: "Coordinator Last Name *", type: "text", required: true },
+  { field_name: "coordinator_email", label: "Coordinator Email *", type: "text", required: true },
+  { field_name: "coordinator_phone", label: "Coordinator Phone # *", type: "text", required: true },
+  { field_name: "special_accommodations", label: "Special Accommodations", type: "text", required: false },
+  { field_name: "photo_submission_file", label: "Team Logo", type: "image", required: false }
+];
 
 const playerColumns = [
-  { label: "First Name *", type: "text" },
-  { label: "Last Name *", type: "text" },
-  { label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"] },
-  { label: "Dietary Restrictions", type: "text" },
-  { label: "Emergency Contact Name *", type: "text" },
-  { label: "Emergency Contact Phone Number *", type: "text" },
-  { label: "Emergency Contact Relationship *", type: "text" },
-  { label: "Grade *", type: "text" },
-  { label: "Gender *", type: "select", options: ["Male", "Female"] },
-  { label: "City", type: "text" },
-  { label: "Years in YPP", type: "text" },
-  { label: "Previous Tournament Experience?", type: "checkbox" },
-  { label: "Photo Consent Given?", type: "checkbox" },
-  { label: "Photo Upload", type: "image" }, 
+  { field_name:"first_name", label: "First Name *", type: "text", required: true },
+  { field_name:"last_name", label: "Last Name *", type: "text", required: true },
+  { field_name:"tshirt_size", label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"], required: true },
+  { field_name:"dietary_restrictions", label: "Dietary Restrictions", type: "text", required: false },
+  { field_name:"emergency_contact_name", label: "Emergency Contact Name *", type: "text", required: true},
+  { field_name:"emergency_contact_phone", label: "Emergency Contact Phone Number *", type: "text", required: true },
+  { field_name:"emergency_contact_relationship", label: "Emergency Contact Relationship *", type: "text", required: true },
+  { field_name:"grade", label: "Grade *", type: "number", options: ["0","1","2","3","4","5","6","7","8","9","10","11","12"], required: true },
+  { field_name:"gender", label: "Gender *", type: "select", options: ["Male", "Female"], required: true },
+  { field_name:"city", label: "City", type: "text", required: false },
+  { field_name:"years_YPP", label: "Years in YPP", type: "number", required: false },
+  { field_name:"previous_tournament_experience", label: "Previous Tournament Experience?", type: "checkbox", required: false},
+  { field_name:"photo_consent_given", label: "Photo Consent Given?", type: "checkbox", required: false},
+  { field_name:"photo_submission_file", label: "Photo Upload", type: "image", required: false} 
 ];
 
 const coachColumns = [
-  { label: "First Name *", type: "text" },
-  { label: "Last Name *", type: "text" },
-  { label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"] },
-  { label: "Dietary Restrictions", type: "text" },
-  { label: "Emergency Contact Name *", type: "text" },
-  { label: "Emergency Contact Phone Number *", type: "text" },
-  { label: "Emergency Contact Relationship *", type: "text" },
-  { label: "Grade *", type: "text" },
-  { label: "Gender *", type: "select", options: ["Male", "Female"] },
-  { label: "City", type: "text" },
-  { label: "Years in YPP", type: "text" },
-  { label: "Previous Tournament Experience?", type: "checkbox" },
-  { label: "Photo Consent Given?", type: "checkbox" },
-  { label: "Photo Upload", type: "image" }, 
+  { field_name:"first_name", label: "First Name *", type: "text", required: true },
+  { field_name:"last_name", label: "Last Name *", type: "text", required: true },
+  { field_name:"tshirt_size", label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"], required: true },
+  { field_name:"dietary_restrictions", label: "Dietary Restrictions", type: "text", required: false },
+  { field_name:"emergency_contact_name", label: "Emergency Contact Name *", type: "text", required: true},
+  { field_name:"emergency_contact_phone", label: "Emergency Contact Phone Number *", type: "text", required: true },
+  { field_name:"emergency_contact_relationship", label: "Emergency Contact Relationship *", type: "text", required: true },
+  { field_name:"grade", label: "Grade *", type: "number", options: ["0","1","2","3","4","5","6","7","8","9","10","11","12"], required: true },
+  { field_name:"gender", label: "Gender *", type: "select", options: ["Male", "Female"], required: true },
+  { field_name:"city", label: "City", type: "text", required: false },
+  { field_name:"years_YPP", label: "Years in YPP", type: "number", required: false },
+  { field_name:"previous_tournament_experience", label: "Previous Tournament Experience?", type: "checkbox", required: false},
+  { field_name:"photo_consent_given", label: "Photo Consent Given?", type: "checkbox", required: false},
+  { field_name:"photo_submission_file", label: "Photo Upload", type: "image", required: false} 
 ];
 
 const chaperoneColumns = [
-  { label: "First Name *", type: "text" },
-  { label: "Last Name *", type: "text" },
-  { label: "Email *", type: "text" },
-  { label: "Phone Number *", type: "text" },
-  { label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"] },
-  { label: "Dietary Restrictions", type: "text" },
-  { label: "Emergency Contact Name", type: "text" },
-  { label: "Emergency Contact Phone Number", type: "text" },
-  { label: "Emergency Contact Relationship", type: "text" },
-  { label: "Gender *", type: "select", options: ["Male", "Female"] },
-  { label: "City", type: "text" },
-  { label: "Years in YPP", type: "text" },
-  { label: "Photo Consent Given?", type: "checkbox" },
-  { label: "Photo Upload", type: "image" }, 
+  { field_name:"first_name", label: "First Name *", type: "text", required: true },
+  { field_name:"last_name", label: "Last Name *", type: "text", required: true },
+  { field_name:"email", label: "Email *", type: "text", required: true},
+  { field_name:"phone", label: "Phone Number *", type: "text", required: true},
+  { field_name:"tshirt_size", label: "T-shirt Size *", type: "select", options: ["XS", "S", "M", "L", "XL", "XXL"], required: true },
+  { field_name:"dietary_restrictions", label: "Dietary Restrictions", type: "text", required: false },
+  { field_name:"emergency_contact_name", label: "Emergency Contact Name *", type: "text", required: true},
+  { field_name:"emergency_contact_phone", label: "Emergency Contact Phone Number *", type: "text", required: true },
+  { field_name:"emergency_contact_relationship", label: "Emergency Contact Relationship *", type: "text", required: true },
+  { field_name:"gender", label: "Gender *", type: "select", options: ["Male", "Female"], required: true },
+  { field_name:"city", label: "City", type: "text", required: false },
+  { field_name:"years_YPP", label: "Years in YPP", type: "text", required: false },
+  { field_name:"photo_consent_given", label: "Photo Consent Given?", type: "checkbox", required: false},
+  { field_name:"photo_submission_file", label: "Photo Upload", type: "image", required: false} 
 ];
 
+const defaultPlayerSize = 6;
+const defaultCoachSize = 2;
+const defaultChaperoneSize = 2;
+
 export default function RegistrationForm() {
-	const resetForm = () => {
-		setFormData({
-		  teamInfo: Array(11).fill(""),
-		  players: Array.from({ length: 6 }, () => Array(playerColumns.length).fill("")),
-		  coaches: Array.from({ length: 2 }, () => Array(coachColumns.length).fill("")),
-		  chaperones: Array.from({ length: 2 }, () => Array(chaperoneColumns.length).fill("")),
-		});
-		setIsSubmitted(false);
-	  };
-	  
 	const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const [formData, setFormData] = useState({
-		teamInfo: Array(11).fill(""), // ✅ Fills array with empty strings
-		players: Array.from({ length: 6 }, () => Array(playerColumns.length).fill("")), // ✅ Generates a 12x8 matrix
-		coaches: Array.from({ length: 2 }, () => Array(coachColumns.length).fill("")), // ✅ Generates a 5x8 matrix
-		chaperones: Array.from({ length: 2 }, () => Array(chaperoneColumns.length).fill("")), // ✅ Generates a 4x7 matrix
-	  });
-
-  const addPlayerRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
-    e.preventDefault();
-    setFormData((prevForm) => ({
-      ...prevForm,
-      players: [...prevForm.players, Array(playerColumns.length).fill("")],
-    }))
-  }
-
-  const addCoachRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
-    e.preventDefault();
-    setFormData((prevForm) => ({
-      ...prevForm,
-      coaches: [...prevForm.coaches, Array(coachColumns.length).fill("")], 
-    })) 
-  }
+    team: {... emptyTeamForm},
+    players: Array.from({ length: defaultPlayerSize }, () => ({... emptyPlayerForm})),
+    coaches: Array.from({ length:  defaultCoachSize }, () =>  ({... emptyCoachForm})), 
+    chaperones: Array.from({ length: defaultChaperoneSize }, () => ({... emptyChaperoneForm})),
+  });
   
-  const addChaperoneRow = (e: React.MouseEvent<HTMLButtonElement>) => { 
-    e.preventDefault();
-    setFormData((prevForm) => ({
-      ...prevForm,
-      chaperones: [...prevForm.chaperones, Array(chaperoneColumns.length).fill("")],
-    })) 
+  const resetForm = () => {
+		setFormData({
+		  team: {... emptyTeamForm},
+      players: Array.from({ length: defaultPlayerSize }, () => ({... emptyPlayerForm})),
+      coaches: Array.from({ length:  defaultCoachSize }, () =>  ({... emptyCoachForm})), 
+      chaperones: Array.from({ length: defaultChaperoneSize }, () => ({... emptyChaperoneForm})),
+		});
+		setIsSubmitted(false);
+	};
+
+const addRow = (
+  section: "players" | "coaches" | "chaperones",
+  emptyForm: typeof emptyPlayerForm | typeof emptyCoachForm | typeof emptyChaperoneForm
+) => (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  setFormData((prevForm) => ({
+    ...prevForm,
+    [section]: [...prevForm[section], { ...emptyForm }],
+  }));
+};
+
+const removeLastRow = (
+  section: "players" | "coaches" | "chaperones"
+) => (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  setFormData((prevForm) => ({
+    ...prevForm,
+    [section]: prevForm[section].length > 0
+      ? prevForm[section].slice(0, -1)
+      : prevForm[section],
+  }));
+
+  // Remove Errors of Last Row
+  setErrors((prevErrors) => {
+    const lastIndex = formData[section].length - 1;
+    const newErrors = { ...prevErrors };
+    Object.keys(newErrors).forEach((key) => {
+      if (key.startsWith(`${section}-${lastIndex}-`)) {
+        delete newErrors[key];
+      }
+    });
+    return newErrors;
+  });
+};
+
+/**
+ * Validates a Single Field After it is Filled, Does not Detect Unfilled Fields
+ * @param section 
+ * @param field 
+ * @param value 
+ * @returns Empty String for No Error or String Describing Error
+ */
+const validateField = (
+  section: string,
+  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+  value: string | File | number | boolean | null
+): string => {
+  let error = "";
+  const field = colMeta.field_name;
+  const isString = (v: any): v is string => typeof v === "string";
+
+  const isEmpty =
+    value === undefined ||
+    value === null ||
+    (typeof value === "string" && value.trim() === "") ||
+    (colMeta.type === "select" && value === "") ||
+    (colMeta.type === "checkbox" && value !== true) ||
+    (colMeta.type === "image" && !(value instanceof File));
+  
+  if (colMeta.required && isEmpty) {
+    return `${colMeta.label} is required`;
   }
 
-  const validateField = (section: string, row: number, col: number, value: string) => {
-    let error = "";
-
-    if (section === "team") {
-      if (col === 8) {
-        // Validate Coordinator Phone Number
-        const phoneRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
-        if (value.trim() !== "" && !phoneRegex.test(value)) {
-          error = "Invalid phone number";
-        }
+  if ( (field === "coordinator_phone" || field === "phone" || field === "emergency_contact_phone") && isString(value)) {
+      const phoneRegex = /^[0-9]{10,}$/;
+      if (value.trim() !== "" && !phoneRegex.test(value)) {
+        error = "Invalid phone number";
       }
+  }
+
+  if (field === "grade") {
+    if (value === null) {
+      error = "Grade is required";
+    } else if (typeof value === "number" && (value < 0 || value > 12)) {
+      error = "Grade must be between 0 and 12";
     }
+  }
 
-    if (section === "players" || section === "coaches"){
-      if (col === 5) {// Validate phone number
-        const phoneRegex = /^[0-9]{10,14}$/; // Example: 10-digit phone number
-        if (value !== "" && !phoneRegex.test(value)) {
-          error = "Invalid phone number";
-        }
-      } else if (col === 7) {// Validate grade (only for players and coaches)
-        const grade = parseInt(value, 10);
-        if (value !== "" && (isNaN(grade) || grade < 1 || grade > 12)) {
-          error = "Grade must be between 1 and 12";
-        }
-      } else if (col === 10) {// Validate yearsYPP (only for players and coaches)
-        const yearsYPP = parseInt(value, 10);
-        if (value !== "" && (isNaN(yearsYPP) || yearsYPP < 0)) {
-          error = "Years YPP must be a positive number";
-        }
-      }
-    } 
-    
-    if (section === "chaperones") {
-        if (col === 7 || col === 3) {
-        // Validate phone number
-        const phoneRegex = /^[0-9]{10,14}$/; // Example: 10-digit phone number
-        if (value !== "" && !phoneRegex.test(value)) {
-          error = "Invalid phone number";
-        }
-      } else if (col === 11) {// Validate yearsYPP
-        const yearsYPP = parseInt(value, 10);
-        if (value !== "" && (isNaN(yearsYPP) || yearsYPP < 0)) {
-          error = "Years YPP must be a positive number";
-        }
-      }
+  if (field === "years_YPP") { // can be null
+    if (value === null) {
+      return ""; // Allow null for years YPP
+    } else if (typeof value === "number" && value < 0) {
+      error = "Years YPP must be a whole number";
     }
-
+  }
   return error;
 };
 	  
-	  const handleChange = (
-		section: "players" | "coaches" | "chaperones", // ✅ Restrict valid sections
-		row: number,
-		col: number,
-		value: string | File // accepts files
-	  ) => {
-      const errorKey = `${section}-${row}-${col}`;
-      const error = validateField(section, row, col, value);
-    
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [errorKey]: error, // Update the error for the specific field
-      }));
-
-      setFormData((prev) => ({
-        ...prev,
-        [section]: prev[section].map((r, i) =>
-        i === row ? r.map((c, j) => (j === col ? value : c)) : [...r] // ✅ Ensures immutability
-        ),
-      }));
-	  };
-
-  const handleSingleChange = (index: number, value: string) => {
-    const errorKey = `team-0-${index}`;
-    const error = validateField("team", 0, index, value);
-
+  /**
+   * Change the Team Info
+   * @param section 
+   * @param row 
+   * @param col 
+   * @param value 
+   */
+  const handleChange = (
+  section: "team" | "players" | "coaches" | "chaperones", // ✅ Restrict valid sections
+  rowIndex: number, // 0 for team, 0-indexed for players/coaches/chaperones
+  colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+  newValue: string | File | boolean | number | null // accepts files
+  ) => {
+    const errorKey = `${section}-${rowIndex}-${colMeta.field_name}`; // eg: students-3-grade or chaperones-0-first_name
+    const error = validateField(section, colMeta, newValue);
+  
     setErrors((prevErrors) => ({
       ...prevErrors,
       [errorKey]: error, // Update the error for the specific field
     }));
-  
-    setFormData((prev) => ({
-      ...prev,
-      teamInfo: prev.teamInfo.map((val, i) => (i === index ? value : val)),
-    }));
+
+    if (section == "team") {
+      setFormData((prev) => ({
+        ...prev,
+        team: {...prev.team, [colMeta.field_name]: newValue, },
+      }));
+    } else { // "players" "coaches" "chaperones"
+      setFormData((prev) => ({ // update the specific info
+        ...prev,
+        [section]: prev[section].map((person, i) =>
+          (i === rowIndex) ? {...person, [colMeta.field_name]: newValue, } : person
+        ),
+      }));
+
+    }
   };
 
+  // Validate Form by Validating Every Field that is Required!!
+  const validateAll = () => {
+    const newErrors: Record<string, string> = {};
+
+    const sections = [
+      {
+        section: "team",
+        getData: () => [formData.team], // Wrap single object in array
+        columns: teamColumns,
+      },
+      {
+        section: "players",
+        getData: () => formData.players,
+        columns: playerColumns,
+      },
+      {
+        section: "coaches",
+        getData: () => formData.coaches,
+        columns: coachColumns,
+      },
+      {
+        section: "chaperones",
+        getData: () => formData.chaperones,
+        columns: chaperoneColumns,
+      },
+    ] as const;
+
+    sections.forEach(({ section, getData, columns }) => {
+      getData().forEach((entry, rowIndex) => {
+        columns.forEach((colMeta) => {
+          const value = entry[colMeta.field_name as keyof typeof entry];
+          const error = validateField(section, colMeta, value ?? ""); // cast to "" if undefined
+          if (error) {
+            const key = `${section}-${rowIndex}-${colMeta.field_name}`;
+            newErrors[key] = error;
+          }
+        });
+      });
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  /**
+   * Takes FormData
+   * @param e 
+   * @returns 
+   */
   const handleSubmit = async (e: React.FormEvent) => {
-	e.preventDefault();
+    e.preventDefault();
+    console.log("errors", errors)
 
-  const hasErrors = Object.values(errors).some((error) => error !== "");
-  if (hasErrors) {
-    alert("Please fix the errors in the form before submitting.");
-    return;
-  }
+    console.log(formData)
+    // Check if there are any errors present on the form
+    const isValidated = validateAll();
 
-  // Filter out empty rows
-  const filterEmptyRows = (rows: string[][]) =>
-    rows.filter((row) => row.some((value) => value.trim() !== ""));
-  //TODO: Post-Testing, Test a minimum number of players/chaperones
-
-	// const scriptURL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-
-	const formPayload = {
-    team:
-    {
-      name: formData.teamInfo[0],
-      name_abbreviation: formData.teamInfo[1],
-      school_organization: formData.teamInfo[2],
-      state: formData.teamInfo[3],
-      country: formData.teamInfo[4],
-      coordinator_first_name: formData.teamInfo[5],
-      coordinator_last_name: formData.teamInfo[6],
-      coordinator_email: formData.teamInfo[7],
-      coordinator_phone: formData.teamInfo[8],
-      special_accommodations: formData.teamInfo[9],
-      photo_ref: formData.teamInfo[10],
-    }, 
-    players: filterEmptyRows(formData.players).map((row) => ({
-      first_name: row[0],
-      last_name: row[1],
-      tshirt_size: row[2],
-      dietary_restrictions: row[3],
-      emergency_contact_name: row[4],
-      emergency_contact_phone_number: row[5],
-      emergency_contact_relationship: row[6],
-      grade: row[7],
-      gender: row[8], 
-      city: row[9], 
-      years_YPP: row[10], 
-      previous_tournament_experience: row[11],
-      photo_consent_given: row[12],
-      photo_ref: row[13]
-    }))
-    , 
-    coaches: filterEmptyRows(formData.coaches).map((row) => ({
-      first_name: row[0],
-      last_name: row[1],
-      tshirt_size: row[2],
-      dietary_restrictions: row[3],
-      emergency_contact_name: row[4],
-      emergency_contact_phone_number: row[5],
-      emergency_contact_relationship: row[6],
-      grade: row[7],
-      gender: row[8], 
-      city: row[9], 
-      years_YPP: row[10], 
-      previous_tournament_experience: row[11],
-      photo_consent_given: row[12],
-      photo_ref: row[13]
-    }))
-    ,
-    chaperones: filterEmptyRows(formData.chaperones).map((row) => ({
-      first_name: row[0],
-      last_name: row[1],
-      email: row[2],
-      phone: row[3],
-      tshirt_size: row[4],
-      dietary_restrictions: row[5],
-      emergency_contact_name: row[6],
-      emergency_contact_phone_number: row[7],
-      emergency_contact_relationship: row[8],
-      gender: row[9],
-      city: row[10],
-      years_YPP: row[11], 
-      photo_consent_given: row[12],
-      photo_ref: row[13]
-    }))
-	};
-  
-	try {
-    console.log("FINAL FORM", formPayload)
-
-    const teamResult = await addTeamToDatabase(formPayload.team);
-    if (teamResult.error) {
-      console.error("Error creating team:", teamResult.error);
-      throw new Error(`Failed to create team: ${teamResult.error}`);
-    }
-    const team_id = teamResult.id
-    console.log("Successfully created a team with id", team_id);
-
-    const playerResults = await Promise.all(
-      formPayload.players.map(async (s) => {
-        const result = await addPersonToDatabase(s, "player", team_id); 
-        if (result.error) {
-          console.error("Error creating player:", result.error);
-          throw new Error(`Failed to create player: ${result.error}`);
-        }
-        console.log("Successfully created a player:", result);
-        return result;
-      })
-    );
-
-    console.log("All players processed successfully:", playerResults);
-
-    const coachResults = await Promise.all(
-      formPayload.coaches.map(async (s) => {
-        const result = await addPersonToDatabase(s, "coach", team_id);
-        if (result.error) {
-          console.error("Error creating coach:", result.error);
-          throw new Error(`Failed to create coach: ${result.error}`);
-        }
-        console.log("Successfully created a coach:", result);
-        return result;
-      })
-    );
-
-    console.log("All coaches processed successfully:", coachResults);
-
-    const chaperoneResults = await Promise.all(
-      formPayload.coaches.map(async (s) => {
-        const result = await addPersonToDatabase(s, "chaperone", team_id);
-        if (result.error) {
-          console.error("Error creating chaperone:", result.error);
-          throw new Error(`Failed to create chaperone: ${result.error}`);
-        }
-        console.log("Successfully created a chaperone:", result);
-        return result;
-      })
-    );
-
-    console.log("All chaperones processed successfully:", chaperoneResults);
-
-  } catch (error) {
-    console.error("Submission Error:", error);
-    alert("Failed to submit the form. Check console for details.");
-  }
-
-    setIsSubmitted(true); // Show confirmation screen
-    // Handle success response
-    const wantToSubmitAnother = window.confirm(
-      "Your team has been successfully registered! Would you like to submit another team?"
-    );
-    if (wantToSubmitAnother) {
-      resetForm();
+    if (!isValidated) {
+      alert("Please fix the errors before submitting.");
+      return;
     }
 
-  };
+    //TODO: At the moment, handling all numbers as text. change this to number inputs, and adjust validation and handleChange accordingly 
+
+    submitEntireTeamForm(formData).then((result) => {
+      if (result.error) {
+        console.error("Error submitting form:", result.error);
+        alert("Failed to submit the form. Check console for details.");
+      } else {
+        console.log("Form submitted successfully:", result);
+        setIsSubmitted(true);
+      }
+    });
+
+  }
 
   return (
     <div className="py-15 w-[100%] mx-auto p-[4%] bg-white shadow-lg rounded-lg">
@@ -362,36 +319,8 @@ export default function RegistrationForm() {
     <div>
       <h3 className="text-lg font-semibold">Flagway Team Information</h3>
       <p className="text-lg font-semibold">(Required *)</p>
-
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        {[
-          "Team Name *",
-          "Team Abbreviation",
-          "School/Organization *",
-          "State",
-          "Country *",
-          "Coordinator First Name *",
-          "Coordinator Last Name *",
-          "Coordinator Email *",
-          "Coordinator Phone # *",
-          "Special Accommodations (Or NA)", 
-        ].map((label, index) => (
-          <div key={index}>
-            <label className="block font-bold text-black">{label}</label>
-            <input
-              type="text"
-              value={formData.teamInfo[index]}
-              onChange={(e) => handleSingleChange(index, e.target.value)}
-              className={`w-full mt-1 p-2 border ${
-                errors[`team-0-${index}`]
-                  ? "border-red-500 bg-red-100/50"
-                  : "border-gray-300"
-              } rounded-lg`}
-              title={errors[`team-0-${index}`] || ""} // Show error as tooltip
-              required
-            />
-          </div>
-        ))}
+      <div>
+        {createExpandedFormSection("team", teamColumns, 0, handleChange, formData.team, errors)}
       </div>
     </div>
 
@@ -407,105 +336,33 @@ export default function RegistrationForm() {
             <tr className="bg-blue1">
             <th className="p-2 border border-black text-white">Player</th>
               {coachColumns.map((col, i) => ( // TODO: REPEATED HEADER CODE among coach,chaperone,player, MAKE OWN MODULE
-              <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox" || col.label==="Years in YPP")? "w-2":""}`}>
+              <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox")? "w-2":""}`}>
                 {col.label}
               </th>
             ))}
             </tr>
           </thead>
           <tbody>
-          {formData.players.map((row, rowIndex) => ( // TODO: REPEATED ROW CODE among coach,chaperone,player, MAKE OWN MODULE
-              <tr key={rowIndex}>
-                <td className="p-2 border text-center">{rowIndex + 1}</td>
-                {playerColumns.map((colMeta, colIndex) => {
-                  const value = row[colIndex];
-                  const error = errors[`players-${rowIndex}-${colIndex}`];
-                  return ( 
-                    <td key={colIndex} className="p-2 border">
-                      {colMeta.type === "checkbox" ? (
-                        <input
-                          type="checkbox"
-                          checked={value === true || value === "true"}
-                          onChange={(e) =>
-                            handleChange("players", rowIndex, colIndex, e.target.checked)
-                          }
-                          className="w-5 h-5"
-                          title={error || ""}
-                        />
-                      ) : colMeta.type === "select" ? (
-                        <select
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("players", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        >
-                          <option value="">Select...</option>
-                          {colMeta.options.map((opt) => (
-                            <option key={opt} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
-                      ) : colMeta.type === "image" ? (
-                        <div className="flex flex-col gap-1 items-center">
-                          <label className="text-xs bg-blue-100 px-2 py-1 rounded cursor-pointer">
-                            Upload
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                console.log("attempting file", file)
-                                if (file) {
-                                  handleChange("players", rowIndex, colIndex, file);
-                                  console.log("adding file value", value);
-                                }
-                              }}
-                              className="hidden"
-                            />
-                          </label>
-                          {(() => {
-                            const preview =
-                              value instanceof File ? URL.createObjectURL(value) :
-                              typeof value === "string" ? value : "";
-                              
-                            return preview ? (
-                              <img src={preview} alt="Preview" className="w-10 h-10 object-cover rounded" />
-                            ) : null;
-                          })()}
-                        </div>
-                      ) : (
-                        <input
-                          type="text"
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("players", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        />
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+          {formData.players.map((person, personIndex) => ( // TODO: REPEATED ROW CODE among coach,chaperone,player, MAKE OWN MODULE
+              createTableRow("players", playerColumns, personIndex, handleChange, person, errors)
+          ))}
           </tbody>
         </table>
       </div>
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 gap-2">
         <button
-          onClick={addPlayerRow}
+          onClick={addRow("players", emptyPlayerForm)}
           className="text-yellow-500 hover:text-yellow-700"
           title="Add Row"
         >
           <MdAddCircle className="w-10 h-10" />
+        </button>
+        <button
+          onClick={removeLastRow("players")}
+          className="text-red-500 hover:text-red-800"
+          title="Remove Row"
+        >
+          <MdRemoveCircle className="w-10 h-10" />
         </button>
       </div>
     </div>
@@ -520,106 +377,34 @@ export default function RegistrationForm() {
           <tr className="bg-red-800">
             <th className="p-2 border border-black text-white">Coach</th>
             {coachColumns.map((col, i) => (
-              <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox" || col.label==="Years in YPP")? "w-2":""}`}>
+              <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox")? "w-2":""}`}>
                 {col.label}
               </th>
             ))}
           </tr>
         </thead>
           <tbody>
-            {formData.coaches.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="p-2 border text-center">{rowIndex + 1}</td>
-                {coachColumns.map((colMeta, colIndex) => {
-                  const value = row[colIndex];
-                  const error = errors[`coaches-${rowIndex}-${colIndex}`];
-                  return ( 
-                    <td key={colIndex} className="p-2 border">
-                      {colMeta.type === "checkbox" ? (
-                        <input
-                          type="checkbox"
-                          checked={value === true || value === "true"}
-                          onChange={(e) =>
-                            handleChange("coaches", rowIndex, colIndex, e.target.checked)
-                          }
-                          className="w-5 h-5"
-                          title={error || ""}
-                        />
-                      ) : colMeta.type === "select" ? (
-                        <select
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("coaches", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        >
-                          <option value="">Select...</option>
-                          {colMeta.options.map((opt) => (
-                            <option key={opt} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
-                      ) : colMeta.type === "image" ? (
-                        <div className="flex flex-col gap-1 items-center">
-                          <label className="text-xs bg-blue-100 px-2 py-1 rounded cursor-pointer">
-                            Upload
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                console.log("attempting file", file)
-                                if (file) {
-                                  handleChange("coaches", rowIndex, colIndex, file);
-                                  console.log("adding file value", value);
-                                }
-                              }}
-                              className="hidden"
-                            />
-                          </label>
-                          {(() => {
-                            const preview =
-                              value instanceof File ? URL.createObjectURL(value) :
-                              typeof value === "string" ? value : "";
-                              
-                            return preview ? (
-                              <img src={preview} alt="Preview" className="w-10 h-10 object-cover rounded" />
-                            ) : null;
-                          })()}
-                        </div>
-                      ) : (
-                        <input
-                          type="text"
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("coaches", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        />
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
+            {formData.coaches.map((person, personIndex) => (
+              createTableRow("coaches", coachColumns, personIndex, handleChange, person, errors)
             ))}
           </tbody>
         </table>
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 gap-2">
         <button
-          onClick={addCoachRow}
+          onClick={addRow("coaches", emptyCoachForm)}
           className="text-yellow-500 hover:text-yellow-700"
           title="Add Row"
         >
           <MdAddCircle className="w-10 h-10" />
+        </button>
+        <button
+          onClick={removeLastRow("coaches")}
+          className="text-red-400 hover:text-red-800"
+          title="Remove Row"
+        >
+          <MdRemoveCircle className="w-10 h-10" />
         </button>
       </div>
     </div>
@@ -634,106 +419,34 @@ export default function RegistrationForm() {
         <tr className="bg-yellow-500">
           <th className="p-2 border border-black text-white">Chaperones</th>
           {chaperoneColumns.map((col, i) => (
-            <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox" || col.label==="Years in YPP")? "w-2":""}`}>
+            <th key={i} className={`p-2 border border-black text-white ${(col.type === "checkbox")? "w-2":""}`}>
               {col.label}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-      {formData.chaperones.map((row, rowIndex) => ( // TODO: REPEATED ROW CODE among coach,chaperone,player, MAKE OWN MODULE
-              <tr key={rowIndex}>
-                <td className="p-2 border text-center">{rowIndex + 1}</td>
-                {chaperoneColumns.map((colMeta, colIndex) => {
-                  const value = row[colIndex];
-                  const error = errors[`chaperones-${rowIndex}-${colIndex}`];
-                  return ( 
-                    <td key={colIndex} className="p-2 border">
-                      {colMeta.type === "checkbox" ? (
-                        <input
-                          type="checkbox"
-                          checked={value === true || value === "true"}
-                          onChange={(e) =>
-                            handleChange("chaperones", rowIndex, colIndex, e.target.checked)
-                          }
-                          className="w-5 h-5"
-                          title={error || ""}
-                        />
-                      ) : colMeta.type === "select" ? (
-                        <select
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("chaperones", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        >
-                          <option value="">Select...</option>
-                          {colMeta.options.map((opt) => (
-                            <option key={opt} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
-                      ) : colMeta.type === "image" ? (
-                        <div className="flex flex-col gap-1 items-center">
-                          <label className="text-xs bg-blue-100 px-2 py-1 rounded cursor-pointer">
-                            Upload
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                console.log("attempting file", file)
-                                if (file) {
-                                  handleChange("chaperones", rowIndex, colIndex, file);
-                                  console.log("adding file value", value);
-                                }
-                              }}
-                              className="hidden"
-                            />
-                          </label>
-                          {(() => {
-                            const preview =
-                              value instanceof File ? URL.createObjectURL(value) :
-                              typeof value === "string" ? value : "";
-                              
-                            return preview ? (
-                              <img src={preview} alt="Preview" className="w-10 h-10 object-cover rounded" />
-                            ) : null;
-                          })()}
-                        </div>
-                      ) : (
-                        <input
-                          type="text"
-                          value={value}
-                          onChange={(e) =>
-                            handleChange("chaperones", rowIndex, colIndex, e.target.value)
-                          }
-                          className={`w-full p-2 border rounded-lg ${
-                            error ? "border-red-500 bg-red-100/50" : "border-gray-300"
-                          }`}
-                          title={error || ""}
-                        />
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+      {formData.chaperones.map((person, personIndex) => ( // TODO: REPEATED ROW CODE among coach,chaperone,player, MAKE OWN MODULE
+            createTableRow("chaperones", chaperoneColumns, personIndex, handleChange, person, errors)  
+      ))}
       </tbody>
     </table>
   </div>
 
-  <div className="flex justify-center mt-4">
+  <div className="flex justify-center mt-4 gap-2">
     <button
-      onClick={addChaperoneRow}
+      onClick={addRow("chaperones", emptyChaperoneForm)}
       className="text-yellow-500 hover:text-yellow-700"
       title="Add Row"
     >
       <MdAddCircle className="w-10 h-10" />
+    </button>
+    <button
+      onClick={removeLastRow("chaperones")}
+      className="text-red-400 hover:text-red-800"
+      title="Remove Row"
+    >
+      <MdRemoveCircle className="w-10 h-10" />
     </button>
   </div>
 
@@ -765,6 +478,267 @@ export default function RegistrationForm() {
   </div>
 )}
 
+    </div>
+  );
+}
+
+
+/**
+ * 
+ * @param role: "players" | "coaches" | "chaperones"
+ * @param columnFormat: columnDescriptor
+ */
+function createTableRow(
+  role: "team" | "players" | "coaches" | "chaperones",
+  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] }[],
+  rowIndex: number,
+  handleChange: (
+    section: "team" | "players" | "coaches" | "chaperones",
+    rowIndex: number,
+    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+    value: string | File | boolean | number | null
+  ) => void,
+  rowData: Record<string, any>,
+  errors: Record<string, string>
+){
+  return (
+    <tr key={rowIndex}>
+      <td className="p-2 border text-center">{rowIndex + 1}</td>
+      {columnFormat.map((colMeta, colIndex) => {
+        const value = rowData[colMeta.field_name];
+        const error = errors[`${role}-${rowIndex}-${colMeta.field_name}`];
+        return ( 
+          <td key={colIndex} className="p-2 border">
+            {colMeta.type === "checkbox" ? (
+              <input
+                type="checkbox"
+                checked={value === true || value === "true"}
+                onChange={(e) =>
+                  handleChange(role, rowIndex, colMeta, e.target.checked)
+                }
+                className="w-5 h-5"
+                title={error || ""}
+              />
+            ) : colMeta.type === "select" ? (
+              <select
+                value={value}
+                onChange={(e) =>
+                  handleChange(role, rowIndex, colMeta, e.target.value)
+                }
+                className={`w-full p-2 border rounded-lg ${
+                  error ? "border-red-500 bg-red-100/50" : "border-gray-300"
+                }`}
+                title={error || ""}
+              >
+                <option value="">Select...</option>
+                {(colMeta.options ?? []).map((opt: string) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ) : colMeta.type === "image" ? (
+                <div className="flex flex-col gap-1 items-start">
+                  <div className="flex flex-row gap-1 items-center">
+                    <label title="Upload Image" className="text-xs bg-blue-100 hover:bg-blue-300 px-2 py-1 rounded cursor-pointer">
+                      Upload
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleChange(role, rowIndex, colMeta, file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                    <button className=" text-black hover:text-red-500 cursor-pointer" title="Remove Image"
+                      onClick={(e) => {e.preventDefault(); handleChange(role, rowIndex, colMeta, null)}}
+                    >
+                      <MdClose className="w-4 h-4"/>
+                    </button>
+                  </div>
+                {(() => {
+                  const preview =
+                    value instanceof File ? URL.createObjectURL(value) :
+                    typeof value === "string" ? value : "";
+                    
+                  return preview ? (
+                    <img src={preview} alt="Preview" className="w-10 h-10 object-cover rounded" />
+                  ) : null;
+                })()}
+              </div>
+            ) : colMeta.type === "number" ? (
+              <input
+                type="number"
+                value={value ?? ""}
+                onChange={e =>
+                  handleChange(
+                    role,
+                    rowIndex,
+                    colMeta, 
+                    isNaN(e.target.valueAsNumber) ? null : e.target.valueAsNumber
+                  )
+                }
+                className={`w-full p-2 border rounded-lg ${error ? "border-red-500 bg-red-100/50" : "border-gray-300"}`}
+                title={error || ""}
+              />
+            ) : (
+              <input
+                type="text"
+                value={value}
+                onChange={(e) =>
+                  handleChange(role, rowIndex, colMeta, e.target.value)
+                }
+                className={`w-full p-2 border rounded-lg ${
+                  error ? "border-red-500 bg-red-100/50" : "border-gray-300"
+                }`}
+                title={error || ""}
+              />
+            )}
+          </td>
+        );
+      })}
+    </tr>
+  )
+}
+
+/**
+ * 
+ * @param role: "players" | "coaches" | "chaperones"
+ * @param columnFormat: columnDescriptor
+ */
+function createExpandedFormSection(
+  role: "team" | "players" | "coaches" | "chaperones",
+  columnFormat: { field_name: string; label: string; type: string; required?: boolean; options?: string[] }[],
+  rowIndex: number,
+  handleChange: (
+    section: "team" | "players" | "coaches" | "chaperones",
+    rowIndex: number,
+    colMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[] },
+    value: string | File | boolean | number | null
+  ) => void,
+  rowData: Record<string, any>,
+  errors: Record<string, string>
+) {
+  return (
+    <div key={rowIndex} className="border border-gray-300 p-4 rounded-lg mb-4">
+      <div className="grid grid-cols-3 gap-4">
+        {columnFormat.map((colMeta, colIndex) => {
+          const value = rowData[colMeta.field_name];
+          const error = errors[`${role}-${rowIndex}-${colMeta.field_name}`];
+
+          return (
+            <div key={colIndex}>
+              <label className="block font-bold text-black mb-1">
+                {colMeta.label}
+              </label>
+
+              {colMeta.type === "checkbox" ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={value === true || value === "true"}
+                    onChange={(e) =>
+                      handleChange(role, rowIndex, colMeta, e.target.checked)
+                    }
+                    className="w-5 h-5"
+                    title={error || ""}
+                  />
+                  <span className="text-sm text-gray-700">{colMeta.label}</span>
+                </div>
+              ) : colMeta.type === "select" ? (
+                <select
+                  value={value}
+                  onChange={(e) =>
+                    handleChange(role, rowIndex, colMeta, e.target.value)
+                  }
+                  className={`w-full p-2 border rounded-lg ${
+                    error ? "border-red-500 bg-red-100/50" : "border-gray-300"
+                  }`}
+                  title={error || ""}
+                >
+                  <option value="">Select...</option>
+                  {(colMeta.options ?? []).map((opt: string) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              ) : colMeta.type === "image" ? (
+                <div className="flex flex-col gap-1 items-start">
+                  <div className="flex flex-row gap-1 items-center">
+                    <label title="Upload Image" className="text-xs bg-blue-100 hover:bg-blue-300 px-2 py-1 rounded cursor-pointer">
+                      Upload
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleChange(role, rowIndex, colMeta, file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                    <button className=" text-black hover:text-red-500 cursor-pointer" title="Remove Image"
+                      onClick={(e) => {e.preventDefault(); handleChange(role, rowIndex, colMeta, null)}}
+                    >
+                      <MdClose className="w-4 h-4"/>
+                    </button>
+                  </div>
+                  {(() => {
+                    const preview =
+                      value instanceof File
+                        ? URL.createObjectURL(value)
+                        : typeof value === "string"
+                        ? value
+                        : "";
+
+                    return preview ? (
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover rounded border border-gray-300 shadow"
+                      />
+                    ) : null;
+                  })()}
+                </div>
+              ) : colMeta.type === "number" ? (
+                <input
+                  type="number"
+                  value={value ?? ""}
+                  onChange={e =>
+                    handleChange(
+                      role,
+                      rowIndex,
+                      colMeta, 
+                      isNaN(e.target.valueAsNumber) ? null : e.target.valueAsNumber
+                    )
+                  }
+                  className={`w-full p-2 border rounded-lg ${error ? "border-red-500 bg-red-100/50" : "border-gray-300"}`}
+                  title={error || ""}
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) =>
+                    handleChange(role, rowIndex, colMeta, e.target.value)
+                  }
+                  className={`w-full p-2 border rounded-lg ${
+                    error ? "border-red-500 bg-red-100/50" : "border-gray-300"
+                  }`}
+                  title={error || ""}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

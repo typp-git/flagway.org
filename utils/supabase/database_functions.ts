@@ -1,159 +1,228 @@
-import { Player } from "@/data/teams"
+import {
+  Team, 
+  Player, 
+  Coach, 
+  Chaperone,
+  TeamForm,
+  PlayerForm,
+  CoachForm,
+  ChaperoneForm, 
+  EntireTeamSubmissionForm,
+  emptyPlayerForm,
+  emptyCoachForm, 
+  emptyChaperoneForm,
+  emptyTeamForm,
+} from "@/data/teams"
+
 import { createClient } from "@/utils/supabase/client";
 
+const addProfileImageToStorage = async (file: File, bucket: string, filepath: string) => {
+  // id is used as the folder name
+  const supabase = await createClient(); 
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(filepath, file);
+  
+  if (error) {
+    console.error("Error uploading image to (bucket:", bucket, ", file_path", filepath, ") :", error);
+    return { error };
+  }
 
+  console.log("Successfully uploaded image to (bucket:", bucket, ", file_path", filepath, ") :", data);
+
+  // Return both success and the file reference (filepath)
+  return { success: true, filepath: data.path };
+};
+
+type PersonType = "players" | "coaches" | "chaperones";
+
+type PersonFormMap = {
+  players: PlayerForm;
+  coaches: CoachForm;
+  chaperones: ChaperoneForm;
+};
+
+export async function addPersonToDatabase<T extends PersonType>(
+  newPersonForm: PersonFormMap[T],
+  personType: T,
+  team_id: string
+) {
+  console.log(`Attempting to create a new ${personType}`);
+
+  const { photo_submission_file, ...personData } = newPersonForm;
+  const finalPersonForm = {
+    ...personData,
+    team_id: team_id,
+  };
+
+  const supabase = await createClient();
+
+  // 1. Insert person data
+  const { data, error } = await supabase
+    .from(personType)
+    .insert(finalPersonForm)
+    .select("id");
+
+  if (error || !data || !data[0]?.id) {
+    console.error(`Error inserting ${personType}:`, error);
+    return { error: error ?? new Error("No person ID returned") };
+  }
+
+  const newPersonId = data[0].id;
+  console.log(`Successfully created a new ${personType}:`, newPersonId);
+
+  if (!photo_submission_file) {
+    return { success: true, id: newPersonId };
+  }
+
+  // 2. Upload photo
+  const filepath = `${newPersonId}/${photo_submission_file.name}`;
+  const uploadResult = await addProfileImageToStorage(
+    photo_submission_file,
+    personType,
+    filepath
+  );
+
+  if (uploadResult.error) {
+    console.error("Error uploading image:", uploadResult.error);
+    return { success: true, id: newPersonId, warning: "Photo upload failed" };
+  }
+
+  // 3. Update person with photo_ref
+  const { error: updateError } = await supabase
+    .from(personType)
+    .update({ photo_ref: uploadResult.filepath })
+    .eq("id", newPersonId);
+
+  if (updateError) {
+    console.error(`Error updating ${personType} with photo reference:`, updateError);
+    return { success: true, id: newPersonId, warning: "Photo uploaded, but record not updated" };
+  }
+
+  console.log(`Successfully updated ${personType} with photo reference.`);
+  return { success: true, id: newPersonId };
+}
+
+export async function addTeamToDatabase(newTeamForm: TeamForm) {
+  console.log("Attempting to create a new team");
+
+  const { photo_submission_file, ...teamData } = newTeamForm;
+  const finalTeamForm = teamData as Omit<TeamForm, "photo_submission_file">; // restructure to remove photo_submission_file
+
+  const supabase = await createClient();
+
+  // 1. Insert team data
+  const { data, error } = await supabase
+    .from("teams")
+    .insert(finalTeamForm)
+    .select("id");
+
+  if (error || !data || !data[0]?.id) {
+    console.error("Error inserting team:", error);
+    return { error: error ?? new Error("No team ID returned") };
+  }
+
+  const newTeamId = data[0].id;
+  console.log("Successfully created a new team:", newTeamId);
+
+  // 2. If no photo, return success
+  if (!photo_submission_file) {
+    return { success: true, id: newTeamId };
+  }
+
+  // 3. Upload photo
+  const filepath = `${newTeamId}/${photo_submission_file.name}`;
+  const uploadResult = await addProfileImageToStorage(
+    photo_submission_file,
+    "teams", // the name of the bucket
+    filepath
+  );
+
+  if (uploadResult.error) {
+    console.error("Error uploading image:", uploadResult.error);
+    return { success: true, id: newTeamId, warning: "Photo upload failed" };
+  }
+
+  // 4. Update team with photo_ref
+  const { error: updateError } = await supabase
+    .from("teams")
+    .update({ photo_ref: uploadResult.filepath })
+    .eq("id", newTeamId);
+
+  if (updateError) {
+    console.error("Error updating team with photo reference:", updateError);
+    return { success: true, id: newTeamId, warning: "Photo uploaded, but team not updated" };
+  }
+
+  console.log("Successfully updated team with photo reference.");
+  return { success: true, id: newTeamId };
+}
 
 /**
  * 
- * @param playerData Player Object but with Strings as Each Value
- * @returns Player Object without id and created_at
+ * @param formPayload EntireTeamSubmissionForm containing team, players, coaches, and chaperones
+ * @returns 
  */
-function parsePlayer(
-    playerData: Partial<Record<keyof Player, string | number | boolean>>
-  ): Partial<Omit<Player, "id" | "created_at">> | { error: string } {
-    try {
-      return {
-        first_name: playerData.first_name as string | undefined,
-        last_name: playerData.last_name as string | undefined,
-        tshirt_size: playerData.tshirt_size as string | undefined,
-        dietary_restrictions: playerData.dietary_restrictions as string | undefined,
-        emergency_contact_name: playerData.emergency_contact_name as string | undefined,
-        emergency_contact_phone: playerData.emergency_contact_phone as string | undefined,
-        emergency_contact_relationship: playerData.emergency_contact_relationship as string | undefined,
-        grade: playerData.grade ? Number(playerData.grade) : undefined, // Convert grade to number or undefined
-        team_id: playerData.team_id ? Number(playerData.team_id) : undefined, // Convert team_id to number or undefined
-        verified: playerData.verified !== undefined ? Boolean(playerData.verified) : undefined, // Convert verified to boolean or undefined
-      };
-    } catch (error) {
-      console.error("Error parsing player data:", error);
-      return { error: "Failed to parse player data. Please check the input format." };
-    }
-}
+export async function submitEntireTeamForm(formPayload: EntireTeamSubmissionForm) {
 
-export async function updatePlayer(playerID: number, newPlayerData: Record<string, string | number | boolean>) {
-    const supabase = await createClient();
-    console.log("Attempting to update player with ID", playerID);
-  
-    // Parse the player data
-    const parsedData = parsePlayer(newPlayerData);
-  
-    // Check for parsing errors
-    if ("error" in parsedData) {
-      console.error(parsedData.error);
-      return { error: parsedData.error };
-    }
+  try {
+    const teamResult = await addTeamToDatabase(formPayload.team);
+    if (teamResult.error) throw new Error(`Failed to create team: ${teamResult.error}`);
+    const team_id = teamResult.id;
+    console.log("Successfully created a team with id", team_id);
+    
+    // Add players
+    const playerResults = await Promise.all(
+      formPayload.players.map(async (player) => {
+        const result = await addPersonToDatabase(player, "players", team_id);
+        if (result.error) throw new Error(`Failed to create player: ${result.error}`);
+        console.log("Successfully created player:", result);
+        return result;
+      })
+    );
 
-    console.log("Formatted Player:", parsedData);
-  
-    const { error } = await supabase
-      .from("players")
-      .update(parsedData)
-      .eq("id", playerID);
-  
-    if (error) {
-      console.error("Error updating player:", error);
-      return { error };
-    }
-  
-    console.log("Successfully Updated Player");
-    return { success: true };
+    // Add coaches
+    const coachResults = await Promise.all(
+      formPayload.coaches.map(async (coach) => {
+        const result = await addPersonToDatabase(coach, "coaches", team_id);
+        if (result.error) throw new Error(`Failed to create coach: ${result.error}`);
+        console.log("Successfully created coach:", result);
+        return result;
+      })
+    );
+
+    // Add chaperones
+    const chaperoneResults = await Promise.all(
+      formPayload.chaperones.map(async (chaperone) => {
+        const result = await addPersonToDatabase(chaperone, "chaperones", team_id);
+        if (result.error) throw new Error(`Failed to create chaperone: ${result.error}`);
+        console.log("Successfully created chaperone:", result);
+        return result;
+      })
+    );
+
+    console.log("All members created successfully:", {
+      team_id,
+      playerResults,
+      coachResults,
+      chaperoneResults,
+    });
+
+    return { success: true, 
+      team_id,
+      playerResults,
+      coachResults,
+      chaperoneResults,
+    };
+
+  } catch (error) {
+    console.error("Submission Error:", error);
+    alert("Failed to submit the form. Check console for details.");
+    return {
+      error: "Failed to submit the form. Check console for details.",
+      details: error instanceof Error ? error.message : String(error),
+    };
   }
-
-// REQUIRES TEAM_ID
-export async function addPersonToDatabase(formData: Record<string, string | number | boolean>, role: string, team_id: number) {
-    const supabase = await createClient();
-    console.log("Attempting to create a new player");
-    // Parse the player data
-    const parsedData = parsePlayer(formData);
-    // Check for parsing errors
-    if ("error" in parsedData) {
-      console.error(parsedData.error);
-      return { error: parsedData.error };
-    }
-    
-    // label with team_id
-    parsedData.team_id = team_id
-    
-    console.log("Formatted Player Data:", parsedData);
-
-    // Label as "player", "chaperone", "coach" for the database
-    if (["chaperone", "player", "coach"].includes(role)){
-        parsedData.role = role
-    } else {
-        return { error: "Internal error: passed-in role nonexistent"}
-    }
-    
-    const { error } = await supabase.from("players").insert(parsedData);
-  
-    if (error) {
-      console.error("Error creating player:", error);
-      return { error };
-    }
-  
-    console.log("Successfully created a new player");
-    return { success: true };
 }
 
-
-
-function parseTeam(
-    teamData: Record<string, string | number | boolean>
-    ): Record<string, string | number> | { error: string } {
-    try {
-        return {
-        name: teamData.name as string,
-        name_abbreviation: teamData.name_abbreviation as string,
-        city: teamData.city as string,
-        state: teamData.state as string,
-        country: teamData.country as string,
-        coordinator_first_name: teamData.coordinator_first_name as string,
-        coordinator_last_name: teamData.coordinator_last_name as string,
-        coordinator_email: teamData.coordinator_email as string,
-        coordinator_phone: teamData.coordinator_phone as string,
-        };
-    } catch (error) {
-        console.error("Error parsing team data:", error);
-        return { error: "Failed to parse team data. Please check the input format." };
-    }
-}
-
-export async function addTeamToDatabase(teamData: Record<string, string | number | boolean>) {
-    const supabase = await createClient();
-    console.log("Attempting to create a new team");
-  
-    // Parse the team data
-    const parsedData = parseTeam(teamData);
-  
-    // Check for parsing errors
-    if ("error" in parsedData) {
-      console.error(parsedData.error);
-      return { error: parsedData.error };
-    }
-  
-    console.log("Formatted Team Data:", parsedData);
-  
-    // Insert the team into the database
-    const { data, error } = await supabase.from("teams").insert(parsedData).select("id");
-  
-    if (error) {
-      console.error("Error creating team:", error);
-      return { error };
-    }
-  
-    console.log("Successfully created a new team", data);
-    return { success: true, id: data[0].id };
-}
-
-
-// {
-//   name: formData.teamInfo[0],
-//   name_abbreviation: formData.teamInfo[1],
-//   city: formData.teamInfo[2],
-//   state: formData.teamInfo[3],
-//   country: formData.teamInfo[4],
-//   coordinator_first_name: formData.teamInfo[5],
-//   coordinator_last_name: formData.teamInfo[6],
-//   coordinator_email: formData.teamInfo[7],
-//   coordinator_phone: formData.teamInfo[8],
-// }, 
-
+//TODO: add Coach, Player, Chaperone Form with the Handling. 
