@@ -1,7 +1,7 @@
 "use client";
 
-import { submitEntireTeamForm, getStateIDs } from "@/utils/supabase/database_functions";
-import { useState } from "react";
+import { submitEntireTeamForm, getStateIDs} from "@/utils/supabase/database_functions";
+import { useState, useEffect } from "react";
 import { MdAddCircle, MdRemoveCircle, MdClose } from "react-icons/md";
 import { emptyPlayerForm, emptyCoachForm, emptyChaperoneForm, emptyTeamForm } from "@/data/teams";
 

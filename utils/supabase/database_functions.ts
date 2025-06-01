@@ -273,3 +273,37 @@ export async function getNestedAllRegionTeams() {
     return [];
   }
 }
+
+export async function getSimpleTeams() { 
+  const supabase = await createClient();
+
+  try {
+  const { data, error } = await supabase
+    .from('regions')
+    .select(`
+      id,
+      name,
+      states (
+        id,
+        name,
+        teams (
+          id,
+          name,
+          players (id, first_name, last_name, grade), 
+          coaches (id, first_name, last_name, grade),
+          chaperones (id, first_name, last_name)
+        )
+      )
+    `);
+
+    if (error) {
+      console.error("Error fetching nested all regions:", error);
+      return [];
+    }
+
+    return data ?? [];
+  } catch (error) { 
+    console.error("Error fetching nested all regions", error);
+    return [];
+  }
+}
