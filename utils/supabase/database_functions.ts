@@ -249,18 +249,27 @@ export async function getNestedAllRegionTeams() {
   const supabase = await createClient();
 
   try {
-    const { data, error } = await supabase
-      .from("states")
-      .select("id, name");
+  const { data, error } = await supabase
+    .from('regions')
+    .select(`
+      *,
+      states (
+        *,
+        teams (
+          *,
+          players (*)
+        )
+      )
+    `);
 
     if (error) {
-      console.error("Error fetching state IDs:", error);
+      console.error("Error fetching nested all regions:", error);
       return [];
     }
 
     return data ?? [];
   } catch (error) { 
-    console.error("Unexpected error fetching state IDs:", error);
+    console.error("Error fetching nested all regions", error);
     return [];
   }
 }
