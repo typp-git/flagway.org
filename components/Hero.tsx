@@ -12,12 +12,14 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
   return (
     <div className="overflow-hidden">
       <div className="relative isolate">
-        <Image
-          className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+        {/* <Image
+          className="absolute inset-0 w-full h-full object-cover select-none"
           alt="blurred flagway structures"
           priority
-          src="/photos/floor-work.jpg"
-        />
+          src="/burst_struct.png"
+          height={900}
+          width={900}
+        /> */}
         <div
           aria-hidden="true"
           className="absolute top-[35rem] sm:left-[40%] sm:top-[20rem] lg:top-[5rem] -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
@@ -47,7 +49,7 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
         <div className="mx-auto max-w-7xl px-6 pb-32 pt-16 sm:pt-32 lg:px-8 lg:pt-16">
           <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
             <div className="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="!text-4xl font-bold tracking-tight text-gray-900 sm:!text-5xl">
                 Where students
                 <TextCarousel />
               </h1>
@@ -58,7 +60,7 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
               <div className="mt-10 flex items-center gap-x-6">
                 <Link
                   href="/about"
-                  className="rounded-md bg-green-700 px-3.5 py-2.5 font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 font-display text-base focus-visible:outline-green-600"
+                  className="rounded-md bg-green-700 px-3.5 py-2.5 font-semibold text-white shadow-sm hover:bg-green-600  focus-visible:outline-2 focus-visible:outline-offset-2 font-display text-base focus-visible:outline-green-600"
                 >
                   SAVE THE DATE! National Tournament May 30-31, 2025
                 </Link>
@@ -73,49 +75,59 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
               </div>
             </div>
             <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0 relative">
-              <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
-                <div className="relative">
+              <div className="ml-auto w-36 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
+                <div className="relative w-36 h-52">
                   <Image
-                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    className="w-full h-full object-cover select-none rounded-lg brightness-125"
                     alt="blurred flagway structures"
                     priority
                     src="/photos/winners.jpg"
+                    width={144}
+                    height={208}
                   />
                 </div>
               </div>
-              <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
-                <div className="relative">
+              <div className="mr-auto w-36 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
+                <div className="relative w-36 h-52">
                   <Image
-                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    className="w-full h-full object-cover select-none rounded-lg brightness-125"
                     alt="blurred flagway structures"
                     priority
                     src="/photos/outdoors.jpg"
+                    width={144}
+                    height={208}
                   />
                 </div>
-                <div className="relative">
+                <div className="relative w-36 h-52">
                   <Image
-                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    className="w-full h-full object-cover select-none rounded-lg brightness-125"
                     alt="blurred flagway structures"
                     priority
                     src="/photos/floor-work.jpg"
+                    width={144}
+                    height={208}
                   />
                 </div>
               </div>
-              <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
-                <div className="relative">
+              <div className="w-36 flex-none space-y-8 pt-32 sm:pt-0">
+                <div className="relative w-36 h-52">
                   <Image
-                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    className="w-full h-full object-cover select-none rounded-lg brightness-125"
                     alt="blurred flagway structures"
                     priority
                     src="/photos/team_2.jpg"
+                    width={144}
+                    height={208}
                   />
                 </div>
-                <div className="relative">
+                <div className="relative w-36 h-52">
                   <Image
-                    className="absolute inset-0 w-full h-full object-cover select-none z-[-1] pointer-events-none brightness-150"
+                    className="w-full h-full object-cover select-none rounded-lg brightness-125"
                     alt="blurred flagway structures"
                     priority
                     src="/photos/mit.jpg"
+                    width={144}
+                    height={208}
                   />
                 </div>
               </div>

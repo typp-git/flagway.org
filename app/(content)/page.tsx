@@ -62,6 +62,8 @@ export default function Home() {
                     className={"rotate-3 " + imgClasses}
                     src="/photos/grading.jpg"
                     alt="people sitting at table with computer"
+                    width={500}
+                    height={333}
                   />
                 </div>
               </div>
@@ -73,6 +75,8 @@ export default function Home() {
                     className={"-rotate-3 " + imgClasses}
                     src="/photos/table.jpg"
                     alt="people sitting at table with computer"
+                    width={500}
+                    height={333}
                   />
                 </div>
                 <div className="order-1 md:order-2 px-1 py-4 text-left md:w-5/12">
@@ -112,6 +116,8 @@ export default function Home() {
                     className={"rotate-3 " + imgClasses}
                     src="/photos/breaker.jpg"
                     alt="people sitting at table with computer"
+                    width={500}
+                    height={333}
                   />
                 </div>
               </div>
@@ -123,6 +129,8 @@ export default function Home() {
                     className={"-rotate-3 " + imgClasses}
                     src="/photos/winning-squad.jpg"
                     alt="people sitting at table with computer"
+                    width={500}
+                    height={333}
                   />
                 </div>
                 <div className="order-1 md:order-2 px-1 py-4 text-left md:w-5/12">

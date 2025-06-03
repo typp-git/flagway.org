@@ -20,7 +20,7 @@ const SideImage: React.FC<SideImageProps> = ({ src, alt, width, position = "left
 				position === 'left' ? '-left-14 rotate-[10deg]' : 'right-0 -rotate-[10deg]'
 			}`}
 		>
-			<Image src={src} alt={alt} width={width} className="block w-[0.3] md:w-full aspect-[2/3] rounded-xl bg-gray-900/5 object-cover" />
+			<Image src={src} alt={alt} width={width} height={Math.floor(width * 1.5)} className="block w-[0.3] md:w-full aspect-[2/3] rounded-xl bg-gray-900/5 object-cover" />
 		</div>
 	);
 };

@@ -31,7 +31,7 @@ const TextCarousel: React.FC = () => {
   }, [texts.length]);
 
   return (
-    <div className="overflow-hidden flex justify-center items-center h-32 w-full relative">
+    <div className="overflow-hidden flex justify-center items-center h-32 w-full relative text-4xl sm:text-5xl">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -39,7 +39,7 @@ const TextCarousel: React.FC = () => {
           animate={{ x: 0 }}
           exit={{ x: "-100%" }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="absolute w-full h-full text-wrap flex items-start whitespace-nowrap"
+          className="absolute w-full h-full text-wrap items-start whitespace-pre-line"
         >
           {texts[currentIndex] + "."}
         </motion.div>
