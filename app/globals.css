@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 @layer utilities {
@@ -14,6 +12,12 @@
     z-index: 10;
     overflow: visible;
     border-radius: 8px;
+  }
+
+  @theme {
+    --color-blue1: #0369a1; /* Blue */
+    --color-red1: #b91c1c; /* Red */
+    --color-yellow1: #ca8a04; /* Yellow */
   }
 
   .custom-border::before {
@@ -56,6 +60,22 @@
       );
     }
   }
+
+    /* Spinning Flagway Structure */
+
+  @keyframes spin-slow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 15s linear infinite;
+  }
+  
 
   /* Hover effect that triggers the animation */
   .custom-border:hover::before {
