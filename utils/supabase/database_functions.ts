@@ -331,3 +331,111 @@ export async function getSimpleTeams() {
     return [];
   }
 }
+
+export async function updatePlayer(
+  playerId: string,
+  updatedPlayerForm: PlayerForm
+) {
+  const supabase = await createClient();
+
+  // Separate out the photo file if present
+  const { photo_submission_file, ...playerData } = updatedPlayerForm;
+
+  // 1. Update player data (excluding photo_ref for now)
+  const { data, error } = await supabase
+    .from("players")
+    .update(playerData)
+    .eq("id", playerId)
+    .select("id");
+
+  if (error || !data || !data[0]?.id) {
+    console.error("Error updating player:", error);
+    return { error: error ?? new Error("No player ID returned") };
+  }
+
+  // 2. If no new photo, return success
+  if (!photo_submission_file) {
+    return { success: true, id: playerId };
+  }
+
+  // 3. Upload new photo
+  const filepath = `${playerId}/${photo_submission_file.name}`;
+  const uploadResult = await addProfileImageToStorage(
+    photo_submission_file,
+    "players",
+    filepath
+  );
+
+  if (uploadResult.error) {
+    console.error("Error uploading image:", uploadResult.error);
+    return { success: true, id: playerId, warning: "Photo upload failed" };
+  }
+
+  // 4. Update player with new photo_ref
+  const { error: updateError } = await supabase
+    .from("players")
+    .update({ photo_ref: uploadResult.filepath })
+    .eq("id", playerId);
+
+  if (updateError) {
+    console.error("Error updating player with photo reference:", updateError);
+    return { success: true, id: playerId, warning: "Photo uploaded, but record not updated" };
+  }
+
+  console.log("Successfully updated player and photo.");
+  return { success: true, id: playerId };
+}
+
+export async function updateTeam(
+  teamId: string,
+  updatedTeamForm: TeamForm
+) {
+  const supabase = await createClient();
+
+  // Separate out the photo file if present
+  const { photo_submission_file, ...teamData } = updatedTeamForm;
+
+  // 1. Update team data (excluding photo_ref for now)
+  const { data, error } = await supabase
+    .from("teams")
+    .update(teamData)
+    .eq("id", teamId)
+    .select("id");
+
+  if (error || !data || !data[0]?.id) {
+    console.error("Error updating team:", error);
+    return { error: error ?? new Error("No team ID returned") };
+  }
+
+  // 2. If no new photo, return success
+  if (!photo_submission_file) {
+    return { success: true, id: teamId };
+  }
+
+  // 3. Upload new photo
+  const filepath = `${teamId}/${photo_submission_file.name}`;
+  const uploadResult = await addProfileImageToStorage(
+    photo_submission_file,
+    "teams",
+    filepath
+  );
+
+  if (uploadResult.error) {
+    console.error("Error uploading image:", uploadResult.error);
+    return { success: true, id: teamId, warning: "Photo upload failed" };
+  }
+
+  // 4. Update team with new photo_ref
+  const { error: updateError } = await supabase
+    .from("teams")
+    .update({ photo_ref: uploadResult.filepath })
+    .eq("id", teamId);
+
+  if (updateError) {
+    console.error("Error updating team with photo reference:", updateError);
+    return { success: true, id: teamId, warning: "Photo uploaded, but record not updated" };
+  }
+
+  console.log("Successfully updated team and photo.");
+  return { success: true, id: teamId };
+}

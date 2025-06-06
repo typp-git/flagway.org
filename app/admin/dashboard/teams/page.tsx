@@ -21,12 +21,11 @@ export default function TeamsDashboard() {
         console.error('Error fetching teams:', error);
       } else {
         setTeams(data);
+        setSelectedTeam(data && data.length > 0 ? data[0] : undefined);
       }
-      console.log(data)
     }
     fetchTeams();
-    setSelectedTeam((teams.length > 0)? teams[0]: undefined)
-  }, [supabase, teams])
+  }, [supabase]);
 
   const handleTeamSelection = function(team: Team) { 
     setSelectedTeam(team)
@@ -78,14 +77,6 @@ export default function TeamsDashboard() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                     <div>
-                      <div className="font-bold font-display text-gray-600">City</div>
-                      <div className="text-gray-800">{selectedTeam.city}</div>
-                    </div>
-                    <div>
-                      <div className="font-bold font-display text-gray-600">State</div>
-                      <div className="text-gray-800">{selectedTeam.state}</div>
-                    </div>
-                    <div>
                       <div className="font-bold font-display text-gray-600">Country</div>
                       <div className="text-gray-800">{selectedTeam.country}</div>
                     </div>
@@ -108,7 +99,7 @@ export default function TeamsDashboard() {
 
             <div className="bg-gray-50 rounded-lg p-2">
               <div className="font-bold font-display ml-2 text-lg rounded-lg">Player List</div>
-              <PlayerList id={selectedTeam.id}>              
+              <PlayerList id={selectedTeam.id!}>
               </PlayerList>
             </div>
           </div>

@@ -45,11 +45,11 @@ function DeleteConfirmationModal({
   );
 }
 
-export default function PlayerList({ id }: {id: number}) {
+export default function PlayerList({ id }: { id: string }) {
   const supabase = createClient()
   const [players, setPlayers] = useState<Player[]>([])
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -76,7 +76,7 @@ export default function PlayerList({ id }: {id: number}) {
     await fetchPlayers();
   }
 
-  const handleBulkSelect = (playerId: number) => {
+  const handleBulkSelect = (playerId: string) => {
     setSelectedPlayers(prev => 
       prev.includes(playerId) 
         ? prev.filter(id => id !== playerId)
@@ -85,22 +85,14 @@ export default function PlayerList({ id }: {id: number}) {
   };
 
   const handleBulkDelete = async () => {
-    console.log('Selected players to delete:', selectedPlayers);
     if (selectedPlayers.length === 0) return;
-    
-    // Add more detailed error logging
     const { data, error } = await supabase
       .from('players')
       .delete()
       .in('id', selectedPlayers);
-    
     if (error) {
       console.error('Error deleting players:', error);
-      console.error('Error details:', error.details);
-      console.error('Error hint:', error.hint);
-      console.error('Error message:', error.message);
     } else {
-      console.log('Successfully deleted players:', data);
       setSelectedPlayers([]);
       await fetchPlayers();
     }
@@ -109,12 +101,10 @@ export default function PlayerList({ id }: {id: number}) {
 
   const handleBulkVerify = async () => {
     if (selectedPlayers.length === 0) return;
-    
     const { error } = await supabase
       .from('players')
       .update({ verified: true })
       .in('id', selectedPlayers);
-    
     if (error) {
       console.error('Error verifying players:', error);
     } else {
@@ -123,12 +113,11 @@ export default function PlayerList({ id }: {id: number}) {
     }
   };
 
-  const handleVerifyPlayer = async (playerId: number) => {
+  const handleVerifyPlayer = async (playerId: string) => {
     const { error } = await supabase
       .from('players')
       .update({ verified: true })
       .eq('id', playerId);
-    
     if (error) {
       console.error('Error verifying player:', error);
     } else {
@@ -178,34 +167,37 @@ export default function PlayerList({ id }: {id: number}) {
               <div className="w-12 h-12 border-4 border-green-700 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : unverifiedPlayers.length > 0 ? 
-            unverifiedPlayers.map((player) => (
-              <div key={player.id} className="grid grid-cols-1 sm:grid-cols-[auto_2fr_2fr_1fr_auto] items-center bg-gray-100 rounded-lg pl-3 my-1 p-2">
-                <input
-                  type="checkbox"
-                  checked={selectedPlayers.includes(player.id || 0)}
-                  onChange={() => handleBulkSelect(player.id || 0)}
-                  className="mr-2"
-                />
-                <span className="font-display">
-                  {player.last_name}, {player.first_name}
-                </span>
-                <div className="grid grid-cols-3 sm:contents gap-2 mt-1 sm:mt-0">
-                  <span className="text-gray-700">Grade: {player.grade}</span>
-                  <Button
-                    onClick={() => player.id && handleVerifyPlayer(player.id)}
-                    className="w-8 h-8 flex items-center justify-center text-green-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
-                  >
-                    <FaCheck size={13} />
-                  </Button>
-                  <Button
-                    onClick={() => editPlayer(player)}
-                    className="w-8 h-8 flex items-center justify-center text-gray-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
-                  >
-                    <FaEdit size={13} />
-                  </Button>
+            unverifiedPlayers.map((player) => {
+              const pid = player.id?.toString() ?? "";
+              return (
+                <div key={pid} className="grid grid-cols-1 sm:grid-cols-[auto_2fr_2fr_1fr_auto] items-center bg-gray-100 rounded-lg pl-3 my-1 p-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedPlayers.includes(pid)}
+                    onChange={() => handleBulkSelect(pid)}
+                    className="mr-2"
+                  />
+                  <span className="font-display">
+                    {player.last_name}, {player.first_name}
+                  </span>
+                  <div className="grid grid-cols-3 sm:contents gap-2 mt-1 sm:mt-0">
+                    <span className="text-gray-700">Grade: {player.grade}</span>
+                    <Button
+                      onClick={() => pid && handleVerifyPlayer(pid)}
+                      className="w-8 h-8 flex items-center justify-center text-green-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
+                    >
+                      <FaCheck size={13} />
+                    </Button>
+                    <Button
+                      onClick={() => editPlayer(player)}
+                      className="w-8 h-8 flex items-center justify-center text-gray-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
+                    >
+                      <FaEdit size={13} />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )) : 
+              );
+            }) : 
             <div>No Unverified Players Found</div>
           }
         </div>
@@ -216,23 +208,26 @@ export default function PlayerList({ id }: {id: number}) {
         <h2 className="text-lg font-bold mb-2">Verified Players</h2>
         <div className="flex flex-col overflow-y-scroll">
           {verifiedPlayers.length > 0 ? 
-            verifiedPlayers.map((player) => (
-              <div key={player.id} className="grid grid-cols-1 sm:grid-cols-[2fr_2fr_1fr_auto] items-center bg-gray-100 rounded-lg pl-3 my-1 p-2">
-                <span className="font-display">
-                  {player.last_name}, {player.first_name}
-                </span>
-                <div className="grid grid-cols-3 sm:contents gap-2 mt-1 sm:mt-0">
-                  <span className="text-gray-700">Grade: {player.grade}</span>
-                  <span className="text-green-600">Verified</span>
-                  <Button
-                    onClick={() => editPlayer(player)}
-                    className="w-8 h-8 flex items-center justify-center text-gray-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
-                  >
-                    <FaEdit size={13} />
-                  </Button>
+            verifiedPlayers.map((player) => {
+              const pid = player.id?.toString() ?? "";
+              return (
+                <div key={pid} className="grid grid-cols-1 sm:grid-cols-[2fr_2fr_1fr_auto] items-center bg-gray-100 rounded-lg pl-3 my-1 p-2">
+                  <span className="font-display">
+                    {player.last_name}, {player.first_name}
+                  </span>
+                  <div className="grid grid-cols-3 sm:contents gap-2 mt-1 sm:mt-0">
+                    <span className="text-gray-700">Grade: {player.grade}</span>
+                    <span className="text-green-600">Verified</span>
+                    <Button
+                      onClick={() => editPlayer(player)}
+                      className="w-8 h-8 flex items-center justify-center text-gray-600 hover:cursor-pointer rounded-full hover:bg-gray-300"
+                    >
+                      <FaEdit size={13} />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )) : 
+              );
+            }) : 
             <div>No Verified Players Found</div>
           }
         </div>

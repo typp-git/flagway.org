@@ -4,22 +4,8 @@ import { FormEvent } from 'react'
 import { Player } from "@/data/teams";
 import { EditField } from "./EditField";
 import { updatePlayer } from "@/utils/supabase/database_functions";
-
-const blankPlayer: Omit<Player, "id" | "created_at"> = {
-  first_name: "",
-  last_name: "",
-  name: "",
-  tshirt_size: null,
-  dietary_restrictions: null,
-  emergency_contact_name: null,
-  emergency_contact_phone_number: null,
-  emergency_contact_relationship: null,
-  grade: 0,
-  team_id: 0,
-  verified: false,
-  yearsYPP: 0,
-  city: ""
-};
+import { emptyPlayerForm } from "@/data/teams";
+const blankPlayer = {... emptyPlayerForm}
 
 export function AddPlayerModal({ playerData = blankPlayer, onClose }: {playerData: Player, onClose:()=>void}) {
   async function submitData(event: FormEvent<HTMLFormElement>) {
@@ -107,7 +93,7 @@ export function AddPlayerModal({ playerData = blankPlayer, onClose }: {playerDat
           <EditField
             label="Emergency Contact Phone"
             name="emergency_contact_phone_number" 
-            defaultValue={playerData.emergency_contact_phone_number ?? ""}
+            defaultValue={playerData.emergency_contact_phone ?? ""}
             type="text"
             form_id="player-form"
             onChange={(val)=>{console.log("val", val)}}
