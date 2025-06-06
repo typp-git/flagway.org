@@ -88,7 +88,7 @@ export async function addPersonToDatabase<T extends PersonType>(
     return { success: true, id: newPersonId, warning: "Photo upload failed" };
   }
 
-  // 3. Update person with photo_ref
+  // 3. Update person with photo_ref 
   const { error: updateError } = await supabase
     .from(personType)
     .update({ photo_ref: uploadResult.filepath })
@@ -241,6 +241,30 @@ export async function getStateIDs() {
     return data ?? [];
   } catch (error) { 
     console.error("Unexpected error fetching state IDs:", error);
+    return [];
+  }
+}
+
+export async function getTeamIDs(onlyVerified = false) { 
+  const supabase = await createClient();
+
+  try {
+    let query = supabase.from("teams").select("id, name");
+
+    if (onlyVerified) {
+      query = query.eq("verified", true);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error fetching team IDs:", error);
+      return [];
+    }
+
+    return data ?? [];
+  } catch (error) { 
+    console.error("Unexpected error fetching team IDs:", error);
     return [];
   }
 }
