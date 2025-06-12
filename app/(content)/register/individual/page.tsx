@@ -3,7 +3,7 @@
 import { getTeamIDs, addPersonToDatabase } from "@/utils/supabase/database_functions";
 import { useState, useEffect } from "react";
 import { emptyPlayerForm, emptyCoachForm, emptyChaperoneForm } from "@/data/teams";
-import { createExpandedFormSection } from "../registerComponents";
+import { createExpandedFormSection } from "../../../../components/registerComponents";
 import { playerFieldMetadata, coachFieldMetadata, chaperoneFieldMetadata} from "../registrationFieldMetadata"
 
 export default function IndividualRegistrationForm() {
@@ -78,18 +78,17 @@ export default function IndividualRegistrationForm() {
   }
 
   /**
-   * Evaluates Errors given Field Metadata and a Value
+   * Evaluates Errors given Field Metadata and a Value: Same between individual and Team registration
    * 
    * @param singleFieldMeta Metadata for the Field
    * @param value 
    * @returns Empty String for No Error or String Describing Error
    */
   const validateField = (
-    singleFieldMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[] },
+    singleFieldMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[], validate?: (value: string | File | number | boolean | null) => string },
     value: string | File | number | boolean | null
   ): string => {
     let error = "";
-    const field = singleFieldMeta.field_name;
 
     // Required fields must not be empty
     const isEmpty = 
@@ -104,35 +103,11 @@ export default function IndividualRegistrationForm() {
       return `${singleFieldMeta.label} is required`;
     }
 
-    // Phone numbers must be made of numbers, and at least 10 digits long
-    if ( (field === "coordinator_phone" || field === "phone" || field === "emergency_contact_phone") && typeof value === "string") {
-        const phoneRegex = /^[0-9]{10,}$/;
-        if (value.trim() !== "" && !phoneRegex.test(value)) {
-          error = "Invalid phone number";
-        }
+    // Validate if there exists a validate function in the field metadata
+    if (typeof singleFieldMeta.validate === "function") {
+      error = singleFieldMeta.validate(value);
     }
 
-    // Grade must be an integer from 0 to 12
-    if (field === "grade") {
-      if (value === null) { // Cannot be null
-        error = "Grade is required";
-      } else if (typeof value === "number" && (value < 0 || value > 12)) {
-        error = "Grade must be between 0 and 12";
-      } else if (typeof value === "number" && !Number.isInteger(value)) {
-      error = "Grade must be a whole number";
-      }
-    }
-
-    // Years YPP must be a nonzero Integer
-    if (field === "years_YPP") { // can be null
-      if (value === null) {
-        return ""; // Allow null for years YPP
-      } else if (typeof value === "number" && value < 0) {
-        error = "Years YPP must be a whole number";
-      } else if (typeof value === "number" && !Number.isInteger(value)) {
-      error = "Years YPP must be a whole number";
-      }
-    }
     return error;
   };
       
@@ -148,7 +123,7 @@ export default function IndividualRegistrationForm() {
   const handleChange = (
   section: "team" | "players" | "coaches" | "chaperones", // ✅ Restrict valid sections
   rowIndex: number, // 0 for team, 0-indexed for players/coaches/chaperones
-  singleFieldMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[] },
+  singleFieldMeta: { field_name: string; label: string; type: string; required?: boolean; options?: string[]|{id:string,name:string}[], validate?: (value: string | File | number | boolean | null) => string }, // Field Metadata of field that will be changed
   newValue: string | File | boolean | number | null // accepts files
   ) => {
     const errorKey = `${section}-${rowIndex}-${singleFieldMeta.field_name}`; // eg: students-3-grade or chaperones-0-first_name

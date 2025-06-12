@@ -5,17 +5,18 @@ import { updateTeam } from '@/utils/supabase/database_functions';
 import { Team, TeamForm } from '@/data/teams';
 import { EditField } from './EditField';
 
-const STRING_FIELDS = [
-  'name',
-  'country',
-  'coordinator_first_name',
-  'coordinator_last_name',
-  'coordinator_email',
-  'coordinator_phone',
-  'name_abbreviation',
-] as const;
+// Note: not used in current build, but could be useful for future validation
+// const STRING_FIELDS = [
+//   'name',
+//   'country',
+//   'coordinator_first_name',
+//   'coordinator_last_name',
+//   'coordinator_email',
+//   'coordinator_phone',
+//   'name_abbreviation',
+// ] as const;
 
-type TeamStringFields = typeof STRING_FIELDS[number];
+// type TeamStringFields = typeof STRING_FIELDS[number];
 
 export function EditTeamModal({ teamData, onClose }: { teamData: Team, onClose: () => void }) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);

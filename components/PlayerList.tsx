@@ -86,7 +86,7 @@ export default function PlayerList({ id }: { id: string }) {
 
   const handleBulkDelete = async () => {
     if (selectedPlayers.length === 0) return;
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('players')
       .delete()
       .in('id', selectedPlayers);
