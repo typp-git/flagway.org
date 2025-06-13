@@ -32,7 +32,6 @@ export default async function TeamsPage() {
                 ( // no teams in state
                   <div key={state.id} className="m-0"></div>
                 ) : (
-                  
                   <div key={state.id} className="mb-4">
                     <h4 className="text-lg font-semibold ml-2">{state.name}</h4>
                     <div className="flex flex-col text-gray-900 h-full">

@@ -1,4 +1,4 @@
-import { Player, Region, Team} from "@/data/teams";
+import { Player, Region} from "@/data/teams";
 import { getDisplayTeams } from "@/utils/supabase/database_functions";
 import Container from "@/components/container";
 import Link from "next/link";
