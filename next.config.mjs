@@ -10,6 +10,15 @@ const nextConfig = {
   eslint: {
     dirs: ["app", "components"],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "qbrwntkvkdhrfolsgtpw.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      }
+    ],
+  },
 };
 
 const withMDX = createMDX({

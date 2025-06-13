@@ -1,4 +1,5 @@
-import regions, { Player } from "@/data/teams";
+import { Player, Region, Team} from "@/data/teams";
+import { getDisplayTeams } from "@/utils/supabase/database_functions";
 import Container from "@/components/container";
 import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
@@ -6,22 +7,34 @@ import React from "react";
 import Image from "next/image";
 import LoadingHOC from "@/components/LoadingHOC";
 
+
+const teamImageRefStem = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/'
+const defaultImage_Ref = 'default/profile-picture.jpg';
+
 // Utility to flatten all teams from regions/states
-function getAllTeams() {
+function getAllTeams(regions: Region[]) {
   return regions.flatMap(region =>
     region.states.flatMap(state =>
-      state.teams
+      state.teams.map(team => ({
+        ...team,
+        region: region.name,
+        state: state.name,
+      }))
     )
   );
 }
 
 export async function generateStaticParams() {
-  return getAllTeams().map(team => ({ slug: team.slug }));
+  const regions: Region[] = await getDisplayTeams();
+  const allTeams = getAllTeams(regions);
+  return allTeams.map(team => ({ team: team.slug }));
 }
 
 export default async function Page({ params }: { params: { team: string } }) {
-  const team = getAllTeams().find(team => team.slug === params.team);
-
+  const regions: Region[] = await getDisplayTeams();
+  const allTeams = getAllTeams(regions);
+  const team = allTeams.find(team => team.slug === params.team);
+  
   if (!team) {
     return <div>Team not found</div>;
   }
@@ -49,7 +62,8 @@ export default async function Page({ params }: { params: { team: string } }) {
             [clip-path:polygon(100%_0,100%_50%,100%_100%,0_100%,0%_50%,0_0)]"
             >
               <Image
-                src="/team-logos/dog-deep.png"
+                src={team.photo_ref != null && team.photo_ref !== "" ?
+                  `${teamImageRefStem}${team.photo_ref}`:`${teamImageRefStem}${defaultImage_Ref}`}
                 alt="Team Logo"
                 width={200}
                 height={200}

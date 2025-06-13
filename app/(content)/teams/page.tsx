@@ -1,23 +1,17 @@
 import Container from "@/components/container";
 import React from "react";
-import regions from "@/data/teams";
+import { Region } from "@/data/teams";
 import Link from "next/link";
 import Image from "next/image";
+import { getDisplayTeams } from "@/utils/supabase/database_functions";
 import { IoIosArrowForward } from "react-icons/io";
 import LoadingHOC from "@/components/LoadingHOC";
 
-const teamLogos = [
-  "/team-logos/dog-deep.png",
-  "/team-logos/crown-deep.png",
-  "/team-logos/meerkat-deep.png",
-  "/team-logos/eagle-deep.png",
-  "/team-logos/rabbit-deep.png",
-  "/team-logos/rhino-deep.png",
-  "/team-logos/fox-deep.png",
-  "/team-logos/lion-deep.png"
-];
+const teamImageRefStem = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/'
+const defaultImage_Ref = 'default/profile-picture.jpg';
 
-const TeamsPage: React.FC = () => {
+export default async function TeamsPage() {
+  const regions: Region[] = await getDisplayTeams();
   return (
     <div
       className="h-full flex-1
@@ -34,14 +28,15 @@ const TeamsPage: React.FC = () => {
               <div key={region.id} className="flex flex-col">
                 <h3 className="text-2xl font-bold">{region.name}</h3>
                 <hr className="h-px my-2 bg-gray-300 border-0 dark:bg-gray-400" />
-
-                {region.states.map((state) => (
+                {region.states.map((state) => state.teams.length === 0?
+                ( // no teams in state
+                  <div key={state.id} className="m-0"></div>
+                ) : (
+                  
                   <div key={state.id} className="mb-4">
                     <h4 className="text-lg font-semibold ml-2">{state.name}</h4>
                     <div className="flex flex-col text-gray-900 h-full">
-                      {state.teams.length === 0 && (
-                        <div className="ml-4 text-gray-400 italic">No teams</div>
-                      )}
+                      
                       {state.teams.map((team) => (
                         <div
                           key={team.id}
@@ -51,7 +46,8 @@ const TeamsPage: React.FC = () => {
                             <div className="flex flex-row items-center justify-start">
                               <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
                                 <Image
-                                  src={teamLogos[team.name.length % teamLogos.length]}
+                                  src={team.photo_ref != null && team.photo_ref !== "" ?
+                                    `${teamImageRefStem}${team.photo_ref}`:`${teamImageRefStem}${defaultImage_Ref}`}
                                   alt={`${team.name} logo`}
                                   width={60}
                                   height={60}
@@ -71,9 +67,12 @@ const TeamsPage: React.FC = () => {
                           </Link>
                         </div>
                       ))}
+
                     </div>
                   </div>
                 ))}
+
+
               </div>
             ))}
           </div>
@@ -82,5 +81,3 @@ const TeamsPage: React.FC = () => {
     </div>
   );
 };
-
-export default TeamsPage;

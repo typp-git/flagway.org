@@ -3,6 +3,7 @@ import {
   Player, 
   Coach, 
   Chaperone,
+  Region,
   TeamForm,
   PlayerForm,
   CoachForm,
@@ -107,9 +108,22 @@ export async function addTeamToDatabase(newTeamForm: TeamForm) {
   console.log("Attempting to create a new team");
 
   const { photo_submission_file, ...teamData } = newTeamForm;
-  const finalTeamForm = teamData as Omit<TeamForm, "photo_submission_file">; // restructure to remove photo_submission_file
+  let finalTeamForm = teamData as Team; // cast to Team type
 
   const supabase = await createClient();
+
+  // 0. add a slug to each team to make it easier to link to the team page
+  const slug = finalTeamForm.name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "") // remove special chars except space and dash
+    .replace(/\s+/g, "-")         // replace spaces with dash
+    .replace(/-+/g, "-")          // collapse multiple dashes
+    .replace(/^-+|-+$/g, "");     // trim leading/trailing dashes
+
+  finalTeamForm = {
+    ...teamData,
+    slug,
+  };
 
   // 1. Insert team data
   const { data, error } = await supabase
@@ -298,7 +312,12 @@ export async function getNestedAllRegionTeams() {
   }
 }
 
-export async function getSimpleTeams() { 
+/**
+ * 
+ * @returns A list of all regions with their states and teams, including players, coaches, and chaperones.
+ * This function is used to display teams on the Teams page. Filters out unverified teams.
+ */
+export async function getDisplayTeams(): Promise<Region[]>{ 
   const supabase = await createClient();
 
   try {
@@ -313,6 +332,10 @@ export async function getSimpleTeams() {
         teams (
           id,
           name,
+          verified,
+          photo_ref,
+          school_organization,
+          slug,
           players (id, first_name, last_name, grade), 
           coaches (id, first_name, last_name, grade),
           chaperones (id, first_name, last_name)
@@ -325,7 +348,16 @@ export async function getSimpleTeams() {
       return [];
     }
 
-    return data ?? [];
+    // filter out all unverified teams
+    const filteredData = data?.map(region => ({
+      ...region,
+      states: region.states.map(state => ({
+        ...state,
+        teams: state.teams.filter(team => team.verified)
+      }))
+    }));
+
+    return filteredData ?? [];
   } catch (error) { 
     console.error("Error fetching nested all regions", error);
     return [];
