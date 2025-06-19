@@ -149,9 +149,11 @@ export const emptyTeamForm: TeamForm = {
 // FOR DISPLAYING ON FRONTEND
 
 export type DisplayTeam = Team & {
-  coaches: { id: string; first_name: string; last_name: string; grade: number }[];
-  players: { id: string; first_name: string; last_name: string; grade: number }[];
-  chaperones: { id: string; first_name: string; last_name: string }[];
+  coaches: Coach[];
+  players: Player[];
+  chaperones: Chaperone[];
+  region?: string  // For display purposes
+  state?: string; // For display purposes
 };
 
 export type Region = {

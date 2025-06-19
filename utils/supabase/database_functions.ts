@@ -9,14 +9,27 @@ import {
   CoachForm,
   ChaperoneForm, 
   EntireTeamSubmissionForm,
-  emptyPlayerForm,
-  emptyCoachForm, 
-  emptyChaperoneForm,
-  emptyTeamForm,
 } from "@/data/teams"
 
 import { createClient } from "@/utils/supabase/client";
 
+// Name of the tables in Supabase/identifiers
+type PersonType = "players" | "coaches" | "chaperones";
+
+// Map of person types to their respective form types
+type PersonFormMap = {
+  players: PlayerForm;
+  coaches: CoachForm;
+  chaperones: ChaperoneForm;
+};
+
+/**
+ * Uploads a profile image to the specified bucket in Supabase storage.
+ * @param file The file to upload
+ * @param bucket The name of the bucket to upload to
+ * @param filepath The path within the bucket where the file should be stored, including folders
+ * @returns 
+ */
 const addProfileImageToStorage = async (file: File, bucket: string, filepath: string) => {
   // id is used as the folder name
   const supabase = await createClient(); 
@@ -35,14 +48,13 @@ const addProfileImageToStorage = async (file: File, bucket: string, filepath: st
   return { success: true, filepath: data.path };
 };
 
-type PersonType = "players" | "coaches" | "chaperones";
-
-type PersonFormMap = {
-  players: PlayerForm;
-  coaches: CoachForm;
-  chaperones: ChaperoneForm;
-};
-
+/**
+ * Adds Person to database, given a team_id and a person type.
+ * @param newPersonForm
+ * @param personType Also the name of the table in Supabase
+ * @param team_id 
+ * @returns 
+ */
 export async function addPersonToDatabase<T extends PersonType>(
   newPersonForm: PersonFormMap[T],
   personType: T,
@@ -70,6 +82,7 @@ export async function addPersonToDatabase<T extends PersonType>(
   }
 
   const newPersonId = data[0].id;
+  
   console.log(`Successfully created a new ${personType}:`, newPersonId);
 
   if (!photo_submission_file) {
@@ -104,6 +117,11 @@ export async function addPersonToDatabase<T extends PersonType>(
   return { success: true, id: newPersonId };
 }
 
+/**
+ *  Adds a new team to the database.
+ * @param newTeamForm TeamForm containing team data and an optional photo_submission_file
+ * @returns success or error object
+ */
 export async function addTeamToDatabase(newTeamForm: TeamForm) {
   console.log("Attempting to create a new team");
 
@@ -239,6 +257,10 @@ export async function submitEntireTeamForm(formPayload: EntireTeamSubmissionForm
   }
 }
 
+/**
+ * 
+ * @returns A list of all state IDs and names from the database.
+ */
 export async function getStateIDs() { 
   const supabase = await createClient();
 
@@ -259,6 +281,11 @@ export async function getStateIDs() {
   }
 }
 
+/**
+ * Fetches all team IDs from the database.
+ * @param onlyVerified 
+ * @returns object with team IDs and names, or an empty array if an error occurs.
+ */
 export async function getTeamIDs(onlyVerified = false) { 
   const supabase = await createClient();
 
@@ -283,43 +310,13 @@ export async function getTeamIDs(onlyVerified = false) {
   }
 }
 
-export async function getNestedAllRegionTeams() { 
-  const supabase = await createClient();
-
-  try {
-  const { data, error } = await supabase
-    .from('regions')
-    .select(`
-      *,
-      states (
-        *,
-        teams (
-          *,
-          players (*)
-        )
-      )
-    `);
-
-    if (error) {
-      console.error("Error fetching nested all regions:", error);
-      return [];
-    }
-
-    return data ?? [];
-  } catch (error) { 
-    console.error("Error fetching nested all regions", error);
-    return [];
-  }
-}
-
 /**
- * 
  * @returns A list of all regions with their states and teams, including players, coaches, and chaperones.
- * This function is used to display teams on the Teams page. Filters out unverified teams.
+ * This function is used to display teams on the Teams page. Filters out unverified teams and registrants
  */
 export async function getDisplayTeams(): Promise<Region[]>{ 
   const supabase = await createClient();
-
+  
   try {
   const { data, error } = await supabase
     .from('regions')
@@ -335,10 +332,13 @@ export async function getDisplayTeams(): Promise<Region[]>{
           verified,
           photo_ref,
           school_organization,
+          coordinator_phone,
+          coordinator_email,
+          name_abbreviation,
           slug,
-          players (id, first_name, last_name, grade), 
-          coaches (id, first_name, last_name, grade),
-          chaperones (id, first_name, last_name)
+          players (id, first_name, last_name, grade, photo_ref, years_YPP, city, grade, gender, verified), 
+          coaches (id, first_name, last_name, grade, photo_ref, years_YPP, city, grade, gender, verified),
+          chaperones (id, first_name, last_name, photo_ref, years_YPP, city, gender, verified)
         )
       )
     `);
@@ -348,12 +348,19 @@ export async function getDisplayTeams(): Promise<Region[]>{
       return [];
     }
 
+    console.log("Successfully fetched nested all regions:", data[0].states[2]);
+    const data_as_region = data as Region[]; // cast to Region type
+    
     // filter out all unverified teams
-    const filteredData = data?.map(region => ({
+    const filteredData = data_as_region?.map(region => ({
       ...region,
       states: region.states.map(state => ({
         ...state,
-        teams: state.teams.filter(team => team.verified)
+        teams: state.teams.filter(team => team.verified).map(team => ({...team, 
+          players: team.players.filter(player => player.verified),
+          coaches: team.coaches.filter(coach => coach.verified),
+          chaperones: team.chaperones.filter(chaperone => chaperone.verified)
+        }))
       }))
     }));
 
@@ -364,6 +371,12 @@ export async function getDisplayTeams(): Promise<Region[]>{
   }
 }
 
+/**
+ * , Updates a player in the database.
+ * @param playerId 
+ * @param updatedPlayerForm possibly incomplete PlayerForm object (Playerforms have no ID)
+ * @returns 
+ */
 export async function updatePlayer(
   playerId: string,
   updatedPlayerForm: PlayerForm
@@ -418,6 +431,12 @@ export async function updatePlayer(
   return { success: true, id: playerId };
 }
 
+/**
+ * Updates a team in the database.
+ * @param teamId 
+ * @param updatedTeamForm  possibly incomplete TeamForm object (Teamforms have no ID)
+ * @returns 
+ */
 export async function updateTeam(
   teamId: string,
   updatedTeamForm: TeamForm
@@ -471,3 +490,15 @@ export async function updateTeam(
   console.log("Successfully updated team and photo.");
   return { success: true, id: teamId };
 }
+
+/**
+ * Get File Links
+ */
+export function getPublicImageRef(bucket: string, filePath: string): string {
+  return `https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/${bucket}/${filePath}`;
+}
+
+// the default images for teams 
+export const defaultTeamImageRef = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/default/profile-picture.jpg';
+// the default image for players
+export const defaultPlayerImageRef = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/default/profile-picture.jpg';

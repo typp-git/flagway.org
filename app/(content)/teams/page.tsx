@@ -1,17 +1,41 @@
+"use client"
 import Container from "@/components/container";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Region } from "@/data/teams";
 import Link from "next/link";
 import Image from "next/image";
 import { getDisplayTeams } from "@/utils/supabase/database_functions";
 import { IoIosArrowForward } from "react-icons/io";
 import LoadingHOC from "@/components/LoadingHOC";
+import { defaultTeamImageRef, getPublicImageRef } from "@/utils/supabase/database_functions";
 
-const teamImageRefStem = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/'
-const defaultImage_Ref = 'default/profile-picture.jpg';
+export default function TeamsPage() {
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function TeamsPage() {
-  const regions: Region[] = await getDisplayTeams();
+  useEffect(() => {
+    async function fetchTeams() {
+      setLoading(true);
+      const data = await getDisplayTeams();
+      setRegions(data);
+      setLoading(false);
+    }
+    fetchTeams();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+      className="min-h-screen flex-grow
+        bg-[url('/structures.png')]
+        bg-gray-950 bg-cover bg-center backdrop-grayscale"
+      >
+      <LoadingHOC>  
+        <div>Loading...</div>
+      </LoadingHOC>
+      </div>)
+  }
+
   return (
     <div
       className="h-full flex-1
@@ -45,8 +69,8 @@ export default async function TeamsPage() {
                             <div className="flex flex-row items-center justify-start">
                               <div className="justify-center shrink-0 h-15 w-15 aspect-square overflow-hidden">
                                 <Image
-                                  src={team.photo_ref != null && team.photo_ref !== "" ?
-                                    `${teamImageRefStem}${team.photo_ref}`:`${teamImageRefStem}${defaultImage_Ref}`}
+                                  src={ team.photo_ref != null && team.photo_ref !== "" ?
+                                    `${getPublicImageRef("teams", team.photo_ref)}`:`${defaultTeamImageRef}`}
                                   alt={`${team.name} logo`}
                                   width={60}
                                   height={60}

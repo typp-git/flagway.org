@@ -1,17 +1,17 @@
-import { Player, Region} from "@/data/teams";
-import { getDisplayTeams } from "@/utils/supabase/database_functions";
+"use client"
+
+import { Player, Region, DisplayTeam} from "@/data/teams";
 import Container from "@/components/container";
 import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LoadingHOC from "@/components/LoadingHOC";
-
-
-const teamImageRefStem = 'https://qbrwntkvkdhrfolsgtpw.supabase.co/storage/v1/object/public/teams/'
-const defaultImage_Ref = 'default/profile-picture.jpg';
+import { defaultTeamImageRef, defaultPlayerImageRef, getPublicImageRef, getDisplayTeams } from "@/utils/supabase/database_functions";
+import { get } from "http";
 
 // Utility to flatten all teams from regions/states
+// Adds Region and State name to each team object. 
 function getAllTeams(regions: Region[]) {
   return regions.flatMap(region =>
     region.states.flatMap(state =>
@@ -24,21 +24,41 @@ function getAllTeams(regions: Region[]) {
   );
 }
 
-export async function generateStaticParams() {
-  const regions: Region[] = await getDisplayTeams();
-  const allTeams = getAllTeams(regions);
-  return allTeams.map(team => ({ team: team.slug }));
-}
+export default function Page({ params }: { params: { team_slug: string } }) {
+  const [loading, setLoading] = useState(true);
+  const [regions, setRegions] = useState<Region[]>([]);
 
-export default async function Page({ params }: { params: { team: string } }) {
-  const regions: Region[] = await getDisplayTeams();
-  const allTeams = getAllTeams(regions);
-  const team = allTeams.find(team => team.slug === params.team);
-  
-  if (!team) {
+  useEffect(() => {
+    async function fetchTeams() {
+      setLoading(true);
+      const data = await getDisplayTeams();
+      setRegions(data);
+      setLoading(false);
+    }
+    fetchTeams();
+  }, []);
+
+  const allTeams: DisplayTeam[] = getAllTeams(regions);
+  const team = allTeams.find(team => team.slug == params.team_slug);
+
+  if (loading) {
+    return (
+      <div
+      className="min-h-screen flex-grow
+        bg-[url('/structures.png')]
+        bg-gray-950 bg-cover bg-center backdrop-grayscale"
+      >
+      <LoadingHOC>  
+        <div>Loading...</div>
+      </LoadingHOC>
+      </div>)
+  }
+
+  if (team == undefined || team === null) {
     return <div>Team not found</div>;
   }
-  const { name, state, region, players } = team;
+  
+  const { name, region, state, players } = team;
 
   return (
     <div
@@ -63,7 +83,7 @@ export default async function Page({ params }: { params: { team: string } }) {
             >
               <Image
                 src={team.photo_ref != null && team.photo_ref !== "" ?
-                  `${teamImageRefStem}${team.photo_ref}`:`${teamImageRefStem}${defaultImage_Ref}`}
+                  `${getPublicImageRef("teams", team.photo_ref)}`:`${defaultTeamImageRef}`}
                 alt="Team Logo"
                 width={200}
                 height={200}
@@ -109,13 +129,8 @@ export default async function Page({ params }: { params: { team: string } }) {
                   md:[clip-path:polygon(0_0,0_100%,65%_100%,90%_0,95%_0,70%_100%,75%_100%,100%_0)]"
                     >
                       <Image
-                        src={
-                          player.grade % 3 === 1
-                            ? "/profile-pic-icons/example_avatar_dog.jpg"
-                            : player.grade % 3 === 2
-                            ? "/profile-pic-icons/profile-picture-opt-2.png"
-                            : "/profile-pic-icons/profile-picture-opt-1.png"
-                        }
+                        src={player.photo_ref != null && player.photo_ref !== "" ?
+                          `${getPublicImageRef("players", player.photo_ref)}`:`${defaultPlayerImageRef}`}
                         alt="Profile Picture"
                         width={100}
                         height={100}
