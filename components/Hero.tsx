@@ -17,6 +17,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
           alt="blurred flagway structures"
           priority
           src="/photos/floor-work.jpg"
+          width={2000}
+          height={2000}
         />
         <div
           aria-hidden="true"
@@ -80,6 +82,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
                     alt="blurred flagway structures"
                     priority
                     src="/photos/winners.jpg"
+                    width={2000}
+                    height={2000}
                   />
                 </div>
               </div>
@@ -90,6 +94,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
                     alt="blurred flagway structures"
                     priority
                     src="/photos/outdoors.jpg"
+                    width={2000}
+                    height={2000}
                   />
                 </div>
                 <div className="relative">
@@ -98,6 +104,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
                     alt="blurred flagway structures"
                     priority
                     src="/photos/floor-work.jpg"
+                    width={2000}
+                    height={2000}
                   />
                 </div>
               </div>
@@ -108,6 +116,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
                     alt="blurred flagway structures"
                     priority
                     src="/photos/team_2.jpg"
+                    width={2000}
+                    height={2000}
                   />
                 </div>
                 <div className="relative">
@@ -116,6 +126,8 @@ const Hero: React.FC<HeroProps> = ({ timelineRef }: HeroProps) => {
                     alt="blurred flagway structures"
                     priority
                     src="/photos/mit.jpg"
+                    width={2000}
+                    height={2000}
                   />
                 </div>
               </div>
