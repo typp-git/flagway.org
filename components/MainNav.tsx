@@ -115,7 +115,7 @@ export default function Navbar() {
                 )}
               >
                 <FaUserPlus className="inline h-4 mr-2" />
-                Register
+                Register Team
                 {pathname.startsWith("/register") && (
                   <>
                     <motion.div
@@ -125,7 +125,28 @@ export default function Navbar() {
                     <span className="sr-only">(current)</span>
                   </>
                 )}
+                
               </Link>
+              <Link
+                href="/training"
+                className={clsx(
+                  "nav-item relative hover:text-yellow-800" +
+                    (pathname.startsWith("/training") ? " text-yellow-800" : ""),
+                )}
+              >
+                <UserGroupIcon className="inline h-4 mr-2" />
+                Training
+                {pathname.startsWith("/training") && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-yellow-800 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
+              
               {/* <a href="/near-me" className="nav-item">Flagway Near You</a> */}
               {/* <a href="/login" className="nav-item">Log In</a> */}
               <DashboardNavLink />

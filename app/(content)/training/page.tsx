@@ -6,26 +6,42 @@ const AboutPage: React.FC = () => {
   return (
     <Container>
       <div className="relative bg-white min-h-screen">
-        <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:mb-16 lg:mt-12">
-          <Image
-            src="/photos/purple.jpg"
-            alt="Training Image"
-            width={800}
-            height={600}
-            className="h-64 w-full bg-gray-50 rounded-3xl object-cover sm:h-80 sm:relative sm:object-[0%_20%] lg:object-[35%_60%] lg:h-[90%] rounded-lg shadow-xl"
-          />
-        </div>
-        <div className="pb-24 pt-16 sm:pb-32 sm:pt-12 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
-          <div className="px-6 lg:px-8">
-            <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-              <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                Let&apos;s get your site <em>running</em> with
-                <br /> Flagway training!
-              </h2>
-              <p className="mt-2 text-lg/8 text-gray-600">
-                Leave us your contact information and a sense of how many
-                students will be part of your Flagway training.
-              </p>
+      <div className="pb-24 pt-16 sm:pb-32 sm:pt-12 lg:mx-auto lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-8 lg:pt-20">
+  {/* Left column: Text and iframe */}
+  <div className="px-6 lg:px-8">
+    <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
+      <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+        Let&apos;s get your site <em>running</em> with
+        <br /> Flagway training!
+      </h2>
+      <p className="mt-2 text-lg text-gray-600">
+      </p>
+      <div className="mt-10">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLSeLLK1YilnWVDDdb8MbXTdFhfKox-lWtlfdHeB5wRR62adNKw/viewform?embedded=true"
+          width="100%"
+          height="600"
+          className="w-full"
+        >
+          Loading…
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  {/* Right column: Sticky image on large screens */}
+  <div className="hidden lg:block relative">
+    <div className="sticky top-32 px-6 lg:px-0">
+      <Image
+        src="/photos/training25.jpg"
+        alt="Training Image"
+        width={800}
+        height={600}
+        className="w-full rounded-3xl object-cover shadow-xl"
+      />
+   
+ 
+              {/* //TRAINING NEXT FORM-----
               <form action="#" method="POST" className="mt-16">
                 <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                   <div>
@@ -270,6 +286,7 @@ const AboutPage: React.FC = () => {
                   </button>
                 </div>
               </form>
+               */}
             </div>
           </div>
         </div>
