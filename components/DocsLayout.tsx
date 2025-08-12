@@ -2,7 +2,6 @@ import { type Node } from '@markdoc/markdoc'
 import { DocsHeader } from '@/components/DocsHeader'
 import { PrevNextLinks } from '@/components/PrevNextLinks'
 import { Prose } from '@/components/Prose'
-import { TableOfContents } from '@/components/TableOfContents'
 import { collectSections } from '@/lib/sections'
 
 export function DocsLayout({

@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LoadingHOC from "@/components/LoadingHOC";
 import { defaultTeamImageRef, defaultPlayerImageRef, getPublicImageRef, getDisplayTeams } from "@/utils/supabase/database_functions";
-import { get } from "http";
 
 // Utility to flatten all teams from regions/states
 // Adds Region and State name to each team object. 
@@ -27,6 +26,7 @@ function getAllTeams(regions: Region[]) {
 export default function Page({ params }: { params: { team_slug: string } }) {
   const [loading, setLoading] = useState(true);
   const [regions, setRegions] = useState<Region[]>([]);
+  
 
   useEffect(() => {
     async function fetchTeams() {
@@ -40,6 +40,7 @@ export default function Page({ params }: { params: { team_slug: string } }) {
 
   const allTeams: DisplayTeam[] = getAllTeams(regions);
   const team = allTeams.find(team => team.slug == params.team_slug);
+  
 
   if (loading) {
     return (

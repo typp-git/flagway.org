@@ -9,6 +9,7 @@ import React from "react";
 import "./home.css";
 import "../graph.css";
 import Image from "next/image";
+import Link from "next/link";
 
 const imgClasses = "rounded-lg shadow-xl";
 const sectionClasses = `mb-12 md:mb-8 md:justify-between justify-center md:gap-24 gap-8 items-center flex flex-col md:flex-row w-full md:w-full  !transition !transition-500 rounded-xl  p-2`;
@@ -44,19 +45,28 @@ export default function Home() {
                     Recruitment and Training
                   </h2>
                   <div className="text-lg italic mb-3">
-                    September to December
+                    August through December
                   </div>
                   <ul className="text-lg list-disc list-outside ml-5 leading-snug text-gray-900 text-opacity-100">
-                    <li>Recruitment kicks off as the Flagway season begins!</li>
+                    <li>Request training if you are a new site!</li>
+                    <li>Recruit students for the program!</li>
                     <li>
-                      Students join the Young People&apos;s Project (YPP) and dive
-                      into learning the core concepts of Flagway.
+                      Students join the Young People&apos;s Project (YPP) and
+                      dive into learning the core concepts of Flagway.
                     </li>
                   </ul>
-                  <button className="bg-green-700 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5">
-                    Request Training
-                  </button>
+
+                  <div className="mt-5">
+                    {" "}
+                    <Link
+                      href="/training"
+                      className=" bg-green-700 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5"
+                    >
+                      Request Training
+                    </Link>
+                  </div>
                 </div>
+
                 <div className="order-2 px-5 py-3 text-left md:w-5/12">
                   <Image
                     className={"rotate-3 " + imgClasses}
