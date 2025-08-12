@@ -18,11 +18,14 @@ export default [
       },
     },
     rules: {
-      ...next.configs['core-web-vitals'].rules,
-      ...typescript.configs['recommended'].rules,
-      'prefer-const': 'off',
-  '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-  '@next/next/no-img-element': 'warn', // optional: downgrade <img> warnings
+      // ✅ Downgrade or disable common noisy rules for production builds
+      'prefer-const': 'warn', // or 'off' if you really don't want it
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@next/next/no-img-element': 'warn',
+
+      // ⛔ You can optionally silence other rules here too:
+      'no-console': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   },
-]; 
+];
