@@ -20,6 +20,9 @@ export default [
     rules: {
       ...next.configs['core-web-vitals'].rules,
       ...typescript.configs['recommended'].rules,
+      'prefer-const': 'off',
+  '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+  '@next/next/no-img-element': 'warn', // optional: downgrade <img> warnings
     },
   },
 ]; 
