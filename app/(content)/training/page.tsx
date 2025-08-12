@@ -2,21 +2,32 @@ import Container from "@/components/container";
 import Image from "next/image";
 import React from "react";
 
+export const metadata = {
+  title: "YPP Training & Meetings",
+  description: "Search for YPP Training and Meetings in your community",
+};
 const AboutPage: React.FC = () => {
   return (
     <Container>
       <div className="relative bg-white min-h-screen">
-      <div className="pb-24 pt-16 sm:pb-32 sm:pt-12 lg:mx-auto lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-8 lg:pt-20">
-  {/* Left column: Text and iframe */}
-  <div className="px-6 lg:px-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-7xl mx-auto px-6 lg:px-8 gap-12 pt-16 pb-24">
+  {/* Left column: Image (always first) */}
+  <div className="w-full">
+    <div className="lg:sticky lg:top-32">
+      <Image
+        src="/photos/training25.jpg"
+        alt="Training Image"
+        width={800}
+        height={600}
+        className="w-full rounded-3xl object-cover shadow-xl"
+      />
+    </div>
+  </div>
+
+  {/* Right column: Text and iframe */}
+  <div className="w-full">
     <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-      <h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-        Let&apos;s get your site <em>running</em> with
-        <br /> Flagway training!
-      </h2>
-      <p className="mt-2 text-lg text-gray-600">
-      </p>
-      <div className="mt-10">
+      <div className="">
         <iframe
           src="https://docs.google.com/forms/d/e/1FAIpQLSeLLK1YilnWVDDdb8MbXTdFhfKox-lWtlfdHeB5wRR62adNKw/viewform?embedded=true"
           width="100%"
@@ -26,20 +37,9 @@ const AboutPage: React.FC = () => {
           Loading…
         </iframe>
       </div>
-    </div>
-  </div>
-
-  {/* Right column: Sticky image on large screens */}
-  <div className="hidden lg:block relative">
-    <div className="sticky top-32 px-6 lg:px-0">
-      <Image
-        src="/photos/training25.jpg"
-        alt="Training Image"
-        width={800}
-        height={600}
-        className="w-full rounded-3xl object-cover shadow-xl"
-      />
-   
+  
+  
+  
  
               {/* //TRAINING NEXT FORM-----
               <form action="#" method="POST" className="mt-16">
