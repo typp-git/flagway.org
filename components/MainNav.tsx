@@ -5,7 +5,7 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { TrophyIcon, UserGroupIcon } from "@heroicons/react/20/solid";
+import { TrophyIcon, UserGroupIcon, ArrowsPointingInIcon } from "@heroicons/react/20/solid";
 import { FaUserPlus } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -146,7 +146,25 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
-              
+              <Link
+                href="/resources"
+                className={clsx(
+                  "nav-item relative hover:text-purple-800" +
+                    (pathname.startsWith("/resources") ? " text-purple-800" : ""),
+                )}
+              >
+                <ArrowsPointingInIcon className="inline h-4 mr-2" />
+                Resources
+                {pathname.startsWith("/resources") && (
+                  <>
+                    <motion.div
+                      layoutId="underline"
+                      className="bg-purple-800 w-10/12 h-0.5 absolute -bottom-0.5 left-0 right-0 m-auto"
+                    ></motion.div>
+                    <span className="sr-only">(current)</span>
+                  </>
+                )}
+              </Link>
               {/* <a href="/near-me" className="nav-item">Flagway Near You</a> */}
               {/* <a href="/login" className="nav-item">Log In</a> */}
               <DashboardNavLink />
