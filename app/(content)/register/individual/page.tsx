@@ -4,7 +4,8 @@ import { getTeamIDs, addPersonToDatabase } from "@/utils/supabase/database_funct
 import { useState, useEffect } from "react";
 import { emptyPlayerForm, emptyCoachForm, emptyChaperoneForm } from "@/data/teams";
 import { createExpandedFormSection } from "../../../../components/registerComponents";
-import { playerFieldMetadata, coachFieldMetadata, chaperoneFieldMetadata} from "../registrationFieldMetadata"
+import { playerFieldMetadata, coachFieldMetadata, chaperoneFieldMetadata } from "../registrationFieldMetadata";
+import Image from "next/image";
 
 export default function IndividualRegistrationForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -196,11 +197,11 @@ export default function IndividualRegistrationForm() {
   return (
     <div className="py-15 w-[100%] mx-auto p-[4%] bg-white shadow-lg rounded-lg">
       <div className="flex justify-center">
-        <img
+        <Image
           src="/clear-structure.png"
           alt="Clear Structure"
-          width={100} // Adjust as needed
-          height={300} // Adjust as needed
+          width={100}
+          height={300}
           className="animate-spin-slow mb-6"
         />
       </div>

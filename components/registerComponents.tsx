@@ -1,4 +1,5 @@
 import { MdClose } from "react-icons/md";
+import Image from "next/image"
 
 /**
  * 
@@ -98,7 +99,11 @@ export function createTableRow(
                     typeof value === "string" ? value : "";
                     
                   return preview ? (
-                    <img src={preview} alt="Preview" className="w-10 h-10 object-cover rounded" />
+                    <Image
+                      src={preview}
+                      alt="Preview"
+                      className="w-10 h-10 object-cover rounded"
+                    />
                   ) : null;
                 })()}
               </div>
@@ -250,7 +255,7 @@ export function createExpandedFormSection(
                         : "";
 
                     return preview ? (
-                      <img
+                      <Image
                         src={preview}
                         alt="Preview"
                         className="w-32 h-32 object-cover rounded border border-gray-300 shadow"

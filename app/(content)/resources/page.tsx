@@ -58,6 +58,7 @@ const ResourcesPage = () => {
             const Icon = resource.icon;
             return (
               <Link
+                key={resource.link}
                 href={resource.link}
                 className={`block p-6 bg-${resource.bgc}-50 rounded-lg hover:bg-${resource.bgc}-100 transition-all duration-300 group"`}
               >

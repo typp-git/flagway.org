@@ -5,7 +5,8 @@ import { useState } from "react";
 import { MdAddCircle, MdRemoveCircle} from "react-icons/md";
 import { emptyPlayerForm, emptyCoachForm, emptyChaperoneForm, emptyTeamForm } from "@/data/teams";
 import { createTableRow, createExpandedFormSection } from "../../../components/registerComponents";
-import { playerFieldMetadata, coachFieldMetadata, chaperoneFieldMetadata, teamFieldMetadata} from "./registrationFieldMetadata"
+import { playerFieldMetadata, coachFieldMetadata, chaperoneFieldMetadata, teamFieldMetadata} from "./registrationFieldMetadata";
+import Image from "next/image";
 
 // Controls the default lengths for each section, can be changed as needed
 const defaultPlayerSize = 6;
@@ -226,11 +227,11 @@ const validateField = (
   return (
     <div className="py-15 w-[100%] mx-auto p-[4%] bg-white shadow-lg rounded-lg">
       <div className="flex justify-center">
-        <img
+        <Image
           src="/clear-structure.png"
           alt="Clear Structure"
-          width={100} // Adjust as needed
-          height={300} // Adjust as needed
+          width={100}
+          height={300}
           className="animate-spin-slow mb-6"
         />
       </div>
