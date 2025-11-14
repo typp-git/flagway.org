@@ -3,8 +3,10 @@ import Link from "next/link";
 import {
   HandRaisedIcon,
   PencilIcon,
-  EyeIcon,
+  BookmarkIcon,
   AcademicCapIcon,
+  CalendarIcon,
+  PlayIcon,
 } from "@heroicons/react/24/outline";
 
 const ResourcesPage = () => {
@@ -27,6 +29,16 @@ const ResourcesPage = () => {
       icon: HandRaisedIcon,
       bgc: "bg-blue-400",
       link: "https://docs.google.com/spreadsheets/d/17VmLSmsM02X1ILeoLYmzdZTPml8sn0wE73ixwYQsEeQ/edit?usp=sharing",
+      section: "Implement",
+    },
+    {
+      id: "mlw-outreach-template",
+      name: "MLW Lesson Plan Template",
+      description:
+        "Guides Math Literacy Workers in planning high-quality instructional sessions. Helps MLWs outline objectives, materials, roles, and strategies that support YPPs youth-led teaching model and ensure consistent, engaging math experiences.",
+      icon: PlayIcon,
+      bgc: "bg-blue-400",
+      link: "https://docs.google.com/document/d/1CYcxJJJO7DWeqv1OrWCA72FtKpCYg6bGAuMDxmR0H0U/edit?usp=sharing",
       section: "Implement",
     },
     {
@@ -60,16 +72,16 @@ const ResourcesPage = () => {
       id: "flagway-season",
       name: "Flagway Season Schedule",
       description: "Outlines the full schedule of the Flagway League season, including training, recruitment, teacher/learning, practice, and tournament milestones. It serves as a reference for teams, coaches, and partners involved in Flagway programming.",
-      icon: EyeIcon,
+      icon: CalendarIcon,
       bgc: "bg-yellow-400",
       link: "/",
       section: "Plan",
     },
     {
-      id: "tournament-guide",
+      id: "tournament-packet",
       name: "National Flagway Tournament Packet",
       description: "A comprehensive guide for YPP's National Flagway Tournament. Includes event logistics, team rosters, rules, travel information, and schedules. This packet ensures all participating teams and partners are fully prepared for national competition.",
-      icon: AcademicCapIcon,
+      icon: BookmarkIcon,
       bgc: "bg-yellow-400",
       link: "https://www.canva.com/design/DAG2WplLflM/So93yQLjWeB_rPFGiFP4IQ/view?utm_content=DAG2WplLflM&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha7f1c347d3",
       section: "Plan",
