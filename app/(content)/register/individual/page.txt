@@ -1,0 +1,16 @@
+useEffect(() => { 
+    console.log("Resetting form data");
+    sectionName = (personType === "coach") ? "coaches" :
+                        (personType === "chaperone") ? "chaperones" :
+                        (personType === "player") ? "players" : "players"
+
+    columnType = (personType === "coach") ? coachFieldMetadata :
+                        (personType === "chaperone") ? chaperoneFieldMetadata :
+                        (personType === "player") ? playerFieldMetadata : playerFieldMetadata
+    emptyFormType = (personType === "coach") ? emptyCoachForm :
+                        (personType === "chaperone") ? emptyChaperoneForm :
+                        (personType === "player") ? emptyPlayerForm : emptyPlayerForm
+    setErrors({});
+    setFormData(emptyFormType);
+    setIsSubmitted(false);
+  }, [personType])

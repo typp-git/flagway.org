@@ -92,7 +92,7 @@ const ResourcesPage = () => {
       <Container>
         <h1 className="text-4xl font-bold mb-4 text-white">Resources</h1>
         <h2 className="mb-10 text-gray-600">
-          Use the resources here to keep track of your YPP program's activity. 
+          Use the resources here to keep track of your YPP program activity. 
         </h2>
 
         <div className="space-y-16">
