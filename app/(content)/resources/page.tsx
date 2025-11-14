@@ -118,14 +118,14 @@ const ResourcesPage = () => {
                           </div>
                           <Link
                             href={resource.link}
-                            className="text-lg font-extrabold text-black-600 hover:underline"
+                            className="text-lg font-extrabold text-black hover:underline"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
                             {resource.name}
                           </Link>
                         </div>
-                        <p className="text-sm text-black-600 group-hover:text-gray-700 transition-colors">
+                        <p className="text-sm text-black-600 transition-colors">
                           {resource.description}
                         </p>
                       </div>
