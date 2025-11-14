@@ -9,38 +9,20 @@ export const metadata = {
 const AboutPage: React.FC = () => {
   return (
     <Container>
-      <div className="relative bg-white min-h-screen">
-      <div className="grid grid-cols-1 lg:grid-cols-2 max-w-7xl mx-auto px-6 lg:px-8 gap-12 pt-16 pb-24">
-  {/* Left column: Image (always first) */}
-  <div className="w-full">
-    <div className="lg:sticky lg:top-32">
-      <Image
-        src="/photos/training25.jpg"
-        alt="Training Image"
-        width={800}
-        height={600}
-        className="w-full rounded-3xl object-cover shadow-xl"
-      />
-    </div>
-  </div>
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+  <div className="max-w-7xl mx-auto">
+    <iframe
+      src="https://calendar.google.com/calendar/embed?height=1000&wkst=1&ctz=America%2FNew_York&title=YPP%20North%20East%20Training%20Center&src=Y185ZWYyMjM5OWFiOWZiM2I0YmU3MjFhODVhNjFkNjUxN2JiZjAyNDIzNGI1ZjA3ZmFkOTE0YjkyMDcxNGIxMWRjQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f6bf26"
+      width="100%"
+      height="800"
+      className="w-full rounded-xl border"
+      style={{ border: 0 }}
+      frameBorder="0"
+      scrolling="no"
+    ></iframe>
+  
 
-  {/* Right column: Text and iframe */}
-  <div className="w-full">
-    <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-      <div className="">
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLSeLLK1YilnWVDDdb8MbXTdFhfKox-lWtlfdHeB5wRR62adNKw/viewform?embedded=true"
-          width="100%"
-          height="600"
-          className="w-full"
-        >
-          Loading…
-        </iframe>
-      </div>
-  
-  
-  
- 
+
               {/* //TRAINING NEXT FORM-----
               <form action="#" method="POST" className="mt-16">
                 <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -289,8 +271,8 @@ const AboutPage: React.FC = () => {
                */}
             </div>
           </div>
-        </div>
-      </div>
+        
+      
     </Container>
   );
 };

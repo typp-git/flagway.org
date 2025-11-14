@@ -71,6 +71,8 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
+              
+              {/* 
               <Link
                 href="/posts"
                 className={clsx(
@@ -89,6 +91,7 @@ export default function Navbar() {
                   </>
                 )}
               </Link>
+*/}
               <Link
                 href="/tournaments"
                 className={clsx(
