@@ -71,7 +71,7 @@ const ResourcesPage = () => {
       description: "A comprehensive guide for YPP's National Flagway Tournament. Includes event logistics, team rosters, rules, travel information, and schedules. This packet ensures all participating teams and partners are fully prepared for national competition.",
       icon: AcademicCapIcon,
       bgc: "bg-yellow-400",
-      link: "https://www.canva.com/design/DAF_ZndNg6U/2EFxRDedyudvPgry9OJQjw/edit",
+      link: "https://www.canva.com/design/DAG2WplLflM/So93yQLjWeB_rPFGiFP4IQ/view?utm_content=DAG2WplLflM&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha7f1c347d3",
       section: "Plan",
     },
     {
