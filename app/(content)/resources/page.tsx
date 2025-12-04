@@ -92,7 +92,7 @@ const ResourcesPage = () => {
       description: "Documents the completion of a specific YPP activity, milestone, training, or short-term project. Summarizes goals, participation, outcomes, lessons learned, and next steps—supporting evaluation, reporting, and institutional learning.",
       icon: AcademicCapIcon,
       bgc: "bg-orange-400",
-      link: "##",
+      link: "https://docs.google.com/forms/d/1zwjVLzSBh4fp7sfDOqfv0Xncct9J1efkuvVaszkPjpM/edit",
       section: "Report",
     },
   ];
