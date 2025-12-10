@@ -28,7 +28,7 @@ const ResourcesPage = () => {
         "Used by Program Coordinators to track Math Literacy Workers (MLWs) hours, training participation, and other work related time. The timesheet ensures accurate payroll processing and supports transparent reporting of youth employment within YPP programs.",
       icon: HandRaisedIcon,
       bgc: "bg-blue-400",
-      link: "https://docs.google.com/spreadsheets/d/17VmLSmsM02X1ILeoLYmzdZTPml8sn0wE73ixwYQsEeQ/edit?usp=sharing",
+      link: "https://docs.google.com/spreadsheets/d/1a0UfpVmXI_YoaAOEyuUaHHoA8OCZcu3uPA5YAO3r04w/edit?usp=sharing",
       section: "Implement",
     },
     {
@@ -92,7 +92,7 @@ const ResourcesPage = () => {
       description: "Documents the completion of a specific YPP activity, milestone, training, or short-term project. Summarizes goals, participation, outcomes, lessons learned, and next steps—supporting evaluation, reporting, and institutional learning.",
       icon: AcademicCapIcon,
       bgc: "bg-orange-400",
-      link: "https://docs.google.com/forms/d/1zwjVLzSBh4fp7sfDOqfv0Xncct9J1efkuvVaszkPjpM/edit",
+      link: "https://forms.gle/U7tH8B7ms8j36fTU7",
       section: "Report",
     },
   ];
