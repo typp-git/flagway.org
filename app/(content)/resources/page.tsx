@@ -11,6 +11,15 @@ import {
 
 const ResourcesPage = () => {
   const resources = [
+     {
+      id: "training-survey",
+      name: "Post-Training Survey",
+      description: "Survey to be filled out at the conclusion of any YPP training.",
+      icon: PencilIcon,
+      bgc: "bg-orange-400",
+      link: "https://forms.gle/rHtBsUqmfVkePRyU6",
+      section: "Report",
+    },
     {
       id: "attendance-template",
       name: "Participant Attendance Template",
@@ -95,6 +104,7 @@ const ResourcesPage = () => {
       link: "https://forms.gle/U7tH8B7ms8j36fTU7",
       section: "Report",
     },
+    
   ];
 
   const sections = ["Plan", "Resource", "Implement", "Report"];
