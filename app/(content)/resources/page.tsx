@@ -111,7 +111,7 @@ const ResourcesPage = () => {
       icon: HandRaisedIcon,
       bgc: "bg-blue-400",
       link: "https://docs.google.com/spreadsheets/d/12vTn0_mu9cQFdPrNo_oa_n2ODtNEolV83BAqvN316y4/edit?usp=sharing",
-      section: "Report",
+      section: "Implement",
     },
     
   ];
