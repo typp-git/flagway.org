@@ -21,6 +21,15 @@ const ResourcesPage = () => {
       section: "Report",
     },
     {
+      id: "media-release",
+      name: "Media Release Form",
+      description: "Use this form for consent to be shown in YPP marketing materials.",
+      icon: HandRaisedIcon,
+      bgc: "bg-blue-400",
+      link: "https://eform.pandadoc.com/?eform=08e931c4-c3e9-40a7-8b3e-0f40806ccf67",
+      section: "Implement",
+    },
+    {
       id: "attendance-template",
       name: "Participant Attendance Template",
       description:
@@ -114,8 +123,8 @@ const ResourcesPage = () => {
       section: "Implement",
     },
     
+    
   ];
-
   const sections = ["Plan", "Resource", "Implement", "Report"];
 
   return (
