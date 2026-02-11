@@ -29,7 +29,10 @@ export default function Navbar() {
         "block border-l-4 !border-sky-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-sky-700 rounded-tr-lg rounded-br-lg transition-all",
       "/register":
         "block border-l-4 !border-green-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-green-800 rounded-tr-lg rounded-br-lg transition-all",
+    "/resources":
+        "block border-l-4 !border-green-800 bg-gray-300/10 py-2 pl-3 pr-4 text-base font-medium !text-green-800 rounded-tr-lg rounded-br-lg transition-all",
     };
+     
 
     const defaultClasses =
       "block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium rounded-tr-lg rounded-br-lg text-gray-500 hover:border-gray-300 hover:bg-gray-700/50 hover:text-gray-50 transition-all";
