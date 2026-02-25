@@ -23,13 +23,12 @@ export default function FlagwayLogo() {
           alt="Logo of the Young People's Project"
           width={150}
           height={50}
-          className="w-[40px] md:w-[65px] h-auto"
+          className="w-[65px] md:w-[65px] h-auto"
         />
 
         <h3 className="!text-2xl *:font-bold leading-none font-display w-fit">
-          <span className="">FLAGWAY</span>
-          <br />
-          <span className="">LEAGUE</span>
+          <span className="">YPP MATH</span>
+         
         </h3>
       </Link>
     </div>

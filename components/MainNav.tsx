@@ -141,7 +141,7 @@ export default function Navbar() {
                 )}
               >
                 <UserGroupIcon className="inline h-4 mr-2" />
-                Training
+                Training & Events
                 {pathname.startsWith("/training") && (
                   <>
                     <motion.div
@@ -243,10 +243,10 @@ export default function Navbar() {
           </DisclosureButton>
           <DisclosureButton
             as="a"
-            href="/posts"
-            className={getMobileClasses("/posts")}
+            href="/training"
+            className={getMobileClasses("/training")}
           >
-            <TrophyIcon className="inline h-[1rem] mr-2" /> Announcements
+            <UserGroupIcon className="inline h-[1rem] mr-2" /> Training & Events
           </DisclosureButton>
           <DisclosureButton
             as="a"
@@ -257,11 +257,11 @@ export default function Navbar() {
           </DisclosureButton>
           <DisclosureButton
             as="a"
-            href="/register"
-            className={getMobileClasses("/register")}
+            href="/resources"
+            className={getMobileClasses("/resources")}
           >
-            <FaUserPlus className="inline h-[1rem] mr-2" />
-            Register
+            <ArrowsPointingInIcon className="inline h-[1rem] mr-2" />
+            Resources
           </DisclosureButton>
         </div>
       </DisclosurePanel>
