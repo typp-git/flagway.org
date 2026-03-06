@@ -1,10 +1,20 @@
+"use client"
+
 import Container from "@/components/container";
 import Link from "next/link";
 import "../../graph.css";
 import { MapPinIcon, TrophyIcon, ArrowDownTrayIcon, BookOpenIcon } from "@heroicons/react/24/outline";
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 
 const TournamentPage = () => {
+  // Added Type Safety for the loading state
+  const [loadedEmbeds, setLoadedEmbeds] = useState<Record<number, boolean>>({});
+
+  const handleLoad = (index: number) => {
+    setLoadedEmbeds((prev) => ({ ...prev, [index]: true }));
+  };
+
   const sections = [
     {
       name: "Local Tournaments",
@@ -28,20 +38,19 @@ const TournamentPage = () => {
       subtitle: "2026 National Flagway Tournament Player Guide",
       embedUrl: "https://www.canva.com/design/DAG2WplLflM/7LL9dB3jhcnshRMvy7fgHg/view?embed",
       downloadUrl: "https://www.canva.com/design/DAG2WplLflM/7LL9dB3jhcnshRMvy7fgHg/view",
-      aspectRatio: "56.25%", // 16:9 ratio
+      aspectRatio: "56.25%", 
     },
     {
       title: "Audience Guide",
       subtitle: "2026 National Tournament Guide for Audience",
       embedUrl: "https://www.canva.com/design/DAG2vYLGWn8/H31_7qYki9fhHQHDpm8FKQ/view?embed",
       downloadUrl: "https://www.canva.com/design/DAG2vYLGWn8/H31_7qYki9fhHQHDpm8FKQ/view",
-      aspectRatio: "77.2727%", // Custom document ratio
+      aspectRatio: "77.2727%", 
     },
   ];
 
   return (
     <div className="pb-24">
-      {/* Navigation Section */}
       <Container>
         <h1 className="text-4xl font-bold mb-8">Past Tournaments</h1>
         <div className="grid gap-6 md:grid-cols-2">
@@ -67,7 +76,6 @@ const TournamentPage = () => {
         </div>
       </Container>
 
-      {/* Resources Section */}
       <Container className="mt-20">
         <div className="flex items-center gap-4 mb-12 border-b border-gray-100 pb-6">
           <BookOpenIcon className="h-10 w-10 text-sky-600" />
@@ -80,21 +88,36 @@ const TournamentPage = () => {
               key={index} 
               className="w-full bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
             >
-              {/* Canva Embed Area (Top) */}
               <div 
-                className="relative w-full bg-gray-50" 
+                className="relative w-full bg-gray-50 flex items-center justify-center" 
                 style={{ paddingTop: resource.aspectRatio }}
               >
+                {/* Spinner now works with TypeScript */}
+                {!loadedEmbeds[index] && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 bg-gray-50">
+                    <div className="animate-spin transition-opacity duration-300">
+                      <Image 
+                        src="/clear-structure.png" 
+                        alt="Loading..." 
+                        width={64} 
+                        height={64} 
+                        className="opacity-60"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <iframe
                   src={resource.embedUrl}
-                  className="absolute inset-0 w-full h-full"
+                  onLoad={() => handleLoad(index)}
+                  className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
+                    loadedEmbeds[index] ? "opacity-100" : "opacity-0"
+                  }`}
                   allowFullScreen
                   allow="fullscreen"
-                  loading="lazy"
                 ></iframe>
               </div>
 
-              {/* Card Footer with Title and Download (Bottom) */}
               <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white">
                 <div className="flex-1">
                   <h3 className="text-3xl font-bold text-gray-900 mb-2">{resource.title}</h3>
