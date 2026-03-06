@@ -1,7 +1,7 @@
 import Container from "@/components/container";
 import Link from "next/link";
 import "../../graph.css";
-import { MapPinIcon, TrophyIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon, TrophyIcon, ArrowDownTrayIcon, BookOpenIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
 const TournamentPage = () => {
@@ -13,11 +13,6 @@ const TournamentPage = () => {
       icon: MapPinIcon,
       gradientClasses: "from-yellow-500 via-yellow-600 to-yellow-700",
     },
-    // {
-    //   name: "Regional Tournaments",
-    //   description: "Details about regional tournaments and qualifiers",
-    //   path: "/tournaments/regional",
-    // },
     {
       name: "National Tournament",
       description: "Information about the annual national tournament",
@@ -27,10 +22,28 @@ const TournamentPage = () => {
     },
   ];
 
+  const canvaResources = [
+    {
+      title: "Tournament Packet",
+      subtitle: "2026 National Flagway Tournament Player Guide",
+      embedUrl: "https://www.canva.com/design/DAG2WplLflM/7LL9dB3jhcnshRMvy7fgHg/view?embed",
+      downloadUrl: "https://www.canva.com/design/DAG2WplLflM/7LL9dB3jhcnshRMvy7fgHg/view",
+      aspectRatio: "56.25%", // 16:9 ratio
+    },
+    {
+      title: "Audience Guide",
+      subtitle: "2026 National Tournament Guide for Audience",
+      embedUrl: "https://www.canva.com/design/DAG2vYLGWn8/H31_7qYki9fhHQHDpm8FKQ/view?embed",
+      downloadUrl: "https://www.canva.com/design/DAG2vYLGWn8/H31_7qYki9fhHQHDpm8FKQ/view",
+      aspectRatio: "77.2727%", // Custom document ratio
+    },
+  ];
+
   return (
-    <div className="">
+    <div className="pb-24">
+      {/* Navigation Section */}
       <Container>
-        <h1 className="text-4xl font-bold mb-8">Tournaments</h1>
+        <h1 className="text-4xl font-bold mb-8">Past Tournaments</h1>
         <div className="grid gap-6 md:grid-cols-2">
           {sections.map((section) => {
             const Icon = section.icon;
@@ -52,116 +65,56 @@ const TournamentPage = () => {
             );
           })}
         </div>
-        {/* <UnderConstruction /> */}
-        {/* <h1 className="m-auto text-center text-5xl"> */}
-        {/*   Flagway Season Details */}
-        {/* </h1> */}
-        {/* <p className="text-lg max-w-4xl"></p> */}
-        {/* <br /> */}
-        {/**/}
-        {/* <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12 mx-auto items-center"> */}
-        {/*   <div className="order-1 relative px-1 py-2 md:w-1/2"> */}
-        {/*     <h2 className="font-bold">Recruitment and Training</h2> */}
-        {/*     <div className="text-lg italic mb-3"> */}
-        {/*       From September to December */}
-        {/*     </div> */}
-        {/*     <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100"> */}
-        {/*       <li>Recruitment kicks off as the Flagway season begins!</li> */}
-        {/*       <li> */}
-        {/*         Students join the Young People's Project (YPP) and dive into */}
-        {/*         learning the core concepts of Flagway. */}
-        {/*       </li> */}
-        {/*     </ul> */}
-        {/*     <button className="bg-yellow-500 hover:bg-yellow-700 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5"> */}
-        {/*       Request Training */}
-        {/*     </button> */}
-        {/**/}
-        {/*     <div className="absolute hidden md:block bottom-0 h-0.5 w-full bg-gray-200 rounded-xl"></div> */}
-        {/*   </div> */}
-        {/*   <div className="order-2 px-5 py-3 w-2/3 md:max-w-[370px]"> */}
-        {/*     <Image */}
-        {/*       className={"rotate-3 rounded-lg"} */}
-        {/*       src={RegistrationImage} */}
-        {/*       alt="people sitting at table with computer" */}
-        {/*     /> */}
-        {/*   </div> */}
-        {/* </div> */}
-        {/**/}
-        {/* <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12"> */}
-        {/*   <div className="order-1 relative px-1 py-4 md:w-1/2"> */}
-        {/*     <h2 className="font-bold text-2xl">Flagway Practice</h2> */}
-        {/*     <div className="text-lg italic mb-3">From January to March</div> */}
-        {/*     <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100"> */}
-        {/*       <li> */}
-        {/*         Students continue to practice Flagway, focusing on preparing for */}
-        {/*         competition. */}
-        {/*       </li> */}
-        {/*     </ul> */}
-        {/*     <button className="bg-green-600 hover:bg-green-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5"> */}
-        {/*       Get training materials */}
-        {/*     </button> */}
-        {/*     <div className="absolute hidden md:block bottom-0 h-0.5 w-full bg-gray-200 rounded-xl"></div> */}
-        {/*   </div> */}
-        {/*   <div className="order-2 px-5 py-3 w-2/3 md:max-w-[370px]"> */}
-        {/*     <Image */}
-        {/*       className={"-rotate-3 rounded-lg"} */}
-        {/*       src={Table} */}
-        {/*       alt="people sitting at table with computer" */}
-        {/*     /> */}
-        {/*   </div> */}
-        {/* </div> */}
-        {/**/}
-        {/* <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12"> */}
-        {/*   <div className="order-1 relative px-1 py-4 md:w-1/2"> */}
-        {/*     <h2 className="font-bold">Local &amp; Regional Tournaments</h2> */}
-        {/*     <div className="text-lg italic mb-3">In April</div> */}
-        {/*     <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100"> */}
-        {/*       <li> */}
-        {/*         Teams compete locally and regionally to secure their spot to */}
-        {/*         compete on the national stage in May! */}
-        {/*       </li> */}
-        {/*     </ul> */}
-        {/*     <button className="bg-sky-600 hover:bg-sky-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5"> */}
-        {/*       Regional tournament schedule */}
-        {/*     </button> */}
-        {/*     <div className="absolute hidden md:block bottom-0 h-0.5 w-full bg-gray-200 rounded-xl"></div> */}
-        {/*   </div> */}
-        {/*   <div className="order-2 px-5 py-3 w-2/3 md:max-w-[370px]"> */}
-        {/*     <Image */}
-        {/*       className={"rotate-3 rounded-lg"} */}
-        {/*       src={Breaker} */}
-        {/*       alt="people sitting at table with computer" */}
-        {/*     /> */}
-        {/*   </div> */}
-        {/* </div> */}
-        {/**/}
-        {/* <div className="flex flex-col md:flex-row justify-center content-center gap-6 md:gap-12 mb-12"> */}
-        {/*   <div className="order-1 relative px-1 py-4 md:w-1/2"> */}
-        {/*     <h2 className="font-bold">National Tournament</h2> */}
-        {/*     <div className="text-lg italic mb-3">In May</div> */}
-        {/*     <ul className="text-lg list-disc list-inside leading-snug text-gray-900 text-opacity-100"> */}
-        {/*       <li> */}
-        {/*         Winners of regional tournament compete at the national */}
-        {/*         tournament! */}
-        {/*       </li> */}
-        {/*       <li> */}
-        {/*         This event brings together teams from across the country to */}
-        {/*         showcase their skills, celebrate their growth, and connect with */}
-        {/*         a larger community of math learners. */}
-        {/*       </li> */}
-        {/*     </ul> */}
-        {/*     <button className="bg-rose-600 hover:bg-rose-800 mt-5 text-white p-2 rounded-xl font-display font-semibold mb-5"> */}
-        {/*       National tournament details */}
-        {/*     </button> */}
-        {/*   </div> */}
-        {/*   <div className="order-2 px-5 py-3 w-2/3 md:max-w-[370px]"> */}
-        {/*     <Image */}
-        {/*       className={"-rotate-3 rounded-lg"} */}
-        {/*       src={WinningSquad} */}
-        {/*       alt="people sitting at table with computer" */}
-        {/*     /> */}
-        {/*   </div> */}
-        {/* </div> */}
+      </Container>
+
+      {/* Resources Section */}
+      <Container className="mt-20">
+        <div className="flex items-center gap-4 mb-12 border-b border-gray-100 pb-6">
+          <BookOpenIcon className="h-10 w-10 text-sky-600" />
+          <h1 className="text-4xl font-bold text-gray-900">2026 Flagway Season Resources</h1>
+        </div>
+        
+        <div className="flex flex-col gap-12">
+          {canvaResources.map((resource, index) => (
+            <div 
+              key={index} 
+              className="w-full bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
+            >
+              {/* Canva Embed Area (Top) */}
+              <div 
+                className="relative w-full bg-gray-50" 
+                style={{ paddingTop: resource.aspectRatio }}
+              >
+                <iframe
+                  src={resource.embedUrl}
+                  className="absolute inset-0 w-full h-full"
+                  allowFullScreen
+                  allow="fullscreen"
+                  loading="lazy"
+                ></iframe>
+              </div>
+
+              {/* Card Footer with Title and Download (Bottom) */}
+              <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white">
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-2">{resource.title}</h3>
+                  <p className="text-gray-500 text-lg">{resource.subtitle}</p>
+                </div>
+                <div className="shrink-0">
+                  <a
+                    href={resource.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-3 py-4 px-10 bg-gray-900 text-white rounded-2xl font-bold hover:bg-black hover:scale-[1.02] transition-all shadow-xl shadow-gray-200"
+                  >
+                    <ArrowDownTrayIcon className="h-6 w-6" />
+                    Download PDF
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </Container>
     </div>
   );

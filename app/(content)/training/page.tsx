@@ -11,7 +11,7 @@ const AboutPage: React.FC = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
   <div className="max-w-7xl mx-auto">
     <iframe
-      src="https://calendar.google.com/calendar/embed?height=1000&wkst=1&ctz=America%2FNew_York&title=YPP%20North%20East%20Training%20Center&src=Y185ZWYyMjM5OWFiOWZiM2I0YmU3MjFhODVhNjFkNjUxN2JiZjAyNDIzNGI1ZjA3ZmFkOTE0YjkyMDcxNGIxMWRjQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23f6bf26"
+      src="https://calendar.google.com/calendar/embed?src=c_4811d21f9567123515fd32e983a474af23274dda56fe1cc4d0b3d51e9d0e8c33%40group.calendar.google.com&ctz=America%2FNew_York"
       width="100%"
       height="800"
       className="w-full rounded-xl border"
