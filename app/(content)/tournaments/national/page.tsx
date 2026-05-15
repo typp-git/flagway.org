@@ -11,6 +11,13 @@ export default function NationalTournamentsPage() {
       location: "San Francisco, CA",
       gradientClasses: "from-yellow-500 via-yellow-600 to-yellow-700",
     },
+    {
+      name: "2026 National Flagway Tournament",
+      path: "/tournaments/national/nft-2026",
+      date: "May 31st, 2025",
+      location: "Cambridge, MA",
+      gradientClasses: "from-yellow-500 via-yellow-600 to-yellow-700",
+    },
     // Add more tournaments here as they are created
   ];
 
