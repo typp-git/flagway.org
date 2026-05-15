@@ -14,7 +14,7 @@ export default function NationalTournamentsPage() {
     {
       name: "2026 National Flagway Tournament",
       path: "/tournaments/national/nft-2026",
-      date: "May 31st, 2025",
+      date: "May 16th, 2026",
       location: "Cambridge, MA",
       gradientClasses: "from-yellow-500 via-yellow-600 to-yellow-700",
     },
